@@ -8,4 +8,7 @@ export const loginValidation: ValidationChain[] = [
 export const registerValidation: ValidationChain[] = [
   check('email').isEmail(),
   check('password').isLength({ min: 6 }),
+  check('nickname').not().isEmpty(),
+  check('name').not().isEmpty(),
 ];
+

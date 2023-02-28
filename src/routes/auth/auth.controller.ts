@@ -23,11 +23,11 @@ class Handler {
 
   async register(req: express.Request, res: express.Response): Promise<void> {
     if (req.method === 'GET') {
-      res.send('Login Page!');
+      res.send('Register Page!');
     }
     if (req.method === 'POST') {
-      const { email, nickname, name, password } = req.body;
-      const result = await this.service.register(email, password, nickname, name);
+      const { email, password, name, nickname} = req.body;
+      const result = await this.service.register(email, password, name, nickname);
       res.status(result.statusCode).json(result.message);
     }
     res.status(405).send();

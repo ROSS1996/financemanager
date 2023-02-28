@@ -15,13 +15,16 @@ export class AuthService {
   async login(email: string, password: string, res: any): Promise<{ statusCode: number, message: string }> {
     const errors = validationResult(loginValidation);
     if (!errors.isEmpty()) {
-      return { statusCode: 401, message: 'Invalid email or password' };
+      return { statusCode: 401, message: 'Invalid email or password VALIDATION?' };
     }
     const result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
     if (result.rowCount === 0) {
-      return { statusCode: 401, message: 'Invalid email or password' };
+      return { statusCode: 401, message: 'Invalid email or password SELECTO?' };
     }
     const user: User = result.rows[0];
+    console.log(`Plain password: ${password}`)
+    console.log(`Queried password: ${user.password}`)
+
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
       return { statusCode: 401, message: 'Invalid email or password' };
@@ -31,12 +34,11 @@ export class AuthService {
     return { statusCode: 200, message: 'Login successful', };
   }
 
-  async register(email: string, name: string, nickname: string, password: string): Promise<{ statusCode: number, message: string }> {
+  async register(email: string, password: string, name: string, nickname: string): Promise<{ statusCode: number, message: string }> {
     const errors = validationResult(registerValidation);
     if (!errors.isEmpty()) {
       return { statusCode: 422, message: 'Invalid registration data' };
     }
-
     const hashedPassword = await bcrypt.hash(password, 10);
     try {
       await db.query('INSERT INTO users (nickname, name, email, password) VALUES ($1, $2, $3, $4) RETURNING id', [nickname, name, email, hashedPassword]);
