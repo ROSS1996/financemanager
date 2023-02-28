@@ -15,15 +15,13 @@ export class AuthService {
   async login(email: string, password: string, res: any): Promise<{ statusCode: number, message: string }> {
     const errors = validationResult(loginValidation);
     if (!errors.isEmpty()) {
-      return { statusCode: 401, message: 'Invalid email or password VALIDATION?' };
+      return { statusCode: 401, message: 'Invalid email or password' };
     }
     const result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
     if (result.rowCount === 0) {
-      return { statusCode: 401, message: 'Invalid email or password SELECTO?' };
+      return { statusCode: 401, message: 'Invalid email or password' };
     }
     const user: User = result.rows[0];
-    console.log(`Plain password: ${password}`)
-    console.log(`Queried password: ${user.password}`)
 
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
