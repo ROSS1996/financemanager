@@ -1,8 +1,11 @@
 import express from 'express';
-import authRoutes from './auth/auth.routes';
+import AuthController from './auth/auth.controller';
 
 
 const router = express.Router();
-router.use('', authRoutes);
+router.get('', (req, res) => {
+    res.send('Hello World!');
+  });
+router.use('', AuthController);
 
 export default router;

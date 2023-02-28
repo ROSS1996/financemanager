@@ -1,12 +1,36 @@
 import express from 'express';
 import router from './routes';
 import db from './db';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import helmet from 'helmet';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
-const port = 3000;
+const port = process.env.SERVER_PORT;
 
-app.use(express.json());
+const whitelist = ['https://example.com', 'https://www.example.com'];
+
+const corsOptions: cors.CorsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || whitelist.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`Not allowed by CORS: ${origin}`));
+    }
+  },
+};
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+// parse application/json
+app.use(bodyParser.json())
+app.use(helmet());
+app.use(cors(corsOptions));
 app.use(router);
+
 
 db.testConnection()
   .then(() => {
