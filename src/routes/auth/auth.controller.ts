@@ -15,7 +15,7 @@ class Handler {
     }
     if (req.method === 'POST') {
       const { email, password } = req.body;
-      const result = await this.service.login(email, password);
+      const result = await this.service.login(email, password, res);
       res.status(result.statusCode).json(result.message);
     }
       res.status(405).send();
@@ -26,8 +26,8 @@ class Handler {
       res.send('Login Page!');
     }
     if (req.method === 'POST') {
-      const { email, password } = req.body;
-      const result = await this.service.register(email, password);
+      const { email, nickname, name, password } = req.body;
+      const result = await this.service.register(email, password, nickname, name);
       res.status(result.statusCode).json(result.message);
     }
     res.status(405).send();
