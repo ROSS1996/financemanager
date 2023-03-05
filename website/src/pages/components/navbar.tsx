@@ -19,20 +19,21 @@ export const Navbar = ({ userId }: NavbarProps) => {
           <Link href="/">Home</Link>
         </li>
       </ul>
-      <ul>
-        {userId ? (
-          <li className="flex flex-row gap-3 font-bold">
+      {userId ? (
+        <ul className="flex flex-row gap-3 font-bold">
+          <li>
             User ID: <span>{userId}</span>
-            <button onClick={handleLogout}>Logout</button>
           </li>
-        ) : (
           <li className="font-bold">
-            <span>
-              <Link href="/login">Login</Link>
-            </span>
+            <Link href="/edit">Edit Profile</Link>
           </li>
-        )}
-      </ul>
+          <li onClick={handleLogout}>Logout</li>
+        </ul>
+      ) : (
+        <span className="font-bold">
+          <Link href="/login">Login</Link>
+        </span>
+      )}
     </nav>
   );
 };

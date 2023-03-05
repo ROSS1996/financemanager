@@ -6,15 +6,17 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const { data } = await axios.get("http://localhost:3000/userInfo", {
-      headers: { Authorization: req.headers.authorization },
-    });
-    console.log(data.info);
-    return res.status(200).json({
-      name: data.info.name,
-      nickname: data.info.nickname,
-      email: data.info.email,
-    });
+    const { name, nickname, email, password } = req.body;
+    const { data } = await axios.patch(
+      "http://localhost:3000/userInfo",
+      { name, nickname, email, password },
+      {
+        headers: { Authorization: req.headers.authorization },
+      }
+    );
+    return res
+      .status(200)
+      .json({ message: "User information updated successfully" });
   } catch (error: any) {
     if (error.response) {
       return res
