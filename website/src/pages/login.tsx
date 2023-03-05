@@ -8,7 +8,6 @@ export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -22,7 +21,7 @@ export default function Login() {
       setCookie(null, "userId", response.data.userId, { path: "/" });
       router.push("/");
     } catch (error: any) {
-      setError(error.response.data.message);
+      alert(error.response.data.message);
     }
   };
   return (

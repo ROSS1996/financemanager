@@ -10,25 +10,21 @@ class Handler {
   }
 
   async login(req: express.Request, res: express.Response): Promise<void> {
-    if (req.method === 'GET') {
-      res.send('Login Page!');
-    }
     if (req.method === 'POST') {
-      const { email, password } = req.body;
-      const result = await this.service.login(email, password, res);
-      res.status(result.statusCode).json(result.message);
+        const { email, password } = req.body;
+        const result = await this.service.login(email, password, res);
+        res.status(result.statusCode).json({ message: result.message });
+    } else {
+        res.status(405).send();
     }
-      res.status(405).send();
-  }
+}
+
 
   async register(req: express.Request, res: express.Response): Promise<void> {
-    if (req.method === 'GET') {
-      res.send('Register Page!');
-    }
     if (req.method === 'POST') {
       const { email, password, name, nickname} = req.body;
       const result = await this.service.register(email, password, name, nickname);
-      res.status(result.statusCode).json(result.message);
+      res.status(result.statusCode).json({ message: result.message });
     }
     res.status(405).send();
   }
