@@ -27,7 +27,9 @@ export const Navbar = ({ userId }: NavbarProps) => {
           <li className="font-bold">
             <Link href="/edit">Edit Profile</Link>
           </li>
-          <li onClick={handleLogout}>Logout</li>
+          <li onClick={handleLogout} className="cursor-pointer">
+            Logout
+          </li>
         </ul>
       ) : (
         <span className="font-bold">

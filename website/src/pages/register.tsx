@@ -10,26 +10,24 @@ export default function Register() {
   const [confirm, setConfirm] = useState("");
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
-  const [error, setError] = useState("");
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    event.preventDefault();
     try {
-      const response = await axios.post("/api/register", {
+      const { data } = await axios.post("/api/register", {
+        name,
+        nickname,
         email,
         password,
         confirm,
-        name,
-        nickname,
       });
-      if (response.status === 201) {
+      if (data) {
         router.push("/");
-      } else {
-        console.log(response.data.message);
       }
     } catch (error: any) {
-      setError(error.response.data.message);
+      console.log(error);
     }
   };
 
