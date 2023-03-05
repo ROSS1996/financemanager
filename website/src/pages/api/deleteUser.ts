@@ -6,14 +6,10 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const { data } = await axios.get("http://localhost:3000/userInfo", {
+    const { data } = await axios.delete("http://localhost:3000/userInfo", {
       headers: { Authorization: req.headers.authorization },
     });
-    return res.status(200).json({
-      name: data.info.name,
-      nickname: data.info.nickname,
-      email: data.info.email,
-    });
+    return res.status(200).json({ message: data.message });
   } catch (error: any) {
     if (error.response) {
       return res

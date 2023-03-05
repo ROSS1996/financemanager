@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Layout from "./components/layout";
 import axios from "axios";
-import { parseCookies } from "nookies";
+import { parseCookies, destroyCookie } from "nookies";
 import { useRouter } from "next/router";
 
 type UserData = {
@@ -18,6 +18,21 @@ export default function Edit() {
   const cookies = parseCookies();
   const token = cookies.token;
   const router = useRouter();
+
+  const handleDelete = async () => {
+    try {
+      const { data } = await axios.delete("/api/deleteUser", {
+        headers: { Authorization: token },
+      });
+      if (data) {
+        destroyCookie(null, "token", { path: "/" });
+        destroyCookie(null, "userId", { path: "/" });
+        router.push("/");
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -86,7 +101,7 @@ export default function Edit() {
               onChange={(event) => setEmail(event.target.value)}
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-6">
             <label
               className="block mb-2 font-bold text-gray-700"
               htmlFor="password"
@@ -100,12 +115,19 @@ export default function Edit() {
               onChange={(event) => setPassword(event.target.value)}
             />
           </div>
-          <div className="flex items-center justify-between mt-4">
+          <div className="flex items-center justify-between">
             <button
               className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
               type="submit"
             >
               Save
+            </button>
+            <button
+              className="px-4 py-2 font-bold text-white bg-red-500 rounded hover:bg-red-700 focus:outline-none focus:shadow-outline"
+              type="button"
+              onClick={handleDelete}
+            >
+              Delete
             </button>
           </div>
         </form>

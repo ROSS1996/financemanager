@@ -53,6 +53,43 @@ export class UserService {
     }
   }
 
+  async deleteUserInfo(token: string): Promise<UserInfoResponse> {
+    try {
+      const decodedToken = jwt.verify(token, JWT_SECRET);
+      const userId = (decodedToken as { id: number }).id;
+      const result = await db.query(
+        "DELETE FROM users WHERE id = $1 RETURNING name, email, nickname",
+        [userId]
+      );
+      if (result.rowCount === 0) {
+        return {
+          statusCode: 404,
+          message: "User not found",
+          name: "",
+          email: "",
+          nickname: "",
+        };
+      }
+      const userInfo = result.rows[0];
+      return {
+        statusCode: 200,
+        message: "User deleted successfully",
+        name: userInfo.name,
+        email: userInfo.email,
+        nickname: userInfo.nickname,
+      };
+    } catch (err) {
+      console.log(err);
+      return {
+        statusCode: 401,
+        message: "Invalid token",
+        name: "",
+        email: "",
+        nickname: "",
+      };
+    }
+  }
+
   async editUserInfo(
     token: string,
     name: string,
