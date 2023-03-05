@@ -1,5 +1,5 @@
 database/data
 database/pgadmin
 node_modules
-.nex
+.next
 next-env.d.ts

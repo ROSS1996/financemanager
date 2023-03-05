@@ -28,7 +28,8 @@ export class AuthService {
       return { statusCode: 401, message: 'Invalid email or password' };
     }
     const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '1h' });
-    res.set('Authorization', `Bearer ${token}`);
+    res.set('authorization', token);
+    res.set('userid', user.id);
     return { statusCode: 200, message: 'Login successful', };
   }
 
