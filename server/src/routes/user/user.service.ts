@@ -2,6 +2,8 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import db from "../../db";
+import { validationResult } from "express-validator";
+import { updateValidation } from "./user.validation";
 
 dotenv.config();
 
@@ -97,6 +99,16 @@ export class UserService {
     email: string,
     password: string
   ): Promise<UserInfoResponse> {
+    const errors = validationResult(updateValidation);
+    if (!errors.isEmpty()) {
+      return {
+        statusCode: 422,
+        message: "Invalid data provided",
+        name: "",
+        email: "",
+        nickname: "",
+      };
+    }
     try {
       const decodedToken = jwt.verify(token, JWT_SECRET);
       const userId = (decodedToken as { id: number }).id;
