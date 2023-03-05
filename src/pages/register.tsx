@@ -1,26 +1,61 @@
-export default function Login() {
+import { useState } from "react";
+import { useRouter } from "next/router";
+import axios from "axios";
+import Link from "next/link";
+
+export default function Register() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [name, setName] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      const response = await axios.post("/api/register", {
+        email,
+        password,
+        confirm,
+        name,
+        nickname,
+      });
+      if (response.status === 201) {
+        router.push("/");
+      } else {
+        console.log(response.data.message);
+      }
+    } catch (error: any) {
+      setError(error.response.data.message);
+    }
+  };
+
   return (
-    <div className="h-screen w-screen flex items-center justify-center">
+    <div className="flex items-center justify-center w-screen h-screen">
       <form
-        action="/send-data-here"
         method="post"
-        className="flex flex-col gap-2 items-center w-min border justify-center p-4 border-gray-600 rounded"
+        onSubmit={handleSubmit}
+        className="flex flex-col items-center justify-center gap-2 p-4 border border-gray-600 rounded w-min"
       >
         <div className="flex flex-col items-start">
-          <label htmlFor="email" className="font-medium cursor-pointer text-sm">
+          <label htmlFor="email" className="text-sm font-medium cursor-pointer">
             Email
           </label>
           <input
             type="email"
             id="email"
             name="email"
-            className="border border-gray-400 px-2 py-1 rounded-sm"
+            onChange={(event) => setEmail(event.target.value)}
+            className="px-2 py-1 border border-gray-400 rounded-sm"
           />
         </div>
         <div className="flex flex-col items-start">
           <label
             htmlFor="nickname"
-            className="font-medium cursor-pointer text-sm"
+            className="text-sm font-medium cursor-pointer"
           >
             Nickname
           </label>
@@ -28,24 +63,26 @@ export default function Login() {
             type="text"
             id="nickname"
             name="nickname"
-            className="border border-gray-400 px-2 py-1 rounded-sm"
+            onChange={(event) => setNickname(event.target.value)}
+            className="px-2 py-1 border border-gray-400 rounded-sm"
           />
         </div>
         <div className="flex flex-col items-start">
-          <label htmlFor="name" className="font-medium cursor-pointer text-sm">
+          <label htmlFor="name" className="text-sm font-medium cursor-pointer">
             Full Name
           </label>
           <input
             type="name"
             id="name"
             name="name"
-            className="border border-gray-400 px-2 py-1 rounded-sm"
+            onChange={(event) => setName(event.target.value)}
+            className="px-2 py-1 border border-gray-400 rounded-sm"
           />
         </div>
         <div className="flex flex-col items-start">
           <label
             htmlFor="password"
-            className="font-medium cursor-pointer text-sm"
+            className="text-sm font-medium cursor-pointer"
           >
             Password
           </label>
@@ -53,13 +90,14 @@ export default function Login() {
             type="password"
             id="password"
             name="password"
-            className="border border-gray-400 px-2 py-1 rounded-sm"
+            onChange={(event) => setPassword(event.target.value)}
+            className="px-2 py-1 border border-gray-400 rounded-sm"
           />
         </div>
         <div className="flex flex-col items-start">
           <label
             htmlFor="confirm"
-            className="font-medium cursor-pointer text-sm"
+            className="text-sm font-medium cursor-pointer"
           >
             Confirm Password
           </label>
@@ -67,15 +105,23 @@ export default function Login() {
             type="confirm"
             id="confirm"
             name="confirm"
-            className="border border-gray-400 px-2 py-1 rounded-sm"
+            onChange={(event) => setConfirm(event.target.value)}
+            className="px-2 py-1 border border-gray-400 rounded-sm"
           />
         </div>
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-2 py-1 rounded active:bg-blue-700 cursor-pointer"
-        >
-          Submit
-        </button>
+        <div className="flex flex-row items-center justify-around w-full">
+          <button
+            type="submit"
+            className="px-2 py-1 text-white bg-blue-600 rounded cursor-pointer active:bg-blue-700"
+          >
+            Submit
+          </button>
+          <Link href="/login">
+            <span className="px-4 py-1 text-sm text-gray-700 border cursor-pointer bg-gray-50">
+              Login
+            </span>
+          </Link>
+        </div>
       </form>
     </div>
   );

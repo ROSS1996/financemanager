@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { setCookie } from "nookies";
+import Link from "next/link";
 
 export default function Login() {
   const router = useRouter();
@@ -60,12 +61,19 @@ export default function Login() {
             className="px-2 py-1 border border-gray-400 rounded-sm"
           />
         </div>
-        <button
-          type="submit"
-          className="px-2 py-1 text-white bg-blue-600 rounded cursor-pointer active:bg-blue-700"
-        >
-          Submit
-        </button>
+        <div className="flex flex-row items-center justify-around w-full">
+          <button
+            type="submit"
+            className="px-2 py-1 text-white bg-blue-600 rounded cursor-pointer active:bg-blue-700"
+          >
+            Submit
+          </button>
+          <Link href="/register">
+            <span className="px-4 py-1 text-sm text-gray-700 border cursor-pointer bg-gray-50">
+              Register
+            </span>
+          </Link>
+        </div>
       </form>
     </div>
   );
