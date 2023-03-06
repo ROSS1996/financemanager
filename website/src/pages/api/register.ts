@@ -11,9 +11,15 @@ export default async function handler(
   try {
     const { headers } = await axios.post("http://localhost:3000/register", {
       email: req.body.email,
+      username: req.body.username,
       password: req.body.password,
-      name: req.body.name,
-      nickname: req.body.nickname,
+      confirm: req.body.confirm,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      birthdate: req.body.birthdate,
+      country: req.body.country,
+      phone: req.body.phone,
+      address: req.body.address,
     });
     return res
       .status(200)

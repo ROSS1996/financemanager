@@ -8,20 +8,28 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [name, setName] = useState("");
-  const [nickname, setNickname] = useState("");
+  const [firstname, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [birthdate, setBirthdate] = useState("");
+  const [country, setCountry] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    event.preventDefault();
     try {
       const { data } = await axios.post("/api/register", {
-        name,
-        nickname,
         email,
+        username,
         password,
         confirm,
+        firstname,
+        lastname,
+        birthdate,
+        country,
+        phone,
+        address,
       });
       if (data) {
         router.push("/login");
@@ -39,6 +47,21 @@ export default function Register() {
         className="flex flex-col items-center justify-center gap-2 p-4 border border-gray-600 rounded w-min"
       >
         <div className="flex flex-col items-start">
+          <label
+            htmlFor="username"
+            className="text-sm font-medium cursor-pointer"
+          >
+            Username
+          </label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            onChange={(event) => setUsername(event.target.value)}
+            className="px-2 py-1 border border-gray-400 rounded-sm"
+          />
+        </div>
+        <div className="flex flex-col items-start">
           <label htmlFor="email" className="text-sm font-medium cursor-pointer">
             Email
           </label>
@@ -47,33 +70,6 @@ export default function Register() {
             id="email"
             name="email"
             onChange={(event) => setEmail(event.target.value)}
-            className="px-2 py-1 border border-gray-400 rounded-sm"
-          />
-        </div>
-        <div className="flex flex-col items-start">
-          <label
-            htmlFor="nickname"
-            className="text-sm font-medium cursor-pointer"
-          >
-            Nickname
-          </label>
-          <input
-            type="text"
-            id="nickname"
-            name="nickname"
-            onChange={(event) => setNickname(event.target.value)}
-            className="px-2 py-1 border border-gray-400 rounded-sm"
-          />
-        </div>
-        <div className="flex flex-col items-start">
-          <label htmlFor="name" className="text-sm font-medium cursor-pointer">
-            Full Name
-          </label>
-          <input
-            type="name"
-            id="name"
-            name="name"
-            onChange={(event) => setName(event.target.value)}
             className="px-2 py-1 border border-gray-400 rounded-sm"
           />
         </div>
@@ -100,10 +96,97 @@ export default function Register() {
             Confirm Password
           </label>
           <input
-            type="confirm"
+            type="password"
             id="confirm"
             name="confirm"
             onChange={(event) => setConfirm(event.target.value)}
+            className="px-2 py-1 border border-gray-400 rounded-sm"
+          />
+        </div>
+        <div className="flex flex-col items-start">
+          <label
+            htmlFor="firstname"
+            className="text-sm font-medium cursor-pointer"
+          >
+            First Name
+          </label>
+          <input
+            type="text"
+            id="firstname"
+            name="firstname"
+            onChange={(event) => setFirstName(event.target.value)}
+            className="px-2 py-1 border border-gray-400 rounded-sm"
+          />
+        </div>
+        <div className="flex flex-col items-start">
+          <label
+            htmlFor="lastname"
+            className="text-sm font-medium cursor-pointer"
+          >
+            Last Name
+          </label>
+          <input
+            type="text"
+            id="lastname"
+            name="lastname"
+            onChange={(event) => setLastName(event.target.value)}
+            className="px-2 py-1 border border-gray-400 rounded-sm"
+          />
+        </div>
+        <div className="flex flex-col items-start">
+          <label
+            htmlFor="birthdate"
+            className="text-sm font-medium cursor-pointer"
+          >
+            Birthdate
+          </label>
+          <input
+            type="date"
+            id="birthdate"
+            name="birthdate"
+            onChange={(event) => setBirthdate(event.target.value)}
+            className="px-2 py-1 border border-gray-400 rounded-sm"
+          />
+        </div>
+        <div className="flex flex-col items-start">
+          <label
+            htmlFor="country"
+            className="text-sm font-medium cursor-pointer"
+          >
+            Country
+          </label>
+          <input
+            type="text"
+            id="country"
+            name="country"
+            onChange={(event) => setCountry(event.target.value)}
+            className="px-2 py-1 border border-gray-400 rounded-sm"
+          />
+        </div>
+        <div className="flex flex-col items-start">
+          <label htmlFor="phone" className="text-sm font-medium cursor-pointer">
+            Phone
+          </label>
+          <input
+            type="phone"
+            id="phone"
+            name="phone"
+            onChange={(event) => setPhone(event.target.value)}
+            className="px-2 py-1 border border-gray-400 rounded-sm"
+          />
+        </div>
+        <div className="flex flex-col items-start">
+          <label
+            htmlFor="address"
+            className="text-sm font-medium cursor-pointer"
+          >
+            Address
+          </label>
+          <input
+            type="address"
+            id="address"
+            name="address"
+            onChange={(event) => setAddress(event.target.value)}
             className="px-2 py-1 border border-gray-400 rounded-sm"
           />
         </div>
