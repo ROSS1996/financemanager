@@ -6,6 +6,8 @@ export interface User {
   country: string;
   firstname: string;
   lastname: string;
+  first_name?: string;
+  last_name?: string;
   birthdate: string;
   phone: string;
   address: string;

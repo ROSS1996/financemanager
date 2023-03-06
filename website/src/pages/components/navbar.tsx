@@ -2,10 +2,10 @@ import Link from "next/link";
 import { destroyCookie } from "nookies";
 
 type NavbarProps = {
-  userId?: string;
+  email: string | null;
 };
 
-export const Navbar = ({ userId }: NavbarProps) => {
+export const Navbar = ({ email }: NavbarProps) => {
   const handleLogout = () => {
     destroyCookie(null, "token", { path: "/" });
     destroyCookie(null, "userId", { path: "/" });
@@ -19,10 +19,10 @@ export const Navbar = ({ userId }: NavbarProps) => {
           <Link href="/">Home</Link>
         </li>
       </ul>
-      {userId ? (
+      {email ? (
         <ul className="flex flex-row gap-3 font-bold">
           <li>
-            User ID: <span>{userId}</span>
+            <span>{email}</span>
           </li>
           <li className="font-bold">
             <Link href="/edit">Edit Profile</Link>
@@ -33,7 +33,7 @@ export const Navbar = ({ userId }: NavbarProps) => {
         </ul>
       ) : (
         <span className="font-bold">
-          <Link href="/login">Login</Link>
+          <Link href="/login2">Login</Link>
         </span>
       )}
     </nav>

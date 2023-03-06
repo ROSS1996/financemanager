@@ -1,8 +1,6 @@
-import { ReactNode, useEffect, useState } from "react";
 import { getSession } from "next-auth/react";
 import type { Session } from "next-auth";
-
-import { Navbar } from "./navbar";
+import { useState, useEffect } from "react";
 
 interface User {
   email: string;
@@ -12,14 +10,7 @@ interface ProfileProps {
   session: Session | null;
 }
 
-type LayoutProps = {
-  children: ReactNode;
-};
-
-export default function Layout(
-  { children }: LayoutProps,
-  { session }: ProfileProps
-) {
+export default function Profile({ session }: ProfileProps) {
   const [email, setEmail] = useState<string | null>(null);
 
   useEffect(() => {
@@ -38,10 +29,14 @@ export default function Layout(
     }
   }, [session]);
 
+  if (!email) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <>
-      <Navbar email={email} />
-      {children}
-    </>
+    <div>
+      <h1>Profile Page</h1>
+      <p>Email: {email}</p>
+    </div>
   );
 }

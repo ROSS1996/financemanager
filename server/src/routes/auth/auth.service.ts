@@ -15,7 +15,14 @@ export class AuthService {
     email: string,
     password: string,
     res: any
-  ): Promise<{ statusCode: number; message: string }> {
+  ): Promise<{
+    statusCode: number;
+    message: string;
+    id?: string;
+    username?: string;
+    firstname?: string;
+    email?: string;
+  }> {
     const errors = validationResult(loginValidation);
     if (!errors.isEmpty()) {
       return { statusCode: 401, message: "Invalid email or password" };
@@ -34,8 +41,14 @@ export class AuthService {
     }
     const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "1h" });
     res.set("authorization", token);
-    res.set("userid", user.id);
-    return { statusCode: 200, message: "Login successful" };
+    return {
+      statusCode: 200,
+      message: "Login successful",
+      id: user.id,
+      username: user.username,
+      firstname: user.first_name,
+      email: user.email,
+    };
   }
   async register(user: User): Promise<{ statusCode: number; message: string }> {
     const errors = validationResult(registerValidation);

@@ -20,6 +20,7 @@ class Handler {
               username: result.username,
               email: result.email,
               firstname: result.firstname,
+              lastname: result.lastname,
             },
           });
         } else {

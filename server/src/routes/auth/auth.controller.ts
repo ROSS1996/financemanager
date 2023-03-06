@@ -14,7 +14,13 @@ class Handler {
     if (req.method === "POST") {
       const { email, password } = req.body;
       const result = await this.service.login(email, password, res);
-      res.status(result.statusCode).json({ message: result.message });
+      res.status(result.statusCode).json({
+        message: result.message,
+        id: result.id,
+        username: result.username,
+        name: result.firstname,
+        email: result.email,
+      });
     } else {
       res.status(405).send();
     }
