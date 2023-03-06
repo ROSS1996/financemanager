@@ -1,15 +1,14 @@
 import Link from "next/link";
-import { destroyCookie } from "nookies";
+import { signOut } from "next-auth/react";
 
 type NavbarProps = {
-  email: string | null;
+  name: string | null;
 };
 
-export const Navbar = ({ email }: NavbarProps) => {
-  const handleLogout = () => {
-    destroyCookie(null, "token", { path: "/" });
-    destroyCookie(null, "userId", { path: "/" });
-    location.reload();
+export const Navbar = ({ name }: NavbarProps) => {
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
+    window.location.reload();
   };
 
   return (
@@ -19,10 +18,10 @@ export const Navbar = ({ email }: NavbarProps) => {
           <Link href="/">Home</Link>
         </li>
       </ul>
-      {email ? (
+      {name ? (
         <ul className="flex flex-row gap-3 font-bold">
           <li>
-            <span>{email}</span>
+            <span>{name}</span>
           </li>
           <li className="font-bold">
             <Link href="/edit">Edit Profile</Link>
@@ -33,7 +32,7 @@ export const Navbar = ({ email }: NavbarProps) => {
         </ul>
       ) : (
         <span className="font-bold">
-          <Link href="/login2">Login</Link>
+          <Link href="/login">Login</Link>
         </span>
       )}
     </nav>

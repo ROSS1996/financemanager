@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { useRouter } from "next/router";
-import axios from "axios";
-import { setCookie } from "nookies";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Login() {
   const router = useRouter();
@@ -11,25 +10,15 @@ export default function Login() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    try {
-      const response = await axios.post<{ token: string; userId: string }>(
-        "/api/login",
-        { email, password }
-      );
-      const expires = new Date();
-      expires.setHours(expires.getHours() + 1); // expires in 1 hour
-      setCookie(null, "token", response.data.token, {
-        path: "/",
-        expires,
-      });
-      setCookie(null, "userId", response.data.userId, {
-        path: "/",
-        expires,
-      });
+    const result = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+    if (result?.error) {
+      alert(result.error);
+    } else {
       router.push("/");
-    } catch (error: any) {
-      alert(error.response.data.message);
     }
   };
 
@@ -74,7 +63,7 @@ export default function Login() {
             type="submit"
             className="px-2 py-1 text-white bg-blue-600 rounded cursor-pointer active:bg-blue-700"
           >
-            Submit
+            Sign In
           </button>
           <Link href="/register">
             <span className="px-4 py-1 text-sm text-gray-700 border cursor-pointer bg-gray-50">

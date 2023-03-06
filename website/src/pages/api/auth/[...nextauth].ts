@@ -4,19 +4,6 @@ import axios from "axios";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import { SessionOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { Console } from "console";
-
-interface Credentials {
-  email: string;
-  password: string;
-}
-
-interface User {
-  id: string;
-  email: string;
-  name: string;
-  username: string;
-}
 
 const options: NextAuthOptions = {
   providers: [
@@ -48,10 +35,19 @@ const options: NextAuthOptions = {
             email: data.email,
             name: data.name,
             username: data.username,
+            token: headers.authorization, // add token as a property of the user object
           };
+
           const token = headers.authorization;
           if (user && token) {
-            return Promise.resolve(user);
+            const payload = {
+              id: user.id,
+              email: user.email,
+              name: user.name,
+              username: user.username,
+              token: user.token, // include token in the payload
+            };
+            return Promise.resolve(payload);
           } else {
             return Promise.reject(new Error("Invalid email and/or password"));
           }

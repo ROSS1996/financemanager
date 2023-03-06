@@ -5,7 +5,7 @@ import type { Session } from "next-auth";
 import { Navbar } from "./navbar";
 
 interface User {
-  email: string;
+  name: string;
 }
 
 interface ProfileProps {
@@ -20,27 +20,27 @@ export default function Layout(
   { children }: LayoutProps,
   { session }: ProfileProps
 ) {
-  const [email, setEmail] = useState<string | null>(null);
+  const [name, setName] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
       const session = await getSession();
       if (session?.user) {
         const user = session.user as User;
-        setEmail(user.email);
+        setName(user.name);
       }
     }
     if (!session) {
       fetchData();
     } else {
       const user = session.user as User;
-      setEmail(user.email);
+      setName(user.name);
     }
   }, [session]);
 
   return (
     <>
-      <Navbar email={email} />
+      <Navbar name={name} />
       {children}
     </>
   );
