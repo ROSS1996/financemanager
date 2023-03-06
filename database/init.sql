@@ -12,6 +12,12 @@ CREATE TABLE users (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE IF NOT EXISTS accounts (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    starting_balance NUMERIC(12, 2) NOT NULL,
+    category VARCHAR(255)
+);
 CREATE TABLE IF NOT EXISTS expenses (
     id SERIAL PRIMARY KEY,
     description VARCHAR(255) NOT NULL,
@@ -22,8 +28,7 @@ CREATE TABLE IF NOT EXISTS expenses (
     account_id INT NOT NULL REFERENCES accounts(id),
     paid_at TIMESTAMP,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    INDEX (account_id)
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 CREATE TABLE IF NOT EXISTS revenues (
     id SERIAL PRIMARY KEY,
@@ -34,16 +39,8 @@ CREATE TABLE IF NOT EXISTS revenues (
     category VARCHAR(255) NOT NULL,
     account_id INT NOT NULL REFERENCES accounts(id),
     received_at TIMESTAMP,
-    created_at BIGINT NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    INDEX (account_id)
-);
-CREATE TABLE IF NOT EXISTS accounts (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    starting_balance NUMERIC(12, 2) NOT NULL,
-    category VARCHAR(255),
-    INDEX (id)
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 CREATE TABLE IF NOT EXISTS transfers (
     id SERIAL PRIMARY KEY,
@@ -54,7 +51,10 @@ CREATE TABLE IF NOT EXISTS transfers (
     origin_account_id INTEGER NOT NULL,
     destination_account_id INTEGER NOT NULL,
     FOREIGN KEY (origin_account_id) REFERENCES accounts (id) ON DELETE CASCADE,
-    FOREIGN KEY (destination_account_id) REFERENCES accounts (id) ON DELETE CASCADE,
-    INDEX (origin_account_id),
-    INDEX (destination_account_id)
+    FOREIGN KEY (destination_account_id) REFERENCES accounts (id) ON DELETE CASCADE
 );
+CREATE INDEX expenses_account_id_idx ON expenses (account_id);
+CREATE INDEX revenues_account_id_idx ON revenues (account_id);
+CREATE INDEX accounts_id_idx ON accounts (id);
+CREATE INDEX origin_account_id_idx ON transfers (origin_account_id);
+CREATE INDEX destination_account_id_idx ON transfers (destination_account_id);
