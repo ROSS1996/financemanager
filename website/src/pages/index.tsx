@@ -4,8 +4,8 @@ import axios from "axios";
 import { parseCookies } from "nookies";
 
 type UserData = {
-  name: string;
-  nickname: string;
+  firstname: string;
+  username: string;
   email: string;
 };
 
@@ -27,10 +27,10 @@ export default function Index() {
     <Layout>
       {userData ? (
         <div>
-          <p className="text-justify p-2">
+          <p className="p-2 text-justify">
             Did you know that{" "}
-            <span className="font-bold">{userData?.name}</span> (
-            <span className="italic">{userData.nickname}</span>) has been
+            <span className="font-bold">{userData?.firstname}</span> (
+            <span className="italic">{userData.username}</span>) has been
             sending emails to{" "}
             <span className="underline cursor-pointer">{userData.email}</span>{" "}
             as part of a top-secret project? The project is said to involve

@@ -12,9 +12,10 @@ const JWT_SECRET = process.env.JWT_SECRET || "";
 interface UserInfoResponse {
   statusCode: number;
   message: string;
-  name: string;
+  username: string;
+  firstname: string;
+  lastname: string;
   email: string;
-  nickname: string;
 }
 
 export class UserService {
@@ -23,34 +24,37 @@ export class UserService {
       const decodedToken = jwt.verify(token, JWT_SECRET);
       const userId = (decodedToken as { id: number }).id;
       const result = await db.query(
-        "SELECT name, email, nickname FROM users WHERE id = $1",
+        "SELECT username, email, first_name, last_name FROM users WHERE id = $1",
         [userId]
       );
       if (result.rowCount === 0) {
         return {
           statusCode: 404,
           message: "User not found",
-          name: "",
+          username: "",
+          firstname: "",
+          lastname: "",
           email: "",
-          nickname: "",
         };
       }
       const userInfo = result.rows[0];
       return {
         statusCode: 200,
         message: "User info retrieved successfully",
-        name: userInfo.name,
+        username: userInfo.username,
+        firstname: userInfo.first_name,
+        lastname: userInfo.last_name,
         email: userInfo.email,
-        nickname: userInfo.nickname,
       };
     } catch (err) {
       console.log(err);
       return {
         statusCode: 401,
         message: "Invalid token",
-        name: "",
+        username: "",
+        firstname: "",
+        lastname: "",
         email: "",
-        nickname: "",
       };
     }
   }
@@ -60,53 +64,62 @@ export class UserService {
       const decodedToken = jwt.verify(token, JWT_SECRET);
       const userId = (decodedToken as { id: number }).id;
       const result = await db.query(
-        "DELETE FROM users WHERE id = $1 RETURNING name, email, nickname",
+        "DELETE FROM users WHERE id = $1 RETURNING username, email, first_name, last_name",
         [userId]
       );
       if (result.rowCount === 0) {
         return {
           statusCode: 404,
           message: "User not found",
-          name: "",
+          username: "",
+          firstname: "",
+          lastname: "",
           email: "",
-          nickname: "",
         };
       }
       const userInfo = result.rows[0];
       return {
         statusCode: 200,
         message: "User deleted successfully",
-        name: userInfo.name,
+        username: userInfo.username,
+        firstname: userInfo.first_name,
+        lastname: userInfo.last_name,
         email: userInfo.email,
-        nickname: userInfo.nickname,
       };
     } catch (err) {
       console.log(err);
       return {
         statusCode: 401,
         message: "Invalid token",
-        name: "",
+        username: "",
+        firstname: "",
+        lastname: "",
         email: "",
-        nickname: "",
       };
     }
   }
 
   async editUserInfo(
     token: string,
-    name: string,
-    nickname: string,
+    username: string,
+    firstname: string,
+    lastname: string,
     email: string,
-    password: string
+    password: string,
+    country: string,
+    birthdate: string,
+    phone: string,
+    address: string
   ): Promise<UserInfoResponse> {
     const errors = validationResult(updateValidation);
     if (!errors.isEmpty()) {
       return {
         statusCode: 422,
         message: "Invalid data provided",
-        name: "",
+        username: "",
+        firstname: "",
+        lastname: "",
         email: "",
-        nickname: "",
       };
     }
     try {
@@ -117,36 +130,53 @@ export class UserService {
 
       // Update the user's info in the database
       const result = await db.query(
-        "UPDATE users SET name = $1, nickname = $2, email = $3, password = $4 WHERE id = $5 RETURNING name, email, nickname",
-        [name, nickname, email, hashedPassword, userId]
+        "UPDATE users SET username = $1, email = $  2, first_name = $3, last_name = $4, password_hash = $5, country = $6, birthdate = $7, phone = $8, address = $9, updated_at = CURRENT_TIMESTAMP WHERE id = $10 RETURNING username, email, first_name, last_name",
+        [
+          username,
+          email,
+          firstname,
+          lastname,
+          hashedPassword,
+          country,
+          birthdate,
+          phone,
+          address,
+          userId,
+        ]
       );
 
       if (result.rowCount === 0) {
         return {
           statusCode: 404,
           message: "User not found",
-          name: "",
+          username: "",
+          firstname: "",
+          lastname: "",
           email: "",
-          nickname: "",
         };
       }
+
       const userInfo = result.rows[0];
       return {
         statusCode: 200,
         message: "User info updated successfully",
-        name: userInfo.name,
+        username: userInfo.username,
+        firstname: userInfo.first_name,
+        lastname: userInfo.last_name,
         email: userInfo.email,
-        nickname: userInfo.nickname,
       };
     } catch (err) {
       console.log(err);
       return {
         statusCode: 401,
         message: "Invalid token",
-        name: "",
+        username: "",
+        firstname: "",
+        lastname: "",
         email: "",
-        nickname: "",
       };
     }
   }
 }
+
+export default new UserService();

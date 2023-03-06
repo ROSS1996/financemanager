@@ -17,9 +17,9 @@ class Handler {
           res.status(result.statusCode).json({
             message: result.message,
             info: {
-              name: result.name,
+              username: result.username,
               email: result.email,
-              nickname: result.nickname,
+              firstname: result.firstname,
             },
           });
         } else {
@@ -40,13 +40,28 @@ class Handler {
     } else if (req.method === "PATCH") {
       const token = req.headers.authorization;
       if (token) {
-        const { name, nickname, email, password } = req.body;
+        const {
+          username,
+          firstname,
+          lastname,
+          email,
+          password,
+          country,
+          birthdate,
+          phone,
+          address,
+        } = req.body;
         const result = await this.service.editUserInfo(
           token,
-          name,
-          nickname,
+          username,
+          firstname,
+          lastname,
           email,
-          password
+          password,
+          country,
+          birthdate,
+          phone,
+          address
         );
         res.status(result.statusCode).json({ message: result.message });
       } else {

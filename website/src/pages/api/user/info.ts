@@ -10,8 +10,8 @@ export default async function handler(
       headers: { Authorization: req.headers.authorization },
     });
     return res.status(200).json({
-      name: data.info.name,
-      nickname: data.info.nickname,
+      firstname: data.info.firstname,
+      username: data.info.username,
       email: data.info.email,
     });
   } catch (error: any) {
