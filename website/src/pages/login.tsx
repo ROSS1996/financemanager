@@ -17,13 +17,22 @@ export default function Login() {
         "/api/login",
         { email, password }
       );
-      setCookie(null, "token", response.data.token, { path: "/" });
-      setCookie(null, "userId", response.data.userId, { path: "/" });
+      const expires = new Date();
+      expires.setHours(expires.getHours() + 1); // expires in 1 hour
+      setCookie(null, "token", response.data.token, {
+        path: "/",
+        expires,
+      });
+      setCookie(null, "userId", response.data.userId, {
+        path: "/",
+        expires,
+      });
       router.push("/");
     } catch (error: any) {
       alert(error.response.data.message);
     }
   };
+
   return (
     <div className="flex items-center justify-center w-screen h-screen">
       <form

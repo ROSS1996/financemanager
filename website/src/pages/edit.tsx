@@ -11,10 +11,15 @@ type UserData = {
 };
 
 export default function Edit() {
-  const [name, setName] = useState("");
-  const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstname, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [birthdate, setBirthdate] = useState("");
+  const [country, setCountry] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
   const cookies = parseCookies();
   const token = cookies.token;
   const router = useRouter();
@@ -39,7 +44,17 @@ export default function Edit() {
     try {
       const { data } = await axios.patch(
         "/api/user/update",
-        { name, nickname, email, password },
+        {
+          email,
+          username,
+          password,
+          firstname,
+          lastname,
+          birthdate,
+          country,
+          phone,
+          address,
+        },
         {
           headers: { Authorization: token },
         }
@@ -59,60 +74,139 @@ export default function Edit() {
           className="px-8 pt-6 pb-8 mb-4 bg-white border rounded shadow-md"
           onSubmit={handleSubmit}
         >
-          <div className="mb-4">
+          <div className="flex flex-col items-start">
             <label
-              className="block mb-2 font-bold text-gray-700"
-              htmlFor="name"
+              htmlFor="username"
+              className="text-sm font-medium cursor-pointer"
             >
-              Name
+              Username
             </label>
             <input
-              className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-              id="name"
               type="text"
-              onChange={(event) => setName(event.target.value)}
+              id="username"
+              name="username"
+              onChange={(event) => setUsername(event.target.value)}
+              className="px-2 py-1 border border-gray-400 rounded-sm"
             />
           </div>
-          <div className="mb-4">
+          <div className="flex flex-col items-start">
             <label
-              className="block mb-2 font-bold text-gray-700"
-              htmlFor="nickname"
-            >
-              Nickname
-            </label>
-            <input
-              className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-              id="nickname"
-              type="text"
-              onChange={(event) => setNickname(event.target.value)}
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block mb-2 font-bold text-gray-700"
               htmlFor="email"
+              className="text-sm font-medium cursor-pointer"
             >
               Email
             </label>
             <input
-              className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+              type="email"
               id="email"
-              type="text"
+              name="email"
               onChange={(event) => setEmail(event.target.value)}
+              className="px-2 py-1 border border-gray-400 rounded-sm"
             />
           </div>
-          <div className="mb-6">
+          <div className="flex flex-col items-start">
             <label
-              className="block mb-2 font-bold text-gray-700"
               htmlFor="password"
+              className="text-sm font-medium cursor-pointer"
             >
               Password
             </label>
             <input
-              className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-              id="password"
               type="password"
+              id="password"
+              name="password"
               onChange={(event) => setPassword(event.target.value)}
+              className="px-2 py-1 border border-gray-400 rounded-sm"
+            />
+          </div>
+          <div className="flex flex-col items-start">
+            <label
+              htmlFor="firstname"
+              className="text-sm font-medium cursor-pointer"
+            >
+              First Name
+            </label>
+            <input
+              type="text"
+              id="firstname"
+              name="firstname"
+              onChange={(event) => setFirstName(event.target.value)}
+              className="px-2 py-1 border border-gray-400 rounded-sm"
+            />
+          </div>
+          <div className="flex flex-col items-start">
+            <label
+              htmlFor="lastname"
+              className="text-sm font-medium cursor-pointer"
+            >
+              Last Name
+            </label>
+            <input
+              type="text"
+              id="lastname"
+              name="lastname"
+              onChange={(event) => setLastName(event.target.value)}
+              className="px-2 py-1 border border-gray-400 rounded-sm"
+            />
+          </div>
+          <div className="flex flex-col items-start">
+            <label
+              htmlFor="birthdate"
+              className="text-sm font-medium cursor-pointer"
+            >
+              Birthdate
+            </label>
+            <input
+              type="date"
+              id="birthdate"
+              name="birthdate"
+              onChange={(event) => setBirthdate(event.target.value)}
+              className="px-2 py-1 border border-gray-400 rounded-sm"
+            />
+          </div>
+          <div className="flex flex-col items-start">
+            <label
+              htmlFor="country"
+              className="text-sm font-medium cursor-pointer"
+            >
+              Country
+            </label>
+            <input
+              type="text"
+              id="country"
+              name="country"
+              onChange={(event) => setCountry(event.target.value)}
+              className="px-2 py-1 border border-gray-400 rounded-sm"
+            />
+          </div>
+          <div className="flex flex-col items-start">
+            <label
+              htmlFor="phone"
+              className="text-sm font-medium cursor-pointer"
+            >
+              Phone
+            </label>
+            <input
+              type="phone"
+              id="phone"
+              name="phone"
+              onChange={(event) => setPhone(event.target.value)}
+              className="px-2 py-1 border border-gray-400 rounded-sm"
+            />
+          </div>
+          <div className="flex flex-col items-start">
+            <label
+              htmlFor="address"
+              className="text-sm font-medium cursor-pointer"
+            >
+              Address
+            </label>
+            <input
+              type="address"
+              id="address"
+              name="address"
+              onChange={(event) => setAddress(event.target.value)}
+              className="px-2 py-1 border border-gray-400 rounded-sm"
             />
           </div>
           <div className="flex items-center justify-between">

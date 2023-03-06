@@ -6,10 +6,30 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const { name, nickname, email, password } = req.body;
+    const {
+      email,
+      username,
+      password,
+      firstname,
+      lastname,
+      birthdate,
+      country,
+      phone,
+      address,
+    } = req.body;
     const { data } = await axios.patch(
       "http://localhost:3000/userInfo",
-      { name, nickname, email, password },
+      {
+        email,
+        username,
+        password,
+        firstname,
+        lastname,
+        birthdate,
+        country,
+        phone,
+        address,
+      },
       {
         headers: { Authorization: req.headers.authorization },
       }

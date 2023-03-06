@@ -130,7 +130,7 @@ export class UserService {
 
       // Update the user's info in the database
       const result = await db.query(
-        "UPDATE users SET username = $1, email = $  2, first_name = $3, last_name = $4, password_hash = $5, country = $6, birthdate = $7, phone = $8, address = $9, updated_at = CURRENT_TIMESTAMP WHERE id = $10 RETURNING username, email, first_name, last_name",
+        "UPDATE users SET username = $1, email = $2, first_name = $3, last_name = $4, password_hash = $5, country = $6, birthdate = $7, phone = $8, address = $9, updated_at = CURRENT_TIMESTAMP WHERE id = $10 RETURNING username, email, first_name, last_name",
         [
           username,
           email,

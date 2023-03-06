@@ -63,6 +63,7 @@ class Handler {
           phone,
           address
         );
+
         res.status(result.statusCode).json({ message: result.message });
       } else {
         res.status(401).json({ message: "Unauthorized" });

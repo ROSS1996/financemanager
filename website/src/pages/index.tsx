@@ -39,10 +39,10 @@ export default function Index() {
             involves mind-reading and telepathy, but the company has yet to
             confirm or deny these claims. As the project continued, more details
             began to emerge about the top-secret technology being developed by{" "}
-            <span className="font-bold">{userData?.name}</span>. Some sources
-            claimed that the project involved advanced AI algorithms that could
-            interpret and respond to human emotions, allowing people to
-            communicate with each other on a deeper level than ever before.
+            <span className="font-bold">{userData?.firstname}</span>. Some
+            sources claimed that the project involved advanced AI algorithms
+            that could interpret and respond to human emotions, allowing people
+            to communicate with each other on a deeper level than ever before.
             Others speculated that the technology was more focused on enhancing
             human productivity, allowing people to work together more
             efficiently and effectively than ever before. This would be
@@ -68,10 +68,11 @@ export default function Index() {
             real-time, and pushing the boundaries of what was possible in fields
             like science, engineering, and the arts. And it all started with the
             top-secret project that{" "}
-            <span className="font-bold">{userData?.name}</span> had been working
-            on. As the world celebrated this groundbreaking new technology, it
-            was clear that the future of communication and collaboration had
-            arrived, and that it was only going to get better from here.
+            <span className="font-bold">{userData?.firstname}</span> had been
+            working on. As the world celebrated this groundbreaking new
+            technology, it was clear that the future of communication and
+            collaboration had arrived, and that it was only going to get better
+            from here.
           </p>
         </div>
       ) : (
