@@ -21,7 +21,7 @@ export default function Edit() {
 
   const handleDelete = async () => {
     try {
-      const { data } = await axios.delete("/api/deleteUser", {
+      const { data } = await axios.delete("/api/user/delete", {
         headers: { Authorization: token },
       });
       if (data) {
@@ -38,7 +38,7 @@ export default function Edit() {
     event.preventDefault();
     try {
       const { data } = await axios.patch(
-        "/api/editUser",
+        "/api/user/update",
         { name, nickname, email, password },
         {
           headers: { Authorization: token },
