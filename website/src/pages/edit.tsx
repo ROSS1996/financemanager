@@ -1,16 +1,20 @@
-import { useState } from "react";
-import Layout from "./components/layout";
 import axios from "axios";
-import { parseCookies, destroyCookie } from "nookies";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import Layout from "./components/layout";
+import { useSession, signOut } from "next-auth/react";
+import type { Session } from "next-auth";
 
-type UserData = {
-  name: string;
-  nickname: string;
-  email: string;
-};
+export default function Index() {
+  const [sessionState, setSessionState] = useState<Session | null>(null);
+  const { data: sessionData, status } = useSession();
 
-export default function Edit() {
+  useEffect(() => {
+    if (status === "authenticated") {
+      sessionData ? setSessionState(sessionData) : setSessionState(null);
+    }
+  }, [sessionData, status]);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstname, setFirstName] = useState("");
@@ -20,18 +24,15 @@ export default function Edit() {
   const [country, setCountry] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const cookies = parseCookies();
-  const token = cookies.token;
   const router = useRouter();
 
   const handleDelete = async () => {
     try {
       const { data } = await axios.delete("/api/user/delete", {
-        headers: { Authorization: token },
+        headers: { Authorization: sessionState?.user.backend },
       });
       if (data) {
-        destroyCookie(null, "token", { path: "/" });
-        destroyCookie(null, "userId", { path: "/" });
+        signOut();
         router.push("/");
       }
     } catch (error: any) {
@@ -56,7 +57,7 @@ export default function Edit() {
           address,
         },
         {
-          headers: { Authorization: token },
+          headers: { Authorization: sessionState?.user.backend },
         }
       );
       if (data) {

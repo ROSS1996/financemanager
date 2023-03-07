@@ -24,8 +24,8 @@ export default function Index({ session }: ProfileProps) {
           <p className="p-2 text-justify">
             Did you know that{" "}
             <span className="font-bold">{sessionState.user?.name}</span> (
-            <span className="italic">{sessionState.user?.name}</span>) has been
-            sending emails to{" "}
+            <span className="italic">{sessionState.user?.username}</span>) has
+            been sending emails to{" "}
             <span className="underline cursor-pointer">
               {sessionState.user?.email}
             </span>{" "}

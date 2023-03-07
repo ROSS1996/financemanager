@@ -1,17 +1,17 @@
-import express from 'express';
-import router from './routes';
-import db from './db';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-import helmet from 'helmet';
-import dotenv from 'dotenv';
+import express from "express";
+import router from "./routes";
+import db from "./db";
+import cors from "cors";
+import bodyParser from "body-parser";
+import helmet from "helmet";
+import dotenv from "dotenv";
 
 dotenv.config();
 
 const app = express();
 const port = process.env.SERVER_PORT;
 
-const whitelist = ['https://example.com', 'https://www.example.com'];
+const whitelist = ["localhost", "http://localhost:3000"];
 
 const corsOptions: cors.CorsOptions = {
   origin: (origin, callback) => {
@@ -24,13 +24,12 @@ const corsOptions: cors.CorsOptions = {
 };
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 app.use(helmet());
 app.use(cors(corsOptions));
 app.use(router);
-
 
 db.testConnection()
   .then(() => {
@@ -39,5 +38,5 @@ db.testConnection()
     });
   })
   .catch((err) => {
-    console.error('Failed to connect to database', err);
+    console.error("Failed to connect to database", err);
   });

@@ -52,6 +52,7 @@ class Handler {
           phone,
           address,
         } = req.body;
+
         const result = await this.service.editUserInfo(
           token,
           username,

@@ -51,7 +51,6 @@ class Handler {
         phone: phone,
         address: address,
       };
-      console.log(user);
       const result = await this.service.register(user);
       res.status(result.statusCode).json({ message: result.message });
     } else {

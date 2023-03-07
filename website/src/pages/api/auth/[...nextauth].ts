@@ -29,23 +29,21 @@ const options: NextAuthOptions = {
               password: credentials?.password,
             }
           );
-
           const user = {
             id: data.id,
             email: data.email,
             name: data.name,
             username: data.username,
-            token: headers.authorization, // add token as a property of the user object
+            backend: headers.authorization,
           };
 
-          const token = headers.authorization;
-          if (user && token) {
+          if (user) {
             const payload = {
               id: user.id,
               email: user.email,
               name: user.name,
               username: user.username,
-              token: user.token, // include token in the payload
+              backend: user.backend,
             };
             return Promise.resolve(payload);
           } else {
@@ -57,12 +55,31 @@ const options: NextAuthOptions = {
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.username = user.username;
+        token.backend = user.backend;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      if (token && session.user) {
+        session.user.id = token.id;
+        session.user.username = token.username;
+        session.user.backend = token.backend;
+      }
+      return session;
+    },
+  },
   session: {
-    jwt: true,
+    strategy: "jwt",
     maxAge: 60 * 60, // in seconds
-  } as unknown as SessionOptions,
+  },
   jwt: {
     secret: process.env.JWT_SECRET,
+    // modify the token to include id and username fields
   },
 };
 
