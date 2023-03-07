@@ -9,21 +9,16 @@ interface ProfileProps {
 }
 
 interface Expense {
-  id: number;
-  description: string;
-  amount: string;
-  due_date: string;
-  paid: boolean;
+  id: string;
+  name: string;
+  starting_balance: string;
   category: string;
-  user_id: number;
-  paid_at: string | null;
-  created_at: string;
-  updated_at: string;
+  user_id?: string;
 }
 
 export default function Index({ session }: ProfileProps) {
   const [sessionState, setSessionState] = useState<Session | null>(null);
-  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [accounts, setAccounts] = useState<Expense[]>([]);
   const { data: sessionData, status } = useSession();
 
   useEffect(() => {
@@ -35,10 +30,10 @@ export default function Index({ session }: ProfileProps) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/api/expenses/all", {
+        const response = await axios.get("/api/accounts/all", {
           params: { id: sessionState?.user.id },
         });
-        setExpenses(response.data.expenses); // log the response data to the console
+        setAccounts(response.data.accounts);
       } catch (error) {
         console.error(error);
       }
@@ -51,21 +46,15 @@ export default function Index({ session }: ProfileProps) {
 
   return (
     <Layout>
-      {expenses ? (
+      {accounts ? (
         <table className="w-full border-collapse">
           <thead>
             <tr className="text-left bg-gray-100">
               <th className="px-6 py-3 font-bold border-b border-gray-200">
-                Description
+                Name
               </th>
               <th className="px-6 py-3 font-bold border-b border-gray-200">
-                Amount
-              </th>
-              <th className="px-6 py-3 font-bold border-b border-gray-200">
-                Due Date
-              </th>
-              <th className="px-6 py-3 font-bold border-b border-gray-200">
-                Paid
+                Starting Balance
               </th>
               <th className="px-6 py-3 font-bold border-b border-gray-200">
                 Category
@@ -73,32 +62,24 @@ export default function Index({ session }: ProfileProps) {
             </tr>
           </thead>
           <tbody>
-            {expenses.map((expense) => (
+            {accounts.map((account) => (
               <tr
-                key={expense.id}
+                key={account.id}
                 className="bg-white border-b border-gray-200"
               >
+                <td className="px-6 py-4 whitespace-nowrap">{account.name}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {expense.description}
+                  {account.starting_balance}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {expense.amount}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {expense.due_date}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {expense.paid ? "Yes" : "No"}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {expense.category}
+                  {account.category}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       ) : (
-        <p className="text-lg font-bold text-center">No registered expenses.</p>
+        <p className="text-lg font-bold text-center">No registered accounts.</p>
       )}
     </Layout>
   );

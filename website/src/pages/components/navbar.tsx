@@ -18,9 +18,20 @@ export const Navbar = ({ name }: NavbarProps) => {
           <Link href="/">Home</Link>
         </li>
         {name ? (
-          <li className="flex flex-row gap-2 font-bold">
-            <Link href="/expenses">Expenses</Link>
-          </li>
+          <>
+            <li className="flex flex-row gap-2 font-bold">
+              <Link href="/accounts">Accounts</Link>
+            </li>
+            <li className="flex flex-row gap-2 font-bold">
+              <Link href="/expenses">Expenses</Link>
+            </li>
+            <li className="flex flex-row gap-2 font-bold">
+              <Link href="/revenues">Revenues</Link>
+            </li>
+            <li className="flex flex-row gap-2 font-bold">
+              <Link href="/transfers">Transfers</Link>
+            </li>
+          </>
         ) : (
           false
         )}

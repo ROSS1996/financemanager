@@ -8,22 +8,20 @@ interface ProfileProps {
   session?: Session | null;
 }
 
-interface Expense {
-  id: number;
+interface Transfer {
+  id?: string;
   description: string;
   amount: string;
   due_date: string;
-  paid: boolean;
-  category: string;
-  user_id: number;
-  paid_at: string | null;
-  created_at: string;
-  updated_at: string;
+  done: string;
+  origin_account_id: string;
+  destination_account_id: string;
+  user_id?: string;
 }
 
 export default function Index({ session }: ProfileProps) {
   const [sessionState, setSessionState] = useState<Session | null>(null);
-  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [transfers, setTransfers] = useState<Transfer[]>([]);
   const { data: sessionData, status } = useSession();
 
   useEffect(() => {
@@ -35,10 +33,10 @@ export default function Index({ session }: ProfileProps) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/api/expenses/all", {
+        const response = await axios.get("/api/transfers/all", {
           params: { id: sessionState?.user.id },
         });
-        setExpenses(response.data.expenses); // log the response data to the console
+        setTransfers(response.data.transfers);
       } catch (error) {
         console.error(error);
       }
@@ -51,7 +49,7 @@ export default function Index({ session }: ProfileProps) {
 
   return (
     <Layout>
-      {expenses ? (
+      {transfers ? (
         <table className="w-full border-collapse">
           <thead>
             <tr className="text-left bg-gray-100">
@@ -65,40 +63,48 @@ export default function Index({ session }: ProfileProps) {
                 Due Date
               </th>
               <th className="px-6 py-3 font-bold border-b border-gray-200">
-                Paid
+                Done
               </th>
               <th className="px-6 py-3 font-bold border-b border-gray-200">
-                Category
+                Origin Account
+              </th>
+              <th className="px-6 py-3 font-bold border-b border-gray-200">
+                Destination Account
               </th>
             </tr>
           </thead>
           <tbody>
-            {expenses.map((expense) => (
+            {transfers.map((transfer) => (
               <tr
-                key={expense.id}
+                key={transfer.id}
                 className="bg-white border-b border-gray-200"
               >
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {expense.description}
+                  {transfer.description}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {expense.amount}
+                  {transfer.amount}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {expense.due_date}
+                  {transfer.due_date}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {expense.paid ? "Yes" : "No"}
+                  {transfer.done ? "Yes" : "No"}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {expense.category}
+                  {transfer.origin_account_id}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {transfer.destination_account_id}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       ) : (
-        <p className="text-lg font-bold text-center">No registered expenses.</p>
+        <p className="text-lg font-bold text-center">
+          No registered transfers.
+        </p>
       )}
     </Layout>
   );

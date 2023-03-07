@@ -8,12 +8,12 @@ interface ProfileProps {
   session?: Session | null;
 }
 
-interface Expense {
+interface Revenue {
   id: number;
   description: string;
   amount: string;
   due_date: string;
-  paid: boolean;
+  received: boolean;
   category: string;
   user_id: number;
   paid_at: string | null;
@@ -23,7 +23,7 @@ interface Expense {
 
 export default function Index({ session }: ProfileProps) {
   const [sessionState, setSessionState] = useState<Session | null>(null);
-  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [revenues, setRevenues] = useState<Revenue[]>([]);
   const { data: sessionData, status } = useSession();
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function Index({ session }: ProfileProps) {
         const response = await axios.get("/api/expenses/all", {
           params: { id: sessionState?.user.id },
         });
-        setExpenses(response.data.expenses); // log the response data to the console
+        setRevenues(response.data.revenues);
       } catch (error) {
         console.error(error);
       }
@@ -51,7 +51,7 @@ export default function Index({ session }: ProfileProps) {
 
   return (
     <Layout>
-      {expenses ? (
+      {revenues ? (
         <table className="w-full border-collapse">
           <thead>
             <tr className="text-left bg-gray-100">
@@ -65,7 +65,7 @@ export default function Index({ session }: ProfileProps) {
                 Due Date
               </th>
               <th className="px-6 py-3 font-bold border-b border-gray-200">
-                Paid
+                Received
               </th>
               <th className="px-6 py-3 font-bold border-b border-gray-200">
                 Category
@@ -73,32 +73,32 @@ export default function Index({ session }: ProfileProps) {
             </tr>
           </thead>
           <tbody>
-            {expenses.map((expense) => (
+            {revenues.map((revenue) => (
               <tr
-                key={expense.id}
+                key={revenue.id}
                 className="bg-white border-b border-gray-200"
               >
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {expense.description}
+                  {revenue.description}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {expense.amount}
+                  {revenue.amount}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {expense.due_date}
+                  {revenue.due_date}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {expense.paid ? "Yes" : "No"}
+                  {revenue.received ? "Yes" : "No"}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {expense.category}
+                  {revenue.category}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       ) : (
-        <p className="text-lg font-bold text-center">No registered expenses.</p>
+        <p className="text-lg font-bold text-center">No registered revenues.</p>
       )}
     </Layout>
   );
