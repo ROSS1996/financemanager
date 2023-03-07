@@ -2,7 +2,6 @@ import { NextApiHandler, NextApiRequest } from "next";
 import { RequestInternal } from "next-auth";
 import axios from "axios";
 import NextAuth, { NextAuthOptions } from "next-auth";
-import { SessionOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 const options: NextAuthOptions = {

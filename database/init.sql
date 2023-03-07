@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS accounts (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     starting_balance NUMERIC(12, 2) NOT NULL,
-    category VARCHAR(255)
+    category VARCHAR(255),
+    user_id INTEGER NOT NULL REFERENCES users(id)
 );
 CREATE TABLE IF NOT EXISTS expenses (
     id SERIAL PRIMARY KEY,
@@ -26,6 +27,7 @@ CREATE TABLE IF NOT EXISTS expenses (
     paid BOOLEAN NOT NULL,
     category VARCHAR(255) NOT NULL,
     account_id INT NOT NULL REFERENCES accounts(id),
+    user_id INTEGER NOT NULL REFERENCES users(id),
     paid_at TIMESTAMP,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
@@ -38,6 +40,7 @@ CREATE TABLE IF NOT EXISTS revenues (
     received BOOLEAN NOT NULL,
     category VARCHAR(255) NOT NULL,
     account_id INT NOT NULL REFERENCES accounts(id),
+    user_id INTEGER NOT NULL REFERENCES users(id),
     received_at TIMESTAMP,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
@@ -50,6 +53,7 @@ CREATE TABLE IF NOT EXISTS transfers (
     done BOOLEAN NOT NULL,
     origin_account_id INTEGER NOT NULL,
     destination_account_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL REFERENCES users(id),
     FOREIGN KEY (origin_account_id) REFERENCES accounts (id) ON DELETE CASCADE,
     FOREIGN KEY (destination_account_id) REFERENCES accounts (id) ON DELETE CASCADE
 );

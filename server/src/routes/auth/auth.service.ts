@@ -73,6 +73,7 @@ export class AuthService {
       );
       return { statusCode: 201, message: "Registration successful" };
     } catch (error) {
+      console.log(error);
       return { statusCode: 500, message: "Internal server error" };
     }
   }
