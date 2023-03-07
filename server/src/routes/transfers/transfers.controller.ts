@@ -31,9 +31,9 @@ class Handler {
 
   async single(req: express.Request, res: express.Response): Promise<void> {
     if (req.method === "GET") {
-      const accountId = req.body.id;
-      if (accountId) {
-        const result = await this.service.getTransferById(accountId);
+      const transferId = req.body.id;
+      if (transferId) {
+        const result = await this.service.getTransferById(transferId);
         if (result.statusCode === 200) {
           res.status(result.statusCode).json({
             message: result.message,
@@ -44,9 +44,9 @@ class Handler {
         }
       }
     } else if (req.method === "DELETE") {
-      const expenseId = req.body.id;
-      if (expenseId) {
-        const result = await this.service.deleteTransferById(expenseId);
+      const transferId = req.body.id;
+      if (transferId) {
+        const result = await this.service.deleteTransferById(transferId);
         res.status(result.statusCode).json({ message: result.message });
       }
     } else if (req.method === "PATCH") {

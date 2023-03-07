@@ -13,10 +13,17 @@ export const Navbar = ({ name }: NavbarProps) => {
 
   return (
     <nav className="flex flex-row items-center justify-between w-full px-2 py-1 bg-blue-300">
-      <ul>
+      <ul className="flex flex-row items-center gap-2">
         <li className="flex flex-row gap-2 font-bold">
           <Link href="/">Home</Link>
         </li>
+        {name ? (
+          <li className="flex flex-row gap-2 font-bold">
+            <Link href="/expenses">Expenses</Link>
+          </li>
+        ) : (
+          false
+        )}
       </ul>
       {name ? (
         <ul className="flex flex-row gap-3 font-bold">
