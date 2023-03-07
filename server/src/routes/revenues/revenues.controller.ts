@@ -1,9 +1,9 @@
-import { ExpensesService } from "./revenues.service";
+import { RevenuesService } from "./revenues.service";
 import express from "express";
-import { Expense } from "../models/expense";
+import { Revenue } from "../models/revenue";
 
 class Handler {
-  private service = new ExpensesService();
+  private service = new RevenuesService();
 
   constructor() {
     this.multi = this.multi.bind(this);
@@ -14,11 +14,11 @@ class Handler {
     if (req.method === "GET") {
       const userid = req.body.id;
       if (userid) {
-        const result = await this.service.getExpenses(userid);
+        const result = await this.service.getRevenues(userid);
         if (result.statusCode === 200) {
           res.status(result.statusCode).json({
             message: result.message,
-            expenses: result.expenses,
+            revenues: result.revenues,
           });
         } else {
           res.status(result.statusCode).json({ message: result.message });
@@ -31,22 +31,22 @@ class Handler {
 
   async single(req: express.Request, res: express.Response): Promise<void> {
     if (req.method === "GET") {
-      const expenseId = req.body.id;
-      if (expenseId) {
-        const result = await this.service.getExpenseById(expenseId);
+      const revenueId = req.body.id;
+      if (revenueId) {
+        const result = await this.service.getRevenueById(revenueId);
         if (result.statusCode === 200) {
           res.status(result.statusCode).json({
             message: result.message,
-            expense: result.expense,
+            revenue: result.revenue,
           });
         } else {
           res.status(result.statusCode).json({ message: result.message });
         }
       }
     } else if (req.method === "DELETE") {
-      const expenseId = req.body.id;
-      if (expenseId) {
-        const result = await this.service.deleteExpenseById(expenseId);
+      const revenueId = req.body.id;
+      if (revenueId) {
+        const result = await this.service.deleteRevenueById(revenueId);
         res.status(result.statusCode).json({ message: result.message });
       }
     } else if (req.method === "PATCH") {
@@ -55,26 +55,26 @@ class Handler {
         description,
         amount,
         due_date,
-        paid,
+        received,
         category,
         account_id,
-        paid_at,
+        received_at,
       } = req.body;
       if (id) {
-        const expense: Expense = {
+        const revenue: Revenue = {
           id: id,
           description: description,
           amount: amount,
           due_date: due_date,
-          paid: paid,
+          received: received,
           category: category,
           account_id: account_id,
           user_id: "",
-          paid_at: paid_at,
+          received_at: received_at,
           created_at: "",
           updated_at: "",
         };
-        const result = await this.service.updateExpense(id, expense);
+        const result = await this.service.updateRevenue(id, revenue);
         res.status(result.statusCode).json({ message: result.message });
       }
     } else if (req.method === "POST") {
@@ -84,25 +84,25 @@ class Handler {
           description,
           amount,
           due_date,
-          paid,
+          received,
           category,
           account_id,
-          paid_at,
+          received_at,
         } = req.body;
-        const expense: Expense = {
+        const revenue: Revenue = {
           id: "",
           description: description,
           amount: amount,
           due_date: due_date,
-          paid: paid,
+          received: received,
           category: category,
           account_id: account_id,
           user_id: userid,
-          paid_at: paid_at,
+          received_at: received_at,
           created_at: "",
           updated_at: "",
         };
-        const result = await this.service.addExpense(expense);
+        const result = await this.service.addRevenue(revenue);
         res.status(result.statusCode).json({ message: result.message });
       }
     } else {
@@ -111,10 +111,10 @@ class Handler {
   }
 }
 
-const ExpensesController = express.Router();
-const Expenses = new Handler();
+const RevenuesController = express.Router();
+const Revenues = new Handler();
 
-ExpensesController.all("/multi", Expenses.multi);
-ExpensesController.all("/single", Expenses.single);
+RevenuesController.all("/multi", Revenues.multi);
+RevenuesController.all("/single", Revenues.single);
 
-export default ExpensesController;
+export default RevenuesController;

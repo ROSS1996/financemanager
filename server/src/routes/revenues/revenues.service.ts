@@ -1,128 +1,128 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import db from "../../db";
-import { Expense } from "../models/expense";
+import { Revenue } from "../models/revenue";
 
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || "";
 
-interface ExpenseInfo {
+interface RevenuesInfo {
   id: string;
   description: string;
   amount: string;
   due_date: string;
-  paid: string;
+  received: string;
   category: string;
   user_id: string;
-  paid_at: string;
+  received_at: string;
   created_at: string;
   updated_at: string;
 }
 
-interface ExpensesResponse {
+interface RevenuesResponse {
   statusCode: number;
   message: string;
-  expenses: ExpenseInfo[];
+  revenues: RevenuesInfo[];
 }
 
-interface SingleExpenses {
+interface SingleRevenues {
   statusCode: number;
   message: string;
-  expense?: ExpenseInfo | null | undefined;
+  revenue?: RevenuesInfo | null | undefined;
 }
 
-export class ExpensesService {
-  async getExpenses(userid: string): Promise<ExpensesResponse> {
+export class RevenuesService {
+  async getRevenues(userid: string): Promise<RevenuesResponse> {
     try {
       const result = await db.query(
-        "SELECT * FROM expenses WHERE user_id = $1",
+        "SELECT * FROM revenues WHERE user_id = $1",
         [userid]
       );
-      const expensesInfo = result.rows.map((row) => ({
+      const revenuesInfo = result.rows.map((row) => ({
         id: row.id,
         description: row.description,
         amount: row.amount,
         due_date: row.due_date,
-        paid: row.paid,
+        received: row.received,
         category: row.category,
         user_id: row.user_id,
-        paid_at: row.paid_at,
+        received_at: row.received_at,
         created_at: row.created_at,
         updated_at: row.updated_at,
       }));
       return {
         statusCode: 200,
-        message: "Expenses retrieved successfully",
-        expenses: expensesInfo,
+        message: "Revenues retrieved successfully",
+        revenues: revenuesInfo,
       };
     } catch (err) {
       console.log(err);
       return {
         statusCode: 401,
         message: "Invalid token",
-        expenses: [],
+        revenues: [],
       };
     }
   }
 
-  async getExpenseById(expenseId: string): Promise<SingleExpenses> {
+  async getRevenueById(revenueId: string): Promise<SingleRevenues> {
     try {
-      const result = await db.query("SELECT * FROM expenses WHERE id = $1", [
-        expenseId,
+      const result = await db.query("SELECT * FROM revenues WHERE id = $1", [
+        revenueId,
       ]);
-      const expenseInfo = result.rows[0];
-      if (!expenseInfo) {
+      const RevenuesInfo = result.rows[0];
+      if (!RevenuesInfo) {
         return {
           statusCode: 404,
-          message: "Expense not found",
-          expense: null,
+          message: "revenue not found",
+          revenue: null,
         };
       }
-      const expense: Expense = {
-        id: expenseInfo.id,
-        description: expenseInfo.description,
-        amount: expenseInfo.amount,
-        due_date: expenseInfo.due_date,
-        paid: expenseInfo.paid,
-        category: expenseInfo.category,
-        account_id: expenseInfo.account_id,
-        user_id: expenseInfo.user_id,
-        paid_at: expenseInfo.paid_at,
-        created_at: expenseInfo.created_at,
-        updated_at: expenseInfo.updated_at,
+      const revenue: Revenue = {
+        id: RevenuesInfo.id,
+        description: RevenuesInfo.description,
+        amount: RevenuesInfo.amount,
+        due_date: RevenuesInfo.due_date,
+        received: RevenuesInfo.received,
+        category: RevenuesInfo.category,
+        account_id: RevenuesInfo.account_id,
+        user_id: RevenuesInfo.user_id,
+        received_at: RevenuesInfo.received_at,
+        created_at: RevenuesInfo.created_at,
+        updated_at: RevenuesInfo.updated_at,
       };
       return {
         statusCode: 200,
-        message: "Expense retrieved successfully",
-        expense: expense,
+        message: "revenue retrieved successfully",
+        revenue: revenue,
       };
     } catch (err) {
       console.log(err);
       return {
         statusCode: 500,
         message: "Internal server error",
-        expense: null,
+        revenue: null,
       };
     }
   }
 
-  async deleteExpenseById(
-    expenseId: string
+  async deleteRevenueById(
+    revenueId: string
   ): Promise<{ statusCode: number; message: string }> {
     try {
-      const result = await db.query("DELETE FROM expenses WHERE id = $1", [
-        expenseId,
+      const result = await db.query("DELETE FROM revenues WHERE id = $1", [
+        revenueId,
       ]);
       if (result.rowCount === 0) {
         return {
           statusCode: 404,
-          message: "Expense not found",
+          message: "revenue not found",
         };
       }
       return {
         statusCode: 200,
-        message: "Expense deleted successfully",
+        message: "revenue deleted successfully",
       };
     } catch (err) {
       console.log(err);
@@ -133,28 +133,28 @@ export class ExpensesService {
     }
   }
 
-  async addExpense(
-    expense: Expense
+  async addRevenue(
+    revenue: Revenue
   ): Promise<{ statusCode: number; message: string }> {
     try {
       await db.query(
-        `INSERT INTO expenses
-          (description, amount, due_date, paid, category, account_id, user_id, paid_at)
+        `INSERT INTO revenues
+          (description, amount, due_date, received, category, account_id, user_id, received_at)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
         [
-          expense.description,
-          expense.amount,
-          expense.due_date,
-          expense.paid,
-          expense.category,
-          expense.account_id,
-          expense.user_id,
-          expense.paid_at,
+          revenue.description,
+          revenue.amount,
+          revenue.due_date,
+          revenue.received,
+          revenue.category,
+          revenue.account_id,
+          revenue.user_id,
+          revenue.received_at,
         ]
       );
       return {
         statusCode: 200,
-        message: "Expense added successfully",
+        message: "revenue added successfully",
       };
     } catch (err) {
       console.log(err);
@@ -165,33 +165,33 @@ export class ExpensesService {
     }
   }
 
-  async updateExpense(
-    expenseId: string,
-    expense: Expense
+  async updateRevenue(
+    revenueId: string,
+    revenue: Revenue
   ): Promise<{ statusCode: number; message: string }> {
     try {
       const result = await db.query(
-        `UPDATE expenses SET description = $1, amount = $2, due_date = $3, paid = $4, category = $5, account_id = $6, paid_at = $7, updated_at = NOW() WHERE id = $8`,
+        `UPDATE revenues SET description = $1, amount = $2, due_date = $3, received = $4, category = $5, account_id = $6, received_at = $7, updated_at = NOW() WHERE id = $8`,
         [
-          expense.description,
-          expense.amount,
-          expense.due_date,
-          expense.paid,
-          expense.category,
-          expense.account_id,
-          expense.paid_at,
-          expenseId,
+          revenue.description,
+          revenue.amount,
+          revenue.due_date,
+          revenue.received,
+          revenue.category,
+          revenue.account_id,
+          revenue.received_at,
+          revenueId,
         ]
       );
       if (result.rowCount === 0) {
         return {
           statusCode: 404,
-          message: "Expense not found",
+          message: "revenue not found",
         };
       }
       return {
         statusCode: 200,
-        message: "Expense updated successfully",
+        message: "revenue updated successfully",
       };
     } catch (err) {
       console.log(err);
@@ -203,4 +203,4 @@ export class ExpensesService {
   }
 }
 
-export default new ExpensesService();
+export default new RevenuesService();
