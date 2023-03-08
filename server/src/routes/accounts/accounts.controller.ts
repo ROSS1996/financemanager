@@ -64,13 +64,13 @@ class Handler {
     } else if (req.method === "POST") {
       const userid = req.body.id;
       if (userid) {
-        const { name, starting_balance, category, user_id } = req.body;
+        const { name, starting_balance, category } = req.body;
         const account: Account = {
           id: "",
           name: name,
           starting_balance: starting_balance,
           category: category,
-          user_id: user_id,
+          user_id: userid,
         };
         const result = await this.service.addAccount(account);
         res.status(result.statusCode).json({ message: result.message });

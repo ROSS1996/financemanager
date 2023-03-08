@@ -15,6 +15,7 @@ interface RevenuesInfo {
   received: string;
   category: string;
   user_id: string;
+  account_id: string;
   received_at: string;
   created_at: string;
   updated_at: string;
@@ -47,6 +48,7 @@ export class RevenuesService {
         received: row.received,
         category: row.category,
         user_id: row.user_id,
+        account_id: row.account_id,
         received_at: row.received_at,
         created_at: row.created_at,
         updated_at: row.updated_at,

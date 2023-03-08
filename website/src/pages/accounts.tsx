@@ -3,12 +3,13 @@ import axios from "axios";
 import Layout from "./components/layout";
 import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";
+import Link from "next/link";
 
 interface ProfileProps {
   session?: Session | null;
 }
 
-interface Expense {
+interface Account {
   id: string;
   name: string;
   starting_balance: string;
@@ -18,7 +19,7 @@ interface Expense {
 
 export default function Index({ session }: ProfileProps) {
   const [sessionState, setSessionState] = useState<Session | null>(null);
-  const [accounts, setAccounts] = useState<Expense[]>([]);
+  const [accounts, setAccounts] = useState<Account[]>([]);
   const { data: sessionData, status } = useSession();
 
   useEffect(() => {
@@ -47,37 +48,53 @@ export default function Index({ session }: ProfileProps) {
   return (
     <Layout>
       {accounts ? (
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="text-left bg-gray-100">
-              <th className="px-6 py-3 font-bold border-b border-gray-200">
-                Name
-              </th>
-              <th className="px-6 py-3 font-bold border-b border-gray-200">
-                Starting Balance
-              </th>
-              <th className="px-6 py-3 font-bold border-b border-gray-200">
-                Category
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {accounts.map((account) => (
-              <tr
-                key={account.id}
-                className="bg-white border-b border-gray-200"
-              >
-                <td className="px-6 py-4 whitespace-nowrap">{account.name}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {account.starting_balance}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {account.category}
-                </td>
+        <>
+          <div className="px-6 py-3">
+            <Link
+              href="/newaccount"
+              className="px-2 py-1 bg-gray-200 border border-black rounded-sm cursor-pointer w-fit hover:bg-gray-400"
+            >
+              Add new account
+            </Link>
+          </div>
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="text-left bg-gray-100">
+                <th className="px-6 py-3 font-bold border-b border-gray-200">
+                  Name
+                </th>
+                <th className="px-6 py-3 font-bold border-b border-gray-200">
+                  Starting Balance
+                </th>
+                <th className="px-6 py-3 font-bold border-b border-gray-200">
+                  Category
+                </th>
+                <th className="px-6 py-3 font-bold border-b border-gray-200">
+                  Account ID
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {accounts.map((account) => (
+                <tr
+                  key={account.id}
+                  className="bg-white border-b border-gray-200"
+                >
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {account.name}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    ${account.starting_balance}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {account.category}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">{account.id}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
       ) : (
         <p className="text-lg font-bold text-center">No registered accounts.</p>
       )}

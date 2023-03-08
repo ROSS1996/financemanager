@@ -16,6 +16,7 @@ interface ExpenseInfo {
   category: string;
   user_id: string;
   paid_at: string;
+  account_id: string;
   created_at: string;
   updated_at: string;
 }
@@ -48,6 +49,7 @@ export class ExpensesService {
         category: row.category,
         user_id: row.user_id,
         paid_at: row.paid_at,
+        account_id: row.account_id,
         created_at: row.created_at,
         updated_at: row.updated_at,
       }));
