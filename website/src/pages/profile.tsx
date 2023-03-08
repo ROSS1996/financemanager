@@ -6,14 +6,18 @@ import { useSession, signOut } from "next-auth/react";
 import type { Session } from "next-auth";
 
 export default function Index() {
+  const router = useRouter();
+
   const [sessionState, setSessionState] = useState<Session | null>(null);
   const { data: sessionData, status } = useSession();
 
   useEffect(() => {
-    if (status === "authenticated") {
+    if (status !== "authenticated") {
+      router.push("/");
+    } else {
       sessionData ? setSessionState(sessionData) : setSessionState(null);
     }
-  }, [sessionData, status]);
+  }, [sessionData, status, router]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,7 +28,6 @@ export default function Index() {
   const [country, setCountry] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const router = useRouter();
 
   const handleDelete = async () => {
     try {

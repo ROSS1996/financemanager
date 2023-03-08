@@ -1,11 +1,20 @@
-import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { useState, useEffect } from "react";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Layout from "./components/layout";
+import { Session } from "next-auth";
 
 export default function Login() {
+  const { data: sessionData, status } = useSession();
   const router = useRouter();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/");
+    }
+  }, [status, router]);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 

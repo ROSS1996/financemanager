@@ -1,21 +1,24 @@
 import axios from "axios";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Layout from "../components/layout";
 import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";
 import useAccounts from "../hooks/useAccounts";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Index() {
   const [sessionState, setSessionState] = useState<Session | null>(null);
   const { data: sessionData, status } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
-    if (status === "authenticated") {
+    if (status !== "authenticated") {
+      router.push("/");
+    } else {
       sessionData ? setSessionState(sessionData) : setSessionState(null);
     }
-  }, [sessionData, status]);
+  }, [sessionData, status, router]);
 
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
@@ -24,7 +27,6 @@ export default function Index() {
   const [originAccount, setOriginAccount] = useState("");
   const [destinationAccount, setDestinationAccount] = useState("");
 
-  const router = useRouter();
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const id = sessionState?.user.id;

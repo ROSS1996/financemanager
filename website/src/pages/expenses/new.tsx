@@ -11,11 +11,15 @@ export default function Index() {
   const [sessionState, setSessionState] = useState<Session | null>(null);
   const { data: sessionData, status } = useSession();
 
+  const router = useRouter();
+
   useEffect(() => {
-    if (status === "authenticated") {
+    if (status !== "authenticated") {
+      router.push("/");
+    } else {
       sessionData ? setSessionState(sessionData) : setSessionState(null);
     }
-  }, [sessionData, status]);
+  }, [sessionData, status, router]);
 
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
@@ -24,7 +28,6 @@ export default function Index() {
   const [category, setCategory] = useState("");
   const [accountId, setAccountId] = useState("");
 
-  const router = useRouter();
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const id = sessionState?.user.id;

@@ -5,6 +5,7 @@ import type { Session } from "next-auth";
 import Link from "next/link";
 import useExpenses from "../hooks/useExpenses";
 import useAccounts from "../hooks/useAccounts";
+import { useRouter } from "next/router";
 
 interface ProfileProps {
   session?: Session | null;
@@ -14,11 +15,15 @@ export default function Index({ session }: ProfileProps) {
   const [sessionState, setSessionState] = useState<Session | null>(null);
   const { data: sessionData, status } = useSession();
 
+  const router = useRouter();
+
   useEffect(() => {
-    if (status === "authenticated") {
+    if (status !== "authenticated") {
+      router.push("/");
+    } else {
       sessionData ? setSessionState(sessionData) : setSessionState(null);
     }
-  }, [sessionData, status]);
+  }, [sessionData, status, router]);
 
   const expenses = useExpenses(sessionState?.user.id);
   const accounts = useAccounts(sessionState?.user.id);
