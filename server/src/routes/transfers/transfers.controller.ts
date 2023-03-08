@@ -18,7 +18,7 @@ class Handler {
         if (result.statusCode === 200) {
           res.status(result.statusCode).json({
             message: result.message,
-            accounts: result.transfers,
+            transfers: result.transfers,
           });
         } else {
           res.status(result.statusCode).json({ message: result.message });

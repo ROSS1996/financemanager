@@ -72,7 +72,7 @@ export default function Index() {
     <Layout>
       <div className="flex items-center justify-center mt-6">
         <form
-          className="px-8 pt-6 pb-8 mb-4 bg-white border rounded shadow-md"
+          className="flex flex-col gap-3 px-8 pt-6 pb-8 mb-4 bg-white border rounded shadow-md"
           onSubmit={handleSubmit}
         >
           <div className="flex flex-col items-start">

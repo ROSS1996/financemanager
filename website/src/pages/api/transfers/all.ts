@@ -11,7 +11,7 @@ export default async function handler(
       data: { id },
     });
     return res.status(200).json({
-      accounts: data.transfers,
+      transfers: data.transfers,
     });
   } catch (error: any) {
     if (error.response) {
