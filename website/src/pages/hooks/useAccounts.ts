@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 interface Account {
-  id: string;
+  id: number;
   name: string;
   starting_balance: string;
   category: string;

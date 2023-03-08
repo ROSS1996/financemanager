@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";
 import Link from "next/link";
 import useTransfers from "../hooks/useTransfers";
+import useAccounts from "../hooks/useAccounts";
 
 interface ProfileProps {
   session?: Session | null;
@@ -20,6 +21,7 @@ export default function Index({ session }: ProfileProps) {
   }, [sessionData, status]);
 
   const transfers = useTransfers(sessionState?.user.id);
+  const accounts = useAccounts(sessionState?.user.id);
 
   if (!transfers) {
     return (
@@ -28,6 +30,20 @@ export default function Index({ session }: ProfileProps) {
           No registered transfers,{" "}
           <Link href="transfers/new" className="underline underline-offset-2">
             add your first one
+          </Link>
+        </p>
+      </Layout>
+    );
+  }
+
+  if (accounts.length < 2) {
+    return (
+      <Layout pageTitle="Expenses" pageDescription="Expenses">
+        <p className="text-lg font-bold text-center">
+          In order to start adding transfers, you need at least two accounts
+          setup.{" "}
+          <Link href="accounts/new" className="underline underline-offset-2">
+            Add accounts.
           </Link>
         </p>
       </Layout>
@@ -88,10 +104,15 @@ export default function Index({ session }: ProfileProps) {
                     {transfer.done ? "Yes" : "No"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {transfer.origin_account_id}
+                    {accounts.find(
+                      (account) => account.id === transfer.origin_account_id
+                    )?.name ?? ""}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {transfer.destination_account_id}
+                    {accounts.find(
+                      (account) =>
+                        account.id === transfer.destination_account_id
+                    )?.name ?? ""}
                   </td>
                 </tr>
               ))}

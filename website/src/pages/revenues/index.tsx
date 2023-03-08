@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";
 import Link from "next/link";
 import useRevenues from "../hooks/useRevenues";
+import useAccounts from "../hooks/useAccounts";
 
 interface ProfileProps {
   session?: Session | null;
@@ -20,6 +21,7 @@ export default function Index({ session }: ProfileProps) {
   }, [sessionData, status]);
 
   const revenues = useRevenues(sessionState?.user.id);
+  const accounts = useAccounts(sessionState?.user.id);
 
   if (!revenues) {
     return (
@@ -28,6 +30,20 @@ export default function Index({ session }: ProfileProps) {
           No registered revenues,{" "}
           <Link href="revenues/new" className="underline underline-offset-2">
             add your first one
+          </Link>
+        </p>
+      </Layout>
+    );
+  }
+
+  if (accounts.length === 0) {
+    return (
+      <Layout pageTitle="Expenses" pageDescription="Expenses">
+        <p className="text-lg font-bold text-center">
+          In order to start adding revenues, you need at least one account
+          setup.{" "}
+          <Link href="accounts/new" className="underline underline-offset-2">
+            Add your first one.
           </Link>
         </p>
       </Layout>
@@ -65,7 +81,7 @@ export default function Index({ session }: ProfileProps) {
                   Category
                 </th>
                 <th className="px-6 py-3 font-bold border-b border-gray-200">
-                  Account ID
+                  Account
                 </th>
                 <th className="px-6 py-3 font-bold border-b border-gray-200">
                   Paid at
@@ -100,7 +116,9 @@ export default function Index({ session }: ProfileProps) {
                     {revenue.category}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {revenue.account_id}
+                    {accounts.find(
+                      (account) => account.id === revenue.account_id
+                    )?.name ?? ""}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {revenue.received_at

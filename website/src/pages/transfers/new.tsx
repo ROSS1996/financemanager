@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Layout from "../components/layout";
 import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";
+import useAccounts from "../hooks/useAccounts";
+import Link from "next/link";
 
 export default function Index() {
   const [sessionState, setSessionState] = useState<Session | null>(null);
@@ -43,6 +45,22 @@ export default function Index() {
       console.log(error);
     }
   };
+
+  const accounts = useAccounts(sessionState?.user.id);
+
+  if (accounts.length < 2) {
+    return (
+      <Layout pageTitle="Expenses" pageDescription="Expenses">
+        <p className="text-lg font-bold text-center">
+          In order to start adding transfers, you need at least two accounts
+          setup.{" "}
+          <Link href="accounts/new" className="underline underline-offset-2">
+            Add accounts.
+          </Link>
+        </p>
+      </Layout>
+    );
+  }
 
   return (
     <Layout pageTitle="New Transfer" pageDescription="New Transfer">
@@ -130,33 +148,61 @@ export default function Index() {
           </div>
           <div className="flex flex-col">
             <label
-              htmlFor="accountId"
+              htmlFor="originAccount"
               className="mb-2 text-sm font-medium text-gray-700"
             >
               Origin Account
             </label>
-            <input
-              type="number"
-              id="accountId"
-              name="accountId"
-              onChange={(event) => setOriginAccount(event.target.value)}
+            <select
+              id="originAccount"
+              name="originAccount"
+              value={originAccount}
+              onChange={(event) => {
+                setOriginAccount(event.target.value);
+                setDestinationAccount((prevValue) =>
+                  prevValue === event.target.value ? "" : prevValue
+                );
+              }}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+            >
+              <option value="" disabled hidden>
+                Select an account
+              </option>
+              {accounts.map((account) => (
+                <option key={account.id} value={account.id}>
+                  {account.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex flex-col">
             <label
-              htmlFor="accountId"
+              htmlFor="originAccount"
               className="mb-2 text-sm font-medium text-gray-700"
             >
               Destination Account
             </label>
-            <input
-              type="number"
-              id="accountId"
-              name="accountId"
-              onChange={(event) => setDestinationAccount(event.target.value)}
+            <select
+              id="destinationAccount"
+              name="destinationAccount"
+              value={destinationAccount}
+              onChange={(event) => {
+                setDestinationAccount(event.target.value);
+                setOriginAccount((prevValue) =>
+                  prevValue === event.target.value ? "" : prevValue
+                );
+              }}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+            >
+              <option value="" disabled hidden>
+                Select an account
+              </option>
+              {accounts.map((account) => (
+                <option key={account.id} value={account.id}>
+                  {account.name}
+                </option>
+              ))}
+            </select>
           </div>
           <button
             className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"

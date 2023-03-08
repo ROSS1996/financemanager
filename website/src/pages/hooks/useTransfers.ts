@@ -7,8 +7,8 @@ interface Transfer {
   amount: string;
   due_date: string;
   done: string;
-  origin_account_id: string;
-  destination_account_id: string;
+  origin_account_id: number;
+  destination_account_id: number;
   user_id?: string;
 }
 

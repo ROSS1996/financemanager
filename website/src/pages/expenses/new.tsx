@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Layout from "../components/layout";
 import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";
+import useAccounts from "../hooks/useAccounts";
+import Link from "next/link";
 
 export default function Index() {
   const [sessionState, setSessionState] = useState<Session | null>(null);
@@ -43,6 +45,22 @@ export default function Index() {
       console.log(error);
     }
   };
+
+  const accounts = useAccounts(sessionState?.user.id);
+
+  if (accounts.length === 0) {
+    return (
+      <Layout pageTitle="Expenses" pageDescription="Expenses">
+        <p className="text-lg font-bold text-center">
+          In order to start adding expenses, you need at least one account
+          setup.{" "}
+          <Link href="accounts/new" className="underline underline-offset-2">
+            Add your first one.
+          </Link>
+        </p>
+      </Layout>
+    );
+  }
 
   return (
     <Layout pageTitle="New Expense" pageDescription="New Expense">
@@ -171,15 +189,24 @@ export default function Index() {
               htmlFor="accountId"
               className="mb-2 text-sm font-medium text-gray-700"
             >
-              Account ID
+              Account
             </label>
-            <input
-              type="number"
+            <select
               id="accountId"
               name="accountId"
+              value={accountId}
               onChange={(event) => setAccountId(event.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+            >
+              <option value="" disabled hidden>
+                Select an account
+              </option>
+              {accounts.map((account) => (
+                <option key={account.id} value={account.id}>
+                  {account.name}
+                </option>
+              ))}
+            </select>
           </div>
           <button
             className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
