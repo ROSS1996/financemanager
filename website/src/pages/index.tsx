@@ -79,7 +79,7 @@ export default function Index({ session }: ProfileProps) {
   }, [sessionData, status]);
 
   return (
-    <Layout>
+    <Layout pageTitle="Home" pageDescription="Home">
       {sessionState ? (
         <div>
           <p className="p-2 text-justify">

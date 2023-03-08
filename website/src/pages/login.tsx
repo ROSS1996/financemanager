@@ -24,7 +24,7 @@ export default function Login() {
   };
 
   return (
-    <Layout>
+    <Layout pageTitle="Login" pageDescription="Login">
       <div className="flex items-center justify-center w-screen h-screen bg-gray-100">
         <form
           method="post"

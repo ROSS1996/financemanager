@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { getSession } from "next-auth/react";
 import type { Session } from "next-auth";
+import Head from "next/head";
 
 import { Navbar } from "./navbar";
 
@@ -14,10 +15,12 @@ interface ProfileProps {
 
 type LayoutProps = {
   children: ReactNode;
+  pageTitle: string;
+  pageDescription: string;
 };
 
 export default function Layout(
-  { children }: LayoutProps,
+  { children, pageTitle, pageDescription }: LayoutProps,
   { session }: ProfileProps
 ) {
   const [name, setName] = useState<string | null>(null);
@@ -40,6 +43,10 @@ export default function Layout(
 
   return (
     <>
+      <Head>
+        <title>{`Finance Manager | ${pageTitle}`}</title>
+        <meta name="description" content={pageDescription} />
+      </Head>
       <Navbar name={name} />
       {children}
     </>

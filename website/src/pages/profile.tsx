@@ -69,7 +69,7 @@ export default function Index() {
   };
 
   return (
-    <Layout>
+    <Layout pageTitle="Profile" pageDescription="Profile">
       <div className="flex items-center justify-center mt-6">
         <form
           className="flex flex-col gap-3 px-8 pt-6 pb-8 mb-4 bg-white border rounded shadow-md"

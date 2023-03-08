@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Layout from "./components/layout";
+import Layout from "../components/layout";
 import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";
 
@@ -38,7 +38,7 @@ export default function Index() {
   };
 
   return (
-    <Layout>
+    <Layout pageTitle="New Account" pageDescription="New Account">
       <div className="flex items-center justify-center mt-6">
         <form
           className="flex flex-col gap-4 px-8 pt-6 pb-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-lg w-96"

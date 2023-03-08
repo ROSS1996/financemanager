@@ -42,7 +42,7 @@ export const Navbar = ({ name }: NavbarProps) => {
             <span>{name}</span>
           </li>
           <li className="font-bold">
-            <Link href="/edit">Edit Profile</Link>
+            <Link href="/profile">Edit Profile</Link>
           </li>
           <li onClick={handleLogout} className="cursor-pointer">
             Logout

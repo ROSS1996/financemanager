@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Layout from "./components/layout";
+import Layout from "../components/layout";
 import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";
 import Link from "next/link";
@@ -46,12 +46,12 @@ export default function Index({ session }: ProfileProps) {
   }, [sessionState]);
 
   return (
-    <Layout>
+    <Layout pageTitle="Accounts" pageDescription="Accounts">
       {accounts ? (
         <>
           <div className="px-6 py-3">
             <Link
-              href="/newaccount"
+              href="/accounts/new"
               className="px-2 py-1 bg-gray-200 border border-black rounded-sm cursor-pointer w-fit hover:bg-gray-400"
             >
               Add new account

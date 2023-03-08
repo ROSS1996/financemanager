@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Layout from "./components/layout";
+import Layout from "../components/layout";
 import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";
 
@@ -18,26 +18,26 @@ export default function Index() {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [duedate, setDueDate] = useState("");
-  const [done, setDone] = useState("");
-  const [originAccount, setOriginAccount] = useState("");
-  const [destinationAccount, setDestinationAccount] = useState("");
+  const [received, setReceived] = useState("");
+  const [category, setCategory] = useState("");
+  const [accountId, setAccountId] = useState("");
 
   const router = useRouter();
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const id = sessionState?.user.id;
     try {
-      const { data } = await axios.post("/api/transfers/new", {
+      const { data } = await axios.post("/api/revenues/new", {
         id,
         description,
         amount,
         due_date: duedate,
-        done,
-        origin_account_id: originAccount,
-        destination_account_id: destinationAccount,
+        received,
+        category,
+        account_id: accountId,
       });
       if (data) {
-        router.push("/transfers");
+        router.push("/revenues");
       }
     } catch (error: any) {
       console.log(error);
@@ -45,7 +45,7 @@ export default function Index() {
   };
 
   return (
-    <Layout>
+    <Layout pageTitle="New Revenue" pageDescription="New Revenue">
       <div className="flex items-center justify-center mt-6">
         <form
           className="flex flex-col gap-4 px-8 pt-6 pb-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-lg w-96"
@@ -98,19 +98,19 @@ export default function Index() {
           </div>
           <div className="flex flex-col">
             <label
-              htmlFor="done"
+              htmlFor="paid"
               className="mb-2 text-sm font-medium text-gray-700"
             >
-              Done
+              Paid
             </label>
             <div className="flex items-center">
               <label htmlFor="paid-yes" className="mr-2">
                 <input
                   type="radio"
                   id="paid-yes"
-                  name="done"
+                  name="paid"
                   value="true"
-                  onChange={(event) => setDone(event.target.value)}
+                  onChange={(event) => setReceived(event.target.value)}
                   className="mr-1"
                 />
                 Yes
@@ -119,42 +119,61 @@ export default function Index() {
                 <input
                   type="radio"
                   id="paid-no"
-                  name="done"
+                  name="paid"
                   value="false"
-                  onChange={(event) => setDone(event.target.value)}
+                  onChange={(event) => setReceived(event.target.value)}
                   className="mr-1"
                 />
                 No
               </label>
             </div>
           </div>
+          <select
+            id="category"
+            name="category"
+            onChange={(event) => setCategory(event.target.value)}
+            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            defaultValue=""
+          >
+            <option value="" disabled hidden>
+              Select a category
+            </option>
+            <optgroup label=" Employment">
+              <option value="Salary">Salary</option>
+              <option value="Wages">Wages</option>
+              <option value="Bonuses">Bonuses</option>
+              <option value="Commissions">Commissions</option>
+            </optgroup>
+            <optgroup label="Investments">
+              <option value="Stocks">Stocks</option>
+              <option value="Bonds">Bonds</option>
+              <option value="Real Estate">Real Estate</option>
+              <option value="Dividends">Dividends</option>
+              <option value="Interest">Interest</option>
+            </optgroup>
+            <optgroup label="Business">
+              <option value="Sales">Sales</option>
+              <option value="Services">Services</option>
+              <option value="Rent">Rent</option>
+              <option value="Royalties">Royalties</option>
+            </optgroup>
+            <optgroup label="Income">
+              <option value="Other">Other</option>
+            </optgroup>
+          </select>
+
           <div className="flex flex-col">
             <label
               htmlFor="accountId"
               className="mb-2 text-sm font-medium text-gray-700"
             >
-              Origin Account
+              Account ID
             </label>
             <input
               type="number"
               id="accountId"
               name="accountId"
-              onChange={(event) => setOriginAccount(event.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label
-              htmlFor="accountId"
-              className="mb-2 text-sm font-medium text-gray-700"
-            >
-              Destination Account
-            </label>
-            <input
-              type="number"
-              id="accountId"
-              name="accountId"
-              onChange={(event) => setDestinationAccount(event.target.value)}
+              onChange={(event) => setAccountId(event.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
