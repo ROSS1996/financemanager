@@ -1,31 +1,16 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Layout from "../components/layout";
 import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";
 import Link from "next/link";
+import useRevenues from "../hooks/useRevenues";
 
 interface ProfileProps {
   session?: Session | null;
 }
 
-interface Revenue {
-  id: number;
-  description: string;
-  amount: string;
-  due_date: string;
-  received: boolean;
-  category: string;
-  user_id: number;
-  received_at: string | null;
-  account_id: number;
-  created_at: string;
-  updated_at: string;
-}
-
 export default function Index({ session }: ProfileProps) {
   const [sessionState, setSessionState] = useState<Session | null>(null);
-  const [revenues, setRevenues] = useState<Revenue[]>([]);
   const { data: sessionData, status } = useSession();
 
   useEffect(() => {
@@ -34,26 +19,24 @@ export default function Index({ session }: ProfileProps) {
     }
   }, [sessionData, status]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("/api/revenues/all", {
-          params: { id: sessionState?.user.id },
-        });
-        setRevenues(response.data.revenues);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const revenues = useRevenues(sessionState?.user.id);
 
-    if (sessionState) {
-      fetchData();
-    }
-  }, [sessionState]);
+  if (!revenues) {
+    return (
+      <Layout pageTitle="Expenses" pageDescription="Expenses">
+        <p className="text-lg font-bold text-center">
+          No registered revenues,{" "}
+          <Link href="revenues/new" className="underline underline-offset-2">
+            add your first one
+          </Link>
+        </p>
+      </Layout>
+    );
+  }
 
   return (
     <Layout pageTitle="Revenues" pageDescription="Revenues">
-      {revenues ? (
+      {revenues.length > 0 ? (
         <>
           <div className="px-6 py-3">
             <Link
@@ -136,7 +119,12 @@ export default function Index({ session }: ProfileProps) {
           </table>
         </>
       ) : (
-        <p className="text-lg font-bold text-center">No registered revenues.</p>
+        <p className="text-lg font-bold text-center">
+          No registered revenues,{" "}
+          <Link href="revenues/new" className="underline underline-offset-2">
+            add your first one
+          </Link>
+        </p>
       )}
     </Layout>
   );

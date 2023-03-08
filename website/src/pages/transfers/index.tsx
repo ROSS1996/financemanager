@@ -1,28 +1,16 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Layout from "../components/layout";
 import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";
 import Link from "next/link";
+import useTransfers from "../hooks/useTransfers";
 
 interface ProfileProps {
   session?: Session | null;
 }
 
-interface Transfer {
-  id?: string;
-  description: string;
-  amount: string;
-  due_date: string;
-  done: string;
-  origin_account_id: string;
-  destination_account_id: string;
-  user_id?: string;
-}
-
 export default function Index({ session }: ProfileProps) {
   const [sessionState, setSessionState] = useState<Session | null>(null);
-  const [transfers, setTransfers] = useState<Transfer[]>([]);
   const { data: sessionData, status } = useSession();
 
   useEffect(() => {
@@ -31,26 +19,24 @@ export default function Index({ session }: ProfileProps) {
     }
   }, [sessionData, status]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("/api/transfers/all", {
-          params: { id: sessionState?.user.id },
-        });
-        setTransfers(response.data.transfers);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const transfers = useTransfers(sessionState?.user.id);
 
-    if (sessionState) {
-      fetchData();
-    }
-  }, [sessionState]);
+  if (!transfers) {
+    return (
+      <Layout pageTitle="Expenses" pageDescription="Expenses">
+        <p className="text-lg font-bold text-center">
+          No registered transfers,{" "}
+          <Link href="transfers/new" className="underline underline-offset-2">
+            add your first one
+          </Link>
+        </p>
+      </Layout>
+    );
+  }
 
   return (
     <Layout pageTitle="Transfers" pageDescription="Transfers">
-      {transfers ? (
+      {transfers.length > 0 ? (
         <>
           <div className="px-6 py-3">
             <Link
@@ -93,7 +79,7 @@ export default function Index({ session }: ProfileProps) {
                     {transfer.description}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {transfer.amount}
+                    ${transfer.amount}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {new Date(transfer.due_date).toLocaleString()}
@@ -114,7 +100,10 @@ export default function Index({ session }: ProfileProps) {
         </>
       ) : (
         <p className="text-lg font-bold text-center">
-          No registered transfers.
+          No registered transfers,{" "}
+          <Link href="transfers/new" className="underline underline-offset-2">
+            add your first one
+          </Link>
         </p>
       )}
     </Layout>

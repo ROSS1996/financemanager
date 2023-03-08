@@ -1,25 +1,16 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Layout from "../components/layout";
 import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";
 import Link from "next/link";
+import useAccounts from "../hooks/useAccounts";
 
 interface ProfileProps {
   session?: Session | null;
 }
 
-interface Account {
-  id: string;
-  name: string;
-  starting_balance: string;
-  category: string;
-  user_id?: string;
-}
-
 export default function Index({ session }: ProfileProps) {
   const [sessionState, setSessionState] = useState<Session | null>(null);
-  const [accounts, setAccounts] = useState<Account[]>([]);
   const { data: sessionData, status } = useSession();
 
   useEffect(() => {
@@ -28,26 +19,24 @@ export default function Index({ session }: ProfileProps) {
     }
   }, [sessionData, status]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("/api/accounts/all", {
-          params: { id: sessionState?.user.id },
-        });
-        setAccounts(response.data.accounts);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const accounts = useAccounts(sessionState?.user.id);
 
-    if (sessionState) {
-      fetchData();
-    }
-  }, [sessionState]);
+  if (!accounts) {
+    return (
+      <Layout pageTitle="Expenses" pageDescription="Expenses">
+        <p className="text-lg font-bold text-center">
+          No registered accounts,{" "}
+          <Link href="accounts/new" className="underline underline-offset-2">
+            add your first one
+          </Link>
+        </p>
+      </Layout>
+    );
+  }
 
   return (
     <Layout pageTitle="Accounts" pageDescription="Accounts">
-      {accounts ? (
+      {accounts.length > 0 ? (
         <>
           <div className="px-6 py-3">
             <Link
@@ -96,7 +85,12 @@ export default function Index({ session }: ProfileProps) {
           </table>
         </>
       ) : (
-        <p className="text-lg font-bold text-center">No registered accounts.</p>
+        <p className="text-lg font-bold text-center">
+          No registered accounts,{" "}
+          <Link href="accounts/new" className="underline underline-offset-2">
+            add your first one
+          </Link>
+        </p>
       )}
     </Layout>
   );
