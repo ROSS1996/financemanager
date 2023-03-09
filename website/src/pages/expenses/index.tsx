@@ -160,9 +160,11 @@ export default function Index({ session }: ProfileProps) {
                     {new Date(expense.updated_at).toLocaleString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap flex flex-col gap-2">
-                    <div className="flex gap-1 items-center rounded-sm w-20 justify-center font-bold text-sm py-1 bg-slate-600 text-white cursor-pointer hover:bg-slate-800">
-                      <BsFillPencilFill /> Edit
-                    </div>
+                    <Link href={`expenses/edit/${expense.id}`}>
+                      <div className="flex gap-1 items-center rounded-sm w-20 justify-center font-bold text-sm py-1 bg-slate-600 text-white cursor-pointer hover:bg-slate-800">
+                        <BsFillPencilFill /> Edit
+                      </div>
+                    </Link>
                     <div
                       className="flex gap-1 items-center rounded-sm w-20 justify-center font-bold text-sm py-1 bg-red-500 text-white cursor-pointer hover:bg-red-700"
                       onClick={(e) => {

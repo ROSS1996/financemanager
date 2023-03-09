@@ -9,7 +9,7 @@ interface Account {
   user_id?: string;
 }
 
-function useAccounts(userId: string | undefined) {
+function useAccounts(userId: string | number | undefined) {
   const [accounts, setAccounts] = useState<Account[]>([]);
 
   useEffect(() => {
