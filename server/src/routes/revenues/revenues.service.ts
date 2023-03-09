@@ -2,35 +2,23 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import db from "../../db";
 import { Revenue } from "../models/revenue";
+import { validationResult } from "express-validator";
+import { revenueValidation } from "./revenues.validation";
 
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || "";
 
-interface RevenuesInfo {
-  id: string;
-  description: string;
-  amount: string;
-  due_date: string;
-  received: string;
-  category: string;
-  user_id: string;
-  account_id: string;
-  received_at: string;
-  created_at: string;
-  updated_at: string;
-}
-
 interface RevenuesResponse {
   statusCode: number;
   message: string;
-  revenues: RevenuesInfo[];
+  revenues: Revenue[];
 }
 
 interface SingleRevenues {
   statusCode: number;
   message: string;
-  revenue?: RevenuesInfo | null | undefined;
+  revenue?: Revenue | null | undefined;
 }
 
 export class RevenuesService {
@@ -69,6 +57,10 @@ export class RevenuesService {
   }
 
   async getRevenueById(revenueId: string): Promise<SingleRevenues> {
+    const errors = validationResult(revenueValidation);
+    if (!errors.isEmpty()) {
+      return { statusCode: 401, message: "Invalid revenue data" };
+    }
     try {
       const result = await db.query("SELECT * FROM revenues WHERE id = $1", [
         revenueId,
@@ -112,6 +104,10 @@ export class RevenuesService {
   async deleteRevenueById(
     revenueId: string
   ): Promise<{ statusCode: number; message: string }> {
+    const errors = validationResult(revenueValidation);
+    if (!errors.isEmpty()) {
+      return { statusCode: 401, message: "Invalid revenue data" };
+    }
     try {
       const result = await db.query("DELETE FROM revenues WHERE id = $1", [
         revenueId,
@@ -138,6 +134,10 @@ export class RevenuesService {
   async addRevenue(
     revenue: Revenue
   ): Promise<{ statusCode: number; message: string }> {
+    const errors = validationResult(revenueValidation);
+    if (!errors.isEmpty()) {
+      return { statusCode: 401, message: "Invalid revenue data" };
+    }
     try {
       await db.query(
         `INSERT INTO revenues
@@ -171,6 +171,10 @@ export class RevenuesService {
     revenueId: string,
     revenue: Revenue
   ): Promise<{ statusCode: number; message: string }> {
+    const errors = validationResult(revenueValidation);
+    if (!errors.isEmpty()) {
+      return { statusCode: 401, message: "Invalid revenue data" };
+    }
     try {
       const result = await db.query(
         `UPDATE revenues SET description = $1, amount = $2, due_date = $3, received = $4, category = $5, account_id = $6, received_at = $7, updated_at = NOW() WHERE id = $8`,

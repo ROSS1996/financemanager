@@ -2,29 +2,23 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import db from "../../db";
 import { Account } from "../models/account";
+import { validationResult } from "express-validator";
+import { accountValidation } from "./accounts.validation";
 
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || "";
 
-interface AccountInfo {
-  id: string;
-  name: string;
-  starting_balance: string;
-  category: string;
-  user_id?: string;
-}
-
 interface AccountsResponse {
   statusCode: number;
   message: string;
-  accounts: AccountInfo[];
+  accounts: Account[];
 }
 
 interface SingleAccounts {
   statusCode: number;
   message: string;
-  account?: AccountInfo | null | undefined;
+  account?: Account | null | undefined;
 }
 
 export class AccountsService {
@@ -56,6 +50,10 @@ export class AccountsService {
   }
 
   async getAccountById(accountId: string): Promise<SingleAccounts> {
+    const errors = validationResult(accountValidation);
+    if (!errors.isEmpty()) {
+      return { statusCode: 401, message: "Invalid account data" };
+    }
     try {
       const result = await db.query("SELECT * FROM accounts WHERE id = $1", [
         accountId,
@@ -92,6 +90,10 @@ export class AccountsService {
   async deleteAccountById(
     accountId: string
   ): Promise<{ statusCode: number; message: string }> {
+    const errors = validationResult(accountValidation);
+    if (!errors.isEmpty()) {
+      return { statusCode: 401, message: "Invalid account data" };
+    }
     try {
       const result = await db.query("DELETE FROM accounts WHERE id = $1", [
         accountId,
@@ -118,6 +120,10 @@ export class AccountsService {
   async addAccount(
     account: Account
   ): Promise<{ statusCode: number; message: string }> {
+    const errors = validationResult(accountValidation);
+    if (!errors.isEmpty()) {
+      return { statusCode: 401, message: "Invalid account data" };
+    }
     try {
       await db.query(
         `INSERT INTO accounts
@@ -146,6 +152,10 @@ export class AccountsService {
   async updateAccount(
     account: Account
   ): Promise<{ statusCode: number; message: string }> {
+    const errors = validationResult(accountValidation);
+    if (!errors.isEmpty()) {
+      return { statusCode: 401, message: "Invalid account data" };
+    }
     try {
       const result = await db.query(
         `UPDATE accounts SET name = $1, starting_balance = $2, category = $3 WHERE id = $4`,

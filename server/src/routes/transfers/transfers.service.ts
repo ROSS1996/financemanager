@@ -2,32 +2,23 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import db from "../../db";
 import { Transfer } from "../models/transfer";
+import { validationResult } from "express-validator";
+import { transferValidation } from "./transfers.validation";
 
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || "";
 
-interface TransferInfo {
-  id: string;
-  description: string;
-  amount: number;
-  due_date: string;
-  done: boolean;
-  origin_account_id: number;
-  destination_account_id: number;
-  user_id?: number;
-}
-
 interface TransfersResponse {
   statusCode: number;
   message: string;
-  transfers: TransferInfo[];
+  transfers: Transfer[];
 }
 
 interface SingleTransfers {
   statusCode: number;
   message: string;
-  transfer?: TransferInfo | null | undefined;
+  transfer?: Transfer | null | undefined;
 }
 
 export class TransfersService {
@@ -63,6 +54,10 @@ export class TransfersService {
   }
 
   async getTransferById(transferId: string): Promise<SingleTransfers> {
+    const errors = validationResult(transferValidation);
+    if (!errors.isEmpty()) {
+      return { statusCode: 401, message: "Invalid transfer data" };
+    }
     try {
       const result = await db.query("SELECT * FROM transfers WHERE id = $1", [
         transferId,
@@ -75,7 +70,7 @@ export class TransfersService {
           transfer: null,
         };
       }
-      const transfer: TransferInfo = {
+      const transfer: Transfer = {
         id: transferInfo.id,
         description: transferInfo.description,
         amount: transferInfo.amount,
@@ -103,6 +98,10 @@ export class TransfersService {
   async deleteTransferById(
     transferId: string
   ): Promise<{ statusCode: number; message: string }> {
+    const errors = validationResult(transferValidation);
+    if (!errors.isEmpty()) {
+      return { statusCode: 401, message: "Invalid transfer data" };
+    }
     try {
       const result = await db.query("DELETE FROM transfers WHERE id = $1", [
         transferId,
@@ -126,6 +125,10 @@ export class TransfersService {
   async addTransfer(
     transfer: Transfer
   ): Promise<{ statusCode: number; message: string }> {
+    const errors = validationResult(transferValidation);
+    if (!errors.isEmpty()) {
+      return { statusCode: 401, message: "Invalid transfer data" };
+    }
     try {
       await db.query(
         `INSERT INTO transfers
@@ -157,6 +160,10 @@ export class TransfersService {
   async updateTransfer(
     transfer: Transfer
   ): Promise<{ statusCode: number; message: string }> {
+    const errors = validationResult(transferValidation);
+    if (!errors.isEmpty()) {
+      return { statusCode: 401, message: "Invalid transfer data" };
+    }
     try {
       const result = await db.query(
         `UPDATE transfers SET

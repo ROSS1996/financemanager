@@ -1,36 +1,24 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import db from "../../db";
+import { validationResult } from "express-validator";
+import { expenseValidation } from "./expenses.validation";
 import { Expense } from "../models/expense";
 
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || "";
 
-interface ExpenseInfo {
-  id: string;
-  description: string;
-  amount: string;
-  due_date: string;
-  paid: string;
-  category: string;
-  user_id: string;
-  paid_at: string;
-  account_id: string;
-  created_at: string;
-  updated_at: string;
-}
-
 interface ExpensesResponse {
   statusCode: number;
   message: string;
-  expenses: ExpenseInfo[];
+  expenses: Expense[];
 }
 
 interface SingleExpenses {
   statusCode: number;
   message: string;
-  expense?: ExpenseInfo | null | undefined;
+  expense?: Expense | null | undefined;
 }
 
 export class ExpensesService {
@@ -69,6 +57,10 @@ export class ExpensesService {
   }
 
   async getExpenseById(expenseId: string): Promise<SingleExpenses> {
+    const errors = validationResult(expenseValidation);
+    if (!errors.isEmpty()) {
+      return { statusCode: 401, message: "Invalid expense data" };
+    }
     try {
       const result = await db.query("SELECT * FROM expenses WHERE id = $1", [
         expenseId,
@@ -112,6 +104,10 @@ export class ExpensesService {
   async deleteExpenseById(
     expenseId: string
   ): Promise<{ statusCode: number; message: string }> {
+    const errors = validationResult(expenseValidation);
+    if (!errors.isEmpty()) {
+      return { statusCode: 401, message: "Invalid expense data" };
+    }
     try {
       const result = await db.query("DELETE FROM expenses WHERE id = $1", [
         expenseId,
@@ -138,6 +134,10 @@ export class ExpensesService {
   async addExpense(
     expense: Expense
   ): Promise<{ statusCode: number; message: string }> {
+    const errors = validationResult(expenseValidation);
+    if (!errors.isEmpty()) {
+      return { statusCode: 401, message: "Invalid expense data" };
+    }
     try {
       await db.query(
         `INSERT INTO expenses
@@ -171,6 +171,10 @@ export class ExpensesService {
     expenseId: string,
     expense: Expense
   ): Promise<{ statusCode: number; message: string }> {
+    const errors = validationResult(expenseValidation);
+    if (!errors.isEmpty()) {
+      return { statusCode: 401, message: "Invalid expense data" };
+    }
     try {
       const result = await db.query(
         `UPDATE expenses SET description = $1, amount = $2, due_date = $3, paid = $4, category = $5, account_id = $6, paid_at = $7, updated_at = NOW() WHERE id = $8`,

@@ -1,18 +1,31 @@
 import { check, ValidationChain } from "express-validator";
 
-export const updateValidation: ValidationChain[] = [
-  check("email").isEmail().withMessage("Email is invalid"),
-  check("username").not().isEmpty().withMessage("Username is required"),
-  check("password")
-    .isLength({ min: 6 })
-    .withMessage("Password must be at least 6 characters"),
-  check("name").not().isEmpty().withMessage("Name is required"),
-  check("country").not().isEmpty().withMessage("Country is required"),
-  check("firstname").not().isEmpty().withMessage("First name is required"),
-  check("lastname").not().isEmpty().withMessage("Last name is required"),
-  check("birthdate").not().isEmpty().withMessage("Birthdate is required"),
-  check("phone").isMobilePhone("any").withMessage("Phone number is invalid"),
-  check("address")
-    .isLength({ max: 200 })
-    .withMessage("Address must be no more than 200 characters"),
+export const transferValidation: ValidationChain[] = [
+  check("description").not().isEmpty().withMessage("Description is required"),
+  check("amount")
+    .isNumeric()
+    .withMessage("Amount must be a valid number")
+    .not()
+    .isEmpty()
+    .withMessage("Amount is required"),
+  check("due_date")
+    .isDate()
+    .withMessage("Due date must be a valid date")
+    .not()
+    .isEmpty()
+    .withMessage("Due date is required"),
+  check("done").isBoolean().withMessage("Done must be a boolean"),
+  check("origin_account_id")
+    .not()
+    .isEmpty()
+    .withMessage("Origin account ID is required"),
+  check("destination_account_id")
+    .not()
+    .isEmpty()
+    .withMessage("Destination account ID is required"),
+  check("user_id")
+    .optional()
+    .not()
+    .isEmpty()
+    .withMessage("User ID must not be empty"),
 ];
