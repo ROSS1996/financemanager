@@ -11,7 +11,11 @@ dotenv.config();
 const app = express();
 const port = process.env.SERVER_PORT;
 
-const whitelist = ["localhost", "http://localhost:3000"];
+const whitelist = [
+  "localhost",
+  "http://localhost:3000",
+  "http://localhost:3001",
+];
 
 const corsOptions: cors.CorsOptions = {
   origin: (origin, callback) => {
