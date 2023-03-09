@@ -119,28 +119,28 @@ export default function Index() {
           </div>
           <div className="flex flex-col">
             <label
-              htmlFor="paid"
+              htmlFor="received"
               className="mb-2 text-sm font-medium text-gray-700"
             >
-              Paid
+              Received
             </label>
             <div className="flex items-center">
-              <label htmlFor="paid-yes" className="mr-2">
+              <label htmlFor="received-yes" className="mr-2">
                 <input
                   type="radio"
-                  id="paid-yes"
-                  name="paid"
+                  id="received-yes"
+                  name="received"
                   value="true"
                   onChange={(event) => setReceived(event.target.value)}
                   className="mr-1"
                 />
                 Yes
               </label>
-              <label htmlFor="paid-no">
+              <label htmlFor="received-no">
                 <input
                   type="radio"
-                  id="paid-no"
-                  name="paid"
+                  id="received-no"
+                  name="received"
                   value="false"
                   onChange={(event) => setReceived(event.target.value)}
                   className="mr-1"

@@ -13,9 +13,7 @@ export default async function handler(
         data: { id },
       }
     );
-    return res.status(200).json({
-      accounts: data.transfers,
-    });
+    return res.status(200).json({ message: "Transfer successfully removed" });
   } catch (error: any) {
     if (error.response) {
       return res

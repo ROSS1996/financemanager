@@ -117,7 +117,7 @@ export default function Index({ session }: ProfileProps) {
                       onClick={(e) => {
                         if (
                           window.confirm(
-                            "Are you sure you want to delete this account?"
+                            "Are you sure you want to delete this account? Doing so will also remove all the expenses, revenues and transfers related to that account"
                           )
                         ) {
                           handleDelete(

@@ -34,7 +34,7 @@ export default async function handler(
         account_id,
       }
     );
-    return res.status(200).json({ message: "Account created" });
+    return res.status(200).json({ message: "Expense successfully updated" });
   } catch (error: any) {
     if (error.response) {
       return res
