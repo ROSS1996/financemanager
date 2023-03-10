@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Layout from "../components/layout";
+import Layout from "../../components/layout";
 import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";
 
@@ -20,7 +20,7 @@ export default function Index() {
   }, [sessionData, status, router]);
 
   const [name, setName] = useState("");
-  const [balance, setBalnce] = useState("");
+  const [balance, setBalance] = useState("");
   const [category, setCategory] = useState("");
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -74,7 +74,7 @@ export default function Index() {
               type="number"
               id="balance"
               name="balance"
-              onChange={(event) => setBalnce(event.target.value)}
+              onChange={(event) => setBalance(event.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>

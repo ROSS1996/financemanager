@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import Layout from "../components/layout";
+import Layout from "../../components/layout";
 import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";
 import Link from "next/link";
-import useAccounts from "../hooks/useAccounts";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { BsFillPencilFill, BsEraserFill } from "react-icons/bs";
+import useBalance from "../hooks/accounts/useBalance";
 
 interface ProfileProps {
   session?: Session | null;
@@ -25,7 +25,7 @@ export default function Index({ session }: ProfileProps) {
       sessionData ? setSessionState(sessionData) : setSessionState(null);
     }
   }, [sessionData, status, router]);
-  const accounts = useAccounts(sessionState?.user.id);
+  const accounts = useBalance(sessionState?.user.id);
 
   if (!accounts) {
     return (
@@ -74,16 +74,31 @@ export default function Index({ session }: ProfileProps) {
             <thead>
               <tr className="text-left bg-gray-100">
                 <th className="px-6 py-3 font-bold border-b border-gray-200">
+                  ID
+                </th>
+                <th className="px-6 py-3 font-bold border-b border-gray-200">
                   Name
                 </th>
                 <th className="px-6 py-3 font-bold border-b border-gray-200">
                   Starting Balance
                 </th>
                 <th className="px-6 py-3 font-bold border-b border-gray-200">
-                  Category
+                  Revenues
                 </th>
                 <th className="px-6 py-3 font-bold border-b border-gray-200">
-                  Account ID
+                  Expenses
+                </th>
+                <th className="px-6 py-3 font-bold border-b border-gray-200">
+                  Transfers Sent
+                </th>
+                <th className="px-6 py-3 font-bold border-b border-gray-200">
+                  Transfers Received
+                </th>
+                <th className="px-6 py-3 font-bold border-b border-gray-200">
+                  Balance
+                </th>
+                <th className="px-6 py-3 font-bold border-b border-gray-200">
+                  Category
                 </th>
                 <th className="px-6 py-3 font-bold border-b border-gray-200">
                   Actions
@@ -96,24 +111,39 @@ export default function Index({ session }: ProfileProps) {
                   key={account.id}
                   className="bg-white border-b border-gray-200"
                 >
+                  <td className="px-6 py-4 whitespace-nowrap">{account.id}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {account.name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    ${account.starting_balance}
+                    $ {account.starting_balance}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    $ {account.total_revenues}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    $ {account.total_expenses}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    $ {account.total_transfers_received}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    $ {account.total_transfers_sent}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    $ {account.balance}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {account.category}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">{account.id}</td>
-                  <td className="px-6 py-4 whitespace-nowrap flex flex-col gap-2">
+                  <td className="flex flex-col gap-2 px-6 py-4 whitespace-nowrap">
                     <Link href={`accounts/edit/${account.id}`}>
-                      <div className="flex gap-1 items-center rounded-sm w-20 justify-center font-bold text-sm py-1 bg-slate-600 text-white cursor-pointer hover:bg-slate-800">
+                      <div className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white rounded-sm cursor-pointer bg-slate-600 hover:bg-slate-800">
                         <BsFillPencilFill /> Edit
                       </div>
                     </Link>
                     <div
-                      className="flex gap-1 items-center rounded-sm w-20 justify-center font-bold text-sm py-1 bg-red-500 text-white cursor-pointer hover:bg-red-700"
+                      className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white bg-red-500 rounded-sm cursor-pointer hover:bg-red-700"
                       onClick={(e) => {
                         if (
                           window.confirm(

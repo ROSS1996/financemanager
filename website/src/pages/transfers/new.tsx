@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Layout from "../components/layout";
+import Layout from "../../components/layout";
 import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";
-import useAccounts from "../hooks/useAccounts";
+import useAccounts from "../hooks/accounts/useAccounts";
 import Link from "next/link";
 import { useRouter } from "next/router";
 

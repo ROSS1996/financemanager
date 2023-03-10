@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import Link from "next/link";
-import Layout from "./components/layout";
+import Layout from "../components/layout";
 
 export default function Register() {
   const router = useRouter();

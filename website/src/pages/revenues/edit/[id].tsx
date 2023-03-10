@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import Layout from "../../components/layout";
-import useRevenue from "@/pages/hooks/useRevenue";
-import useAccounts from "@/pages/hooks/useAccounts";
+import Layout from "@/components/layout";
+import useRevenue from "@/pages/hooks/revenues/useRevenue";
+import useAccounts from "@/pages/hooks/accounts/useAccounts";
 
 export default function Index() {
   const router = useRouter();

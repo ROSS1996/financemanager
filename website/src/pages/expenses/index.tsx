@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import Layout from "../components/layout";
+import Layout from "../../components/layout";
 import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";
 import Link from "next/link";
-import useExpenses from "../hooks/useExpenses";
-import useAccounts from "../hooks/useAccounts";
+import useExpenses from "../hooks/expenses/useExpenses";
+import useAccounts from "../hooks/accounts/useAccounts";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { BsFillPencilFill, BsEraserFill } from "react-icons/bs";
@@ -159,14 +159,14 @@ export default function Index({ session }: ProfileProps) {
                   <td className="px-6 py-4 whitespace-nowrap">
                     {new Date(expense.updated_at).toLocaleString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap flex flex-col gap-2">
+                  <td className="flex flex-col gap-2 px-6 py-4 whitespace-nowrap">
                     <Link href={`expenses/edit/${expense.id}`}>
-                      <div className="flex gap-1 items-center rounded-sm w-20 justify-center font-bold text-sm py-1 bg-slate-600 text-white cursor-pointer hover:bg-slate-800">
+                      <div className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white rounded-sm cursor-pointer bg-slate-600 hover:bg-slate-800">
                         <BsFillPencilFill /> Edit
                       </div>
                     </Link>
                     <div
-                      className="flex gap-1 items-center rounded-sm w-20 justify-center font-bold text-sm py-1 bg-red-500 text-white cursor-pointer hover:bg-red-700"
+                      className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white bg-red-500 rounded-sm cursor-pointer hover:bg-red-700"
                       onClick={(e) => {
                         if (
                           window.confirm(

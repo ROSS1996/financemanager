@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Layout from "./components/layout";
+import Layout from "../components/layout";
 import { useSession, signOut } from "next-auth/react";
 import type { Session } from "next-auth";
 

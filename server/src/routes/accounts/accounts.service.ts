@@ -78,6 +78,7 @@ export class AccountsService {
       );
       const accountsList = result.rows.map((row) => ({
         id: row.id,
+        userid: userId,
         name: row.name,
         starting_balance: row.starting_balance,
         category: row.category,
