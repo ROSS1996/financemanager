@@ -71,8 +71,6 @@ class Handler {
           account_id: account_id,
           user_id: "",
           received_at: received_at,
-          created_at: "",
-          updated_at: "",
         };
         const result = await this.service.updateRevenue(id, revenue);
         res.status(result.statusCode).json({ message: result.message });
@@ -99,8 +97,6 @@ class Handler {
           account_id: account_id,
           user_id: userid,
           received_at: received_at,
-          created_at: "",
-          updated_at: "",
         };
         const result = await this.service.addRevenue(revenue);
         res.status(result.statusCode).json({ message: result.message });

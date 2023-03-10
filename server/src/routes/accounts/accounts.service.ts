@@ -49,6 +49,59 @@ export class AccountsService {
     }
   }
 
+  async getBalance(userId: string): Promise<AccountsResponse> {
+    try {
+      const result = await db.query(
+        `
+        SELECT 
+        accounts.id, 
+        accounts.name, 
+        accounts.starting_balance, 
+        accounts.category,
+        COALESCE(SUM(CASE WHEN revenues.received = true THEN revenues.amount ELSE 0 END), 0) 
+          - COALESCE(SUM(CASE WHEN transfers.origin_account_id = accounts.id AND transfers.done = true THEN transfers.amount ELSE 0 END), 0) 
+          + COALESCE(SUM(CASE WHEN transfers.destination_account_id = accounts.id AND transfers.done = true THEN transfers.amount ELSE 0 END), 0) 
+          - COALESCE(SUM(CASE WHEN expenses.paid = true THEN expenses.amount ELSE 0 END), 0) 
+          + accounts.starting_balance AS balance,
+        COALESCE(SUM(CASE WHEN revenues.received = true THEN revenues.amount ELSE 0 END), 0) AS revenues_total,
+        COALESCE(SUM(CASE WHEN expenses.paid = true THEN expenses.amount ELSE 0 END), 0) AS expenses_total,
+        COALESCE(SUM(CASE WHEN transfers.destination_account_id = accounts.id AND transfers.done = true THEN transfers.amount ELSE 0 END), 0) AS transfers_received_total,
+        COALESCE(SUM(CASE WHEN transfers.origin_account_id = accounts.id AND transfers.done = true THEN transfers.amount ELSE 0 END), 0) AS transfers_sent_total
+      FROM accounts 
+      LEFT JOIN revenues ON revenues.account_id = accounts.id 
+      LEFT JOIN expenses ON expenses.account_id = accounts.id 
+      LEFT JOIN transfers ON (transfers.origin_account_id = accounts.id OR transfers.destination_account_id = accounts.id) 
+      WHERE accounts.user_id = $1 AND (revenues.received = true OR expenses.paid = true OR transfers.done = true) 
+      GROUP BY accounts.id;
+        `,
+        [userId]
+      );
+      const accountsList = result.rows.map((row) => ({
+        id: row.id,
+        name: row.name,
+        starting_balance: row.starting_balance,
+        category: row.category,
+        total_revenues: row.revenues_total,
+        total_expenses: row.expenses_total,
+        total_transfers_received: row.transfers_received_total,
+        total_transfers_sent: row.transfers_sent_total,
+        balance: row.balance,
+      }));
+      return {
+        statusCode: 200,
+        message: "Accounts retrieved successfully",
+        accounts: accountsList,
+      };
+    } catch (err) {
+      console.log(err);
+      return {
+        statusCode: 401,
+        message: "Invalid token",
+        accounts: [],
+      };
+    }
+  }
+
   async getAccountById(accountId: string): Promise<SingleAccounts> {
     const errors = validationResult(accountValidation);
     if (!errors.isEmpty()) {

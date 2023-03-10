@@ -7,6 +7,7 @@ class Handler {
 
   constructor() {
     this.multi = this.multi.bind(this);
+    this.balance = this.balance.bind(this);
     this.single = this.single.bind(this);
   }
 
@@ -15,6 +16,25 @@ class Handler {
       const userId = req.body.id;
       if (userId) {
         const result = await this.service.getAccounts(userId);
+        if (result.statusCode === 200) {
+          res.status(result.statusCode).json({
+            message: result.message,
+            accounts: result.accounts,
+          });
+        } else {
+          res.status(result.statusCode).json({ message: result.message });
+        }
+      }
+    } else {
+      res.status(401).json({ message: "Unauthorized" });
+    }
+  }
+
+  async balance(req: express.Request, res: express.Response): Promise<void> {
+    if (req.method === "GET") {
+      const userId = req.body.id;
+      if (userId) {
+        const result = await this.service.getBalance(userId);
         if (result.statusCode === 200) {
           res.status(result.statusCode).json({
             message: result.message,
@@ -85,6 +105,7 @@ const AccountsController = express.Router();
 const Accounts = new Handler();
 
 AccountsController.all("/multi", Accounts.multi);
+AccountsController.all("/balance", Accounts.balance);
 AccountsController.all("/single", Accounts.single);
 
 export default AccountsController;

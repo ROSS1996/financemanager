@@ -100,6 +100,33 @@ export class ExpensesService {
       };
     }
   }
+  /*
+  async getExpensesTotal(userId: string): Promise<ExpensesTotalResponse> {
+    try {
+      const result = await db.query(
+        `
+          SELECT COALESCE(SUM(amount), 0) AS total 
+          FROM expenses 
+          WHERE expenses.user_id = $1 AND expenses.paid = true
+        `,
+        [userId]
+      );
+      const total = parseFloat(result.rows[0].total);
+      return {
+        statusCode: 200,
+        message: "Expenses total retrieved successfully",
+        total: total
+      };
+    } catch (err) {
+      console.log(err);
+      return {
+        statusCode: 401,
+        message: "Invalid token",
+        total: 0,
+      };
+    }
+  }
+  */
 
   async deleteExpenseById(
     expenseId: string

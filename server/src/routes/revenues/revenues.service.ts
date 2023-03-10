@@ -100,7 +100,33 @@ export class RevenuesService {
       };
     }
   }
-
+  /*
+  async getRevenuesTotal(userId: string): Promise<RevenuesTotalResponse> {
+    try {
+      const result = await db.query(
+        `
+          SELECT COALESCE(SUM(amount), 0) AS total 
+          FROM revenues 
+          WHERE revenues.user_id = $1 AND revenues.received = true
+        `,
+        [userId]
+      );
+      const total = parseFloat(result.rows[0].total);
+      return {
+        statusCode: 200,
+        message: "Revenues total retrieved successfully",
+        total: total
+      };
+    } catch (err) {
+      console.log(err);
+      return {
+        statusCode: 401,
+        message: "Invalid token",
+        total: 0,
+      };
+    }
+  }
+*/
   async deleteRevenueById(
     revenueId: string
   ): Promise<{ statusCode: number; message: string }> {

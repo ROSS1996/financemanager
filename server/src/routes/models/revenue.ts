@@ -8,6 +8,6 @@ export interface Revenue {
   account_id: string;
   user_id: string;
   received_at: Date;
-  created_at: Date;
-  updated_at: Date;
+  created_at?: Date;
+  updated_at?: Date;
 }
