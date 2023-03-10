@@ -77,7 +77,7 @@ export default function Index({ session }: ProfileProps) {
   return (
     <Layout pageTitle="Transfers" pageDescription="Transfers">
       {transfers.length > 0 ? (
-        <div className="flex flex-col bg-gray-50">
+        <div className="flex flex-col">
           <header className="py-4 shadow bg-gray-50">
             <div className="container px-4 mx-auto">
               <div className="flex items-center justify-between">

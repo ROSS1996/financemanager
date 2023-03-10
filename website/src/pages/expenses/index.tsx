@@ -78,7 +78,7 @@ export default function Index({ session }: ProfileProps) {
   return (
     <Layout pageTitle="Expenses" pageDescription="Expenses">
       {expenses.length > 0 ? (
-        <div className="flex flex-col min-h-screen bg-gray-50">
+        <div className="flex flex-col">
           <header className="py-4 shadow bg-gray-50">
             <div className="container px-4 mx-auto">
               <div className="flex items-center justify-between">

@@ -1,5 +1,9 @@
 import Link from "next/link";
 import { signOut } from "next-auth/react";
+import { BiTransferAlt } from "react-icons/bi";
+import { BsFillPersonFill } from "react-icons/bs";
+import { AiFillBank, AiFillCreditCard, AiFillHome } from "react-icons/ai";
+import { FaMoneyBill } from "react-icons/fa";
 
 type NavbarProps = {
   name: string | null;
@@ -12,44 +16,80 @@ export const Navbar = ({ name }: NavbarProps) => {
   };
 
   return (
-    <nav className="flex flex-row items-center justify-between w-full px-2 py-1 bg-blue-300">
-      <ul className="flex flex-row items-center gap-2">
-        <li className="flex flex-row gap-2 font-bold">
-          <Link href="/">Home</Link>
+    <nav className="flex flex-row items-center justify-between w-full px-4 py-2 bg-gray-200 shadow-lg">
+      <ul className="flex flex-row items-center gap-4">
+        <li>
+          <Link
+            href="/"
+            className="flex items-center gap-1 text-gray-700 hover:text-gray-800"
+          >
+            <AiFillHome />
+            <span>Home</span>
+          </Link>
         </li>
-        {name ? (
+        {name && (
           <>
-            <li className="flex flex-row gap-2 font-bold">
-              <Link href="/accounts">Accounts</Link>
+            <li>
+              <Link
+                href="/accounts"
+                className="flex items-center gap-1 text-gray-700 hover:text-gray-800"
+              >
+                <AiFillBank />
+                <span>Accounts</span>
+              </Link>
             </li>
-            <li className="flex flex-row gap-2 font-bold">
-              <Link href="/expenses">Expenses</Link>
+            <li>
+              <Link
+                href="/expenses"
+                className="flex items-center gap-1 text-gray-700 hover:text-gray-800"
+              >
+                <AiFillCreditCard />
+                <span>Expenses</span>
+              </Link>
             </li>
-            <li className="flex flex-row gap-2 font-bold">
-              <Link href="/revenues">Revenues</Link>
+            <li>
+              <Link
+                href="/revenues"
+                className="flex items-center gap-1 text-gray-700 hover:text-gray-800"
+              >
+                <FaMoneyBill />
+                <span>Revenues</span>
+              </Link>
             </li>
-            <li className="flex flex-row gap-2 font-bold">
-              <Link href="/transfers">Transfers</Link>
+            <li>
+              <Link
+                href="/transfers"
+                className="flex items-center gap-1 text-gray-700 hover:text-gray-800"
+              >
+                <BiTransferAlt />
+                <span>Transfers</span>
+              </Link>
             </li>
           </>
-        ) : (
-          false
         )}
       </ul>
       {name ? (
-        <ul className="flex flex-row gap-3 font-bold">
+        <ul className="flex flex-row items-center gap-4">
           <li>
-            <span>{name}</span>
+            <span className="font-bold text-gray-700 ">{name}</span>
           </li>
-          <li className="font-bold">
-            <Link href="/profile">Edit Profile</Link>
+          <li>
+            <Link
+              href="/profile"
+              className="flex items-center gap-1 text-gray-700 hover:text-gray-800"
+            >
+              <BsFillPersonFill />
+              <span>Profile</span>
+            </Link>
           </li>
           <li onClick={handleLogout} className="cursor-pointer">
-            Logout
+            <span className="flex items-center gap-1 text-gray-700 hover:text-gray-800">
+              Logout
+            </span>
           </li>
         </ul>
       ) : (
-        <span className="font-bold">
+        <span className="font-bold text-gray-700 ">
           <Link href="/login">Login</Link>
         </span>
       )}
