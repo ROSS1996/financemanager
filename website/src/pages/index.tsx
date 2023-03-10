@@ -34,8 +34,10 @@ export default function Index({ session }: ProfileProps) {
       {account.total_revenues > 0 ? (
         <>
           received a total of{" "}
-          <span className="font-semibold">${account.total_revenues}</span> in
-          revenues
+          <span className="font-semibold">
+            ${account.total_revenues.toLocaleString()}
+          </span>{" "}
+          in revenues
         </>
       ) : (
         <>did not receive any revenues</>
@@ -43,8 +45,10 @@ export default function Index({ session }: ProfileProps) {
       {account.total_expenses > 0 ? (
         <>
           and spent a total of{" "}
-          <span className="font-semibold">${account.total_expenses}</span> in
-          expenses
+          <span className="font-semibold">
+            ${account.total_expenses.toLocaleString()}
+          </span>{" "}
+          in expenses
         </>
       ) : (
         <>and did not have any expenses</>
@@ -54,7 +58,7 @@ export default function Index({ session }: ProfileProps) {
         <>
           received{" "}
           <span className="font-semibold">
-            ${account.total_transfers_received}
+            ${account.total_transfers_received.toLocaleString()}
           </span>{" "}
           in transfers
         </>
@@ -64,14 +68,17 @@ export default function Index({ session }: ProfileProps) {
       {account.total_transfers_sent > 0 ? (
         <>
           and sent{" "}
-          <span className="font-semibold">${account.total_transfers_sent}</span>{" "}
+          <span className="font-semibold">
+            ${account.total_transfers_sent.toLocaleString()}
+          </span>{" "}
           in transfers
         </>
       ) : (
         <>and did not send any transfers</>
       )}
       . Your current balance for this account is{" "}
-      <span className="font-semibold">${account.balance}</span>.
+      <span className="font-semibold">${account.balance.toLocaleString()}</span>
+      .
     </p>
   ));
 

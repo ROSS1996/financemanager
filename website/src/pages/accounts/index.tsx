@@ -58,113 +58,158 @@ export default function Index({ session }: ProfileProps) {
     }
   };
 
+  let totalBalance = 0;
+  accounts.forEach((account) => {
+    totalBalance += +account.balance;
+  });
+
   return (
     <Layout pageTitle="Accounts" pageDescription="Accounts">
       {accounts.length > 0 ? (
-        <>
-          <div className="px-6 py-3">
-            <Link
-              href="/accounts/new"
-              className="px-2 py-1 bg-gray-200 border border-black rounded-sm cursor-pointer w-fit hover:bg-gray-400"
-            >
-              Add new account
-            </Link>
-          </div>
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="text-left bg-gray-100">
-                <th className="px-6 py-3 font-bold border-b border-gray-200">
-                  ID
-                </th>
-                <th className="px-6 py-3 font-bold border-b border-gray-200">
-                  Name
-                </th>
-                <th className="px-6 py-3 font-bold border-b border-gray-200">
-                  Starting Balance
-                </th>
-                <th className="px-6 py-3 font-bold border-b border-gray-200">
-                  Revenues
-                </th>
-                <th className="px-6 py-3 font-bold border-b border-gray-200">
-                  Expenses
-                </th>
-                <th className="px-6 py-3 font-bold border-b border-gray-200">
-                  Transfers Sent
-                </th>
-                <th className="px-6 py-3 font-bold border-b border-gray-200">
-                  Transfers Received
-                </th>
-                <th className="px-6 py-3 font-bold border-b border-gray-200">
-                  Balance
-                </th>
-                <th className="px-6 py-3 font-bold border-b border-gray-200">
-                  Category
-                </th>
-                <th className="px-6 py-3 font-bold border-b border-gray-200">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {accounts.map((account) => (
-                <tr
-                  key={account.id}
-                  className="bg-white border-b border-gray-200"
-                >
-                  <td className="px-6 py-4 whitespace-nowrap">{account.id}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {account.name}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    $ {account.starting_balance}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    $ {account.total_revenues}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    $ {account.total_expenses}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    $ {account.total_transfers_received}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    $ {account.total_transfers_sent}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    $ {account.balance}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {account.category}
-                  </td>
-                  <td className="flex flex-col gap-2 px-6 py-4 whitespace-nowrap">
-                    <Link href={`accounts/edit/${account.id}`}>
-                      <div className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white rounded-sm cursor-pointer bg-slate-600 hover:bg-slate-800">
-                        <BsFillPencilFill /> Edit
-                      </div>
-                    </Link>
-                    <div
-                      className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white bg-red-500 rounded-sm cursor-pointer hover:bg-red-700"
-                      onClick={(e) => {
-                        if (
-                          window.confirm(
-                            "Are you sure you want to delete this account? Doing so will also remove all the expenses, revenues and transfers related to that account"
-                          )
-                        ) {
-                          handleDelete(
-                            account.id,
-                            e.currentTarget.closest("tr")
-                          );
-                        }
-                      }}
-                    >
-                      <BsEraserFill /> Delete
+        <div className="flex flex-col bg-gray-50">
+          <header className="py-4 shadow bg-gray-50">
+            <div className="container px-4 mx-auto">
+              <div className="flex items-center justify-between">
+                <h1 className="text-3xl font-bold text-gray-900">Accounts</h1>
+                <div className="flex items-center">
+                  <div className="flex flex-col items-center justify-center px-4 mr-4 text-gray-500 bg-white rounded-sm shadow-md">
+                    <span className="text-xs font-medium tracking-wider text-gray-500 uppercase">
+                      Total Balance
+                    </span>
+                    <div className="text-lg font-bold">
+                      $ {totalBalance.toLocaleString()}
                     </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </>
+                  </div>
+                  <Link
+                    href="/accounts/new"
+                    className="inline-block px-4 py-2 font-semibold text-white bg-blue-500 border border-transparent rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    Add new account
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </header>
+          <main className="flex-grow">
+            <div className="container px-4 py-8 mx-auto">
+              <div className="inline-block min-w-full overflow-hidden bg-white rounded-lg shadow-md">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                      >
+                        ID
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                      >
+                        Name
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                      >
+                        Starting Balance
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                      >
+                        Revenues
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-xs tracking-wider text-left text-gray-500 uppercase font medium"
+                      >
+                        Expenses
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                      >
+                        Transfers Sent
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                      >
+                        Transfers Received
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
+                      >
+                        Balance
+                      </th>
+                      <th scope="col" className="relative px-6 py-3">
+                        <span className="sr-only">Actions</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {accounts.map((account) => (
+                      <tr key={account.id}>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
+                          {account.id}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
+                          {account.name}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
+                          $ {account.starting_balance.toLocaleString()}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-green-500 whitespace-nowrap">
+                          $ {account.total_revenues.toLocaleString()}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-red-500 whitespace-nowrap">
+                          $ {account.total_expenses.toLocaleString()}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
+                          $ {account.total_transfers_sent.toLocaleString()}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
+                          $ {account.total_transfers_received.toLocaleString()}
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
+                          $ {account.balance.toLocaleString()}
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
+                          <div className="flex items-center gap-2">
+                            <Link href={`accounts/edit/${account.id}`}>
+                              <div className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white bg-indigo-600 rounded-sm cursor-pointer hover:bg-indigo-800">
+                                <BsFillPencilFill /> Edit
+                              </div>
+                            </Link>
+                            <div
+                              className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white bg-red-500 rounded-sm cursor-pointer hover:bg-red-700"
+                              onClick={(e) => {
+                                if (
+                                  window.confirm(
+                                    "Are you sure you want to delete this account? Doing so will also remove all the expenses, revenues and transfers related to that account"
+                                  )
+                                ) {
+                                  handleDelete(
+                                    account.id,
+                                    e.currentTarget.closest("tr")
+                                  );
+                                }
+                              }}
+                            >
+                              <BsEraserFill /> Delete
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </main>
+        </div>
       ) : (
         <p className="text-lg font-bold text-center">
           No registered accounts,{" "}
