@@ -61,7 +61,7 @@ export default function Index() {
 
   return (
     <Layout pageTitle="Edit Account" pageDescription="Edit Account">
-      <div className="flex items-center justify-center mt-6">
+      <div className="flex items-center justify-center h-content">
         <form
           className="flex flex-col gap-4 px-8 pt-6 pb-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-lg w-96"
           onSubmit={handleSubmit}
@@ -80,6 +80,7 @@ export default function Index() {
               defaultValue={transfer.description}
               onChange={(event) => setDescription(event.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
             />
           </div>
           <div className="flex flex-col">
@@ -96,6 +97,7 @@ export default function Index() {
               defaultValue={transfer.amount}
               onChange={(event) => setAmount(event.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
             />
           </div>
           <div className="flex flex-col">
@@ -112,6 +114,7 @@ export default function Index() {
               defaultValue={transfer.due_date.slice(0, 10)}
               onChange={(event) => setDueDate(event.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
             />
           </div>
           <div className="flex flex-col">
@@ -164,6 +167,7 @@ export default function Index() {
                 }
               }}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
             >
               <option value="" disabled hidden>
                 Select an account
@@ -193,6 +197,7 @@ export default function Index() {
                 }
               }}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
             >
               <option value="" disabled hidden>
                 Select an account

@@ -8,6 +8,10 @@ import axios from "axios";
 import { BsFillPencilFill, BsEraserFill } from "react-icons/bs";
 import useBalance from "../hooks/accounts/useBalance";
 
+/** TODO
+  Edit this and the other pages to show a div instead of a table.
+**/
+
 interface ProfileProps {
   session?: Session | null;
 }

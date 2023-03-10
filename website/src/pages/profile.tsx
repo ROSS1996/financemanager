@@ -73,30 +73,52 @@ export default function Index() {
 
   return (
     <Layout pageTitle="Profile" pageDescription="Profile">
-      <div className="flex items-center justify-center mt-6">
+      <div className="flex items-center justify-center bg-gray-100 h-content">
         <form
-          className="flex flex-col gap-3 px-8 pt-6 pb-8 mb-4 bg-white border rounded shadow-md"
+          method="post"
           onSubmit={handleSubmit}
+          className="flex flex-col items-center justify-center max-w-sm gap-4 p-6 border-2 border-gray-300 rounded shadow-md"
         >
-          <div className="flex flex-col items-start">
-            <label
-              htmlFor="username"
-              className="text-sm font-medium cursor-pointer"
-            >
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              onChange={(event) => setUsername(event.target.value)}
-              className="px-2 py-1 border border-gray-400 rounded-sm"
-            />
+          <div className="flex gap-2">
+            <div className="flex flex-col items-start">
+              <label
+                htmlFor="username"
+                className="text-sm font-medium text-gray-700 cursor-pointer"
+              >
+                Username
+              </label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                onChange={(event) => setUsername(event.target.value)}
+                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                required
+              />
+            </div>
+            <div className="flex gap-2">
+              <div className="flex flex-col items-start">
+                <label
+                  htmlFor="password"
+                  className="text-sm font-medium text-gray-700 cursor-pointer"
+                >
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  onChange={(event) => setPassword(event.target.value)}
+                  className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                  required
+                />
+              </div>
+            </div>
           </div>
-          <div className="flex flex-col items-start">
+          <div className="flex flex-col items-start w-full">
             <label
               htmlFor="email"
-              className="text-sm font-medium cursor-pointer"
+              className="text-sm font-medium text-gray-700 cursor-pointer"
             >
               Email
             </label>
@@ -105,125 +127,131 @@ export default function Index() {
               id="email"
               name="email"
               onChange={(event) => setEmail(event.target.value)}
-              className="px-2 py-1 border border-gray-400 rounded-sm"
+              className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+              required
             />
           </div>
-          <div className="flex flex-col items-start">
-            <label
-              htmlFor="password"
-              className="text-sm font-medium cursor-pointer"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              onChange={(event) => setPassword(event.target.value)}
-              className="px-2 py-1 border border-gray-400 rounded-sm"
-            />
+          <div className="flex gap-2">
+            <div className="flex flex-col items-start">
+              <label
+                htmlFor="firstname"
+                className="text-sm font-medium text-gray-700 cursor-pointer"
+              >
+                First Name
+              </label>
+              <input
+                type="text"
+                id="firstname"
+                name="firstname"
+                onChange={(event) => setFirstName(event.target.value)}
+                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                required
+              />
+            </div>
+            <div className="flex flex-col items-start">
+              <label
+                htmlFor="lastname"
+                className="text-sm font-medium text-gray-700 cursor-pointer"
+              >
+                Last Name
+              </label>
+              <input
+                type="text"
+                id="lastname"
+                name="lastname"
+                onChange={(event) => setLastName(event.target.value)}
+                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                required
+              />
+            </div>
           </div>
-          <div className="flex flex-col items-start">
-            <label
-              htmlFor="firstname"
-              className="text-sm font-medium cursor-pointer"
-            >
-              First Name
-            </label>
-            <input
-              type="text"
-              id="firstname"
-              name="firstname"
-              onChange={(event) => setFirstName(event.target.value)}
-              className="px-2 py-1 border border-gray-400 rounded-sm"
-            />
+          <div className="flex gap-2">
+            <div className="flex flex-col items-start">
+              <label
+                htmlFor="birthdate"
+                className="text-sm font-medium text-gray-700 cursor-pointer"
+              >
+                Birthdate
+              </label>
+              <input
+                type="date"
+                id="birthdate"
+                name="birthdate"
+                onChange={(event) => setBirthdate(event.target.value)}
+                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                required
+              />
+            </div>
+            <div className="flex flex-col items-start">
+              <label
+                htmlFor="phone"
+                className="text-sm font-medium text-gray-700 cursor-pointer"
+              >
+                Phone
+              </label>
+              <input
+                type="phone"
+                id="phone"
+                name="phone"
+                onChange={(event) => setPhone(event.target.value)}
+                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                required
+              />
+            </div>
           </div>
-          <div className="flex flex-col items-start">
-            <label
-              htmlFor="lastname"
-              className="text-sm font-medium cursor-pointer"
-            >
-              Last Name
-            </label>
-            <input
-              type="text"
-              id="lastname"
-              name="lastname"
-              onChange={(event) => setLastName(event.target.value)}
-              className="px-2 py-1 border border-gray-400 rounded-sm"
-            />
+          <div className="flex gap-2">
+            <div className="flex flex-col items-start">
+              <label
+                htmlFor="address"
+                className="text-sm font-medium text-gray-700 cursor-pointer"
+              >
+                Address
+              </label>
+              <input
+                type="address"
+                id="address"
+                name="address"
+                onChange={(event) => setAddress(event.target.value)}
+                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                required
+              />
+            </div>
+            <div className="flex flex-col items-start">
+              <label
+                htmlFor="country"
+                className="text-sm font-medium text-gray-700 cursor-pointer"
+              >
+                Country
+              </label>
+              <input
+                type="text"
+                id="country"
+                name="country"
+                onChange={(event) => setCountry(event.target.value)}
+                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                required
+              />
+            </div>
           </div>
-          <div className="flex flex-col items-start">
-            <label
-              htmlFor="birthdate"
-              className="text-sm font-medium cursor-pointer"
-            >
-              Birthdate
-            </label>
-            <input
-              type="date"
-              id="birthdate"
-              name="birthdate"
-              onChange={(event) => setBirthdate(event.target.value)}
-              className="px-2 py-1 border border-gray-400 rounded-sm"
-            />
-          </div>
-          <div className="flex flex-col items-start">
-            <label
-              htmlFor="country"
-              className="text-sm font-medium cursor-pointer"
-            >
-              Country
-            </label>
-            <input
-              type="text"
-              id="country"
-              name="country"
-              onChange={(event) => setCountry(event.target.value)}
-              className="px-2 py-1 border border-gray-400 rounded-sm"
-            />
-          </div>
-          <div className="flex flex-col items-start">
-            <label
-              htmlFor="phone"
-              className="text-sm font-medium cursor-pointer"
-            >
-              Phone
-            </label>
-            <input
-              type="phone"
-              id="phone"
-              name="phone"
-              onChange={(event) => setPhone(event.target.value)}
-              className="px-2 py-1 border border-gray-400 rounded-sm"
-            />
-          </div>
-          <div className="flex flex-col items-start">
-            <label
-              htmlFor="address"
-              className="text-sm font-medium cursor-pointer"
-            >
-              Address
-            </label>
-            <input
-              type="address"
-              id="address"
-              name="address"
-              onChange={(event) => setAddress(event.target.value)}
-              className="px-2 py-1 border border-gray-400 rounded-sm"
-            />
-          </div>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-row items-center justify-around w-full">
             <button
-              className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
               type="submit"
+              className="px-4 py-2 text-white bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600"
             >
-              Save
+              Submit
             </button>
             <button
               className="px-4 py-2 font-bold text-white bg-red-500 rounded hover:bg-red-700 focus:outline-none focus:shadow-outline"
               type="button"
-              onClick={handleDelete}
+              onClick={(e) => {
+                if (
+                  window.confirm(
+                    "Are you sure you want to delete your account? This decision will not be reverted"
+                  )
+                ) {
+                  handleDelete();
+                }
+              }}
             >
               Delete
             </button>

@@ -34,11 +34,11 @@ export default function Login() {
 
   return (
     <Layout pageTitle="Login" pageDescription="Login">
-      <div className="flex items-center justify-center w-screen h-screen bg-gray-100">
+      <div className="flex items-center justify-center bg-gray-100 h-content">
         <form
           method="post"
           onSubmit={handleSubmit}
-          className="flex flex-col items-center justify-center max-w-sm gap-4 p-6 border-2 border-gray-300 rounded-lg shadow-md"
+          className="flex flex-col items-center justify-center max-w-sm gap-4 p-6 border-2 border-gray-300 rounded shadow-md"
         >
           <div className="flex flex-col items-start w-full">
             <label
@@ -54,6 +54,7 @@ export default function Login() {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+              required
             />
           </div>
           <div className="flex flex-col items-start w-full">
@@ -70,6 +71,7 @@ export default function Login() {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+              required
             />
           </div>
           <div className="flex flex-row items-center justify-between w-full">

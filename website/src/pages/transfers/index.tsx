@@ -84,7 +84,7 @@ export default function Index({ session }: ProfileProps) {
                 <h1 className="text-3xl font-bold text-gray-900">Transfers</h1>
                 <div className="flex items-center">
                   <Link
-                    href="/accounts/new"
+                    href="/transfers/new"
                     className="inline-block px-4 py-2 font-semibold text-white bg-blue-500 border border-transparent rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
                     Add new transfer

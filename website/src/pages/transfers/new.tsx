@@ -84,6 +84,7 @@ export default function Index() {
               name="name"
               onChange={(event) => setDescription(event.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
             />
           </div>
           <div className="flex flex-col">
@@ -99,6 +100,7 @@ export default function Index() {
               name="amount"
               onChange={(event) => setAmount(event.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
             />
           </div>
           <div className="flex flex-col">
@@ -114,6 +116,7 @@ export default function Index() {
               name="duedate"
               onChange={(event) => setDueDate(event.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
             />
           </div>
           <div className="flex flex-col">
@@ -132,6 +135,7 @@ export default function Index() {
                   value="true"
                   onChange={(event) => setDone(event.target.value)}
                   className="mr-1"
+                  required
                 />
                 Yes
               </label>
@@ -143,6 +147,7 @@ export default function Index() {
                   value="false"
                   onChange={(event) => setDone(event.target.value)}
                   className="mr-1"
+                  required
                 />
                 No
               </label>
@@ -166,6 +171,7 @@ export default function Index() {
                 );
               }}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
             >
               <option value="" disabled hidden>
                 Select an account
@@ -195,6 +201,7 @@ export default function Index() {
                 );
               }}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
             >
               <option value="" disabled hidden>
                 Select an account
