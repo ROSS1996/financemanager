@@ -23,7 +23,7 @@ export default function Index() {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [duedate, setDueDate] = useState("");
-  const [done, setDone] = useState("");
+  const [done, setDone] = useState<boolean>(false);
   const [originAccount, setOriginAccount] = useState("");
   const [destinationAccount, setDestinationAccount] = useState("");
 
@@ -133,7 +133,7 @@ export default function Index() {
                   id="paid-yes"
                   name="done"
                   value="true"
-                  onChange={(event) => setDone(event.target.value)}
+                  onChange={() => setDone(true)}
                   className="mr-1"
                   required
                 />
@@ -145,7 +145,8 @@ export default function Index() {
                   id="paid-no"
                   name="done"
                   value="false"
-                  onChange={(event) => setDone(event.target.value)}
+                  onChange={() => setDone(false)}
+                  defaultChecked={true}
                   className="mr-1"
                   required
                 />

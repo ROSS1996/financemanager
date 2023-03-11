@@ -1,16 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
-interface Transfer {
-  id?: string;
-  description: string;
-  amount: string;
-  due_date: string;
-  done: string;
-  origin_account_id: number;
-  destination_account_id: number;
-  user_id?: string;
-}
+import { Transfer } from "@/models/transfer";
 
 function useTransfers(userId: string | undefined) {
   const [transfers, setTransfers] = useState<Transfer[]>([]);

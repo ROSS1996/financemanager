@@ -1,19 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
-interface Revenue {
-  id: number;
-  description: string;
-  amount: string;
-  due_date: string;
-  received: boolean;
-  category: string;
-  user_id: number;
-  account_id: number;
-  received_at: string | null;
-  created_at: string;
-  updated_at: string;
-}
+import { Revenue } from "@/models/revenue";
 
 function useRevenue(revenueId: string | undefined) {
   const [revenue, setRevenue] = useState<Revenue>();

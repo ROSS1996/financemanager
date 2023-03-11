@@ -11,9 +11,10 @@ export default function Index() {
   const { id } = router.query;
 
   const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState("");
-  const [duedate, setDueDate] = useState("");
+  const [amount, setAmount] = useState<number>();
+  const [duedate, setDueDate] = useState<Date>();
   const [received, setReceived] = useState(false);
+  const [receivedat, setReceivedAt] = useState<Date | null>(null);
   const [category, setCategory] = useState("");
   const [accountId, setAccountId] = useState(0);
 
@@ -30,7 +31,8 @@ export default function Index() {
       setCategory(revenue.category);
       setDueDate(revenue.due_date);
       setReceived(revenue.received);
-      setAccountId(revenue.account_id as unknown as number);
+      setReceivedAt(revenue.received_at ? new Date(revenue.received_at) : null);
+      setAccountId(parseInt(revenue.account_id));
     }
   }, [revenue]);
 
@@ -48,6 +50,7 @@ export default function Index() {
         category,
         due_date: duedate,
         received,
+        received_at: receivedat,
         account_id: accountId,
       });
       if (data) {
@@ -77,6 +80,7 @@ export default function Index() {
               id="name"
               name="name"
               defaultValue={revenue?.description}
+              placeholder={revenue?.description}
               onChange={(event) => setDescription(event.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
@@ -94,7 +98,8 @@ export default function Index() {
               id="amount"
               name="amount"
               defaultValue={revenue?.amount}
-              onChange={(event) => setAmount(event.target.value)}
+              placeholder={revenue?.amount.toString()}
+              onChange={(event) => setAmount(parseFloat(event.target.value))}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
@@ -110,46 +115,80 @@ export default function Index() {
               type="date"
               id="duedate"
               name="duedate"
-              defaultValue={revenue.due_date.slice(0, 10)}
-              onChange={(event) => setDueDate(event.target.value)}
+              defaultValue={new Date(revenue.due_date)
+                .toISOString()
+                .slice(0, 10)}
+              onChange={(event) => setDueDate(new Date(event.target.value))}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
           </div>
           <div className="flex flex-col">
             <label
-              htmlFor="paid"
+              htmlFor="received"
               className="mb-2 text-sm font-medium text-gray-700"
             >
               Received
             </label>
             <div className="flex items-center">
-              <label htmlFor="paid-yes" className="mr-2">
+              <label htmlFor="received-yes" className="mr-2">
                 <input
                   type="radio"
-                  id="paid-yes"
-                  name="paid"
+                  id="received-yes"
+                  name="received"
                   value="true"
                   onChange={(event) => setReceived(true)}
                   className="mr-1"
+                  defaultChecked={revenue.received === true}
                   required
                 />
                 Yes
               </label>
-              <label htmlFor="paid-no">
+              <label htmlFor="received-no">
                 <input
                   type="radio"
-                  id="paid-no"
-                  name="paid"
+                  id="received-no"
+                  name="received"
                   value="false"
-                  onChange={(event) => setReceived(false)}
+                  onChange={(event) => {
+                    setReceived(false);
+                    setReceivedAt(null);
+                  }}
                   className="mr-1"
+                  defaultChecked={revenue.received === false}
                   required
                 />
                 No
               </label>
             </div>
           </div>
+          {received === true ? (
+            <div className="flex flex-col">
+              <label
+                htmlFor="receivedat"
+                className="mb-2 text-sm font-medium text-gray-700"
+              >
+                Date Received
+              </label>
+              <input
+                type="date"
+                id="receivedat"
+                name="receivedat"
+                defaultValue={
+                  revenue.received_at
+                    ? new Date(revenue.received_at).toISOString().slice(0, 10)
+                    : new Date(revenue.due_date).toISOString().slice(0, 10)
+                }
+                onChange={(event) =>
+                  setReceivedAt(new Date(event.target.value))
+                }
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+          ) : (
+            false
+          )}
           <div className="flex flex-col">
             <label
               htmlFor="category"

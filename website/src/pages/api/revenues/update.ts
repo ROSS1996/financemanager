@@ -28,6 +28,7 @@ export default async function handler(
       received,
       category,
       account_id,
+      received_at,
     } = req.body as RequestBody;
     const { data } = await axios.patch(
       "http://localhost:3000/revenues/single",
@@ -37,6 +38,7 @@ export default async function handler(
         amount,
         due_date,
         received,
+        received_at,
         category,
         account_id,
       }

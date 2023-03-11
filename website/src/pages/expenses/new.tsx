@@ -24,7 +24,8 @@ export default function Index() {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [duedate, setDueDate] = useState("");
-  const [paid, setPaid] = useState("");
+  const [paid, setPaid] = useState<boolean>(false);
+  const [paidat, setPaidAt] = useState<string | null>(null);
   const [category, setCategory] = useState("");
   const [accountId, setAccountId] = useState("");
 
@@ -39,6 +40,7 @@ export default function Index() {
         due_date: duedate,
         paid,
         category,
+        paid_at: paidat,
         account_id: accountId,
       });
       if (data) {
@@ -134,7 +136,7 @@ export default function Index() {
                   id="paid-yes"
                   name="paid"
                   value="true"
-                  onChange={(event) => setPaid(event.target.value)}
+                  onChange={(event) => setPaid(true)}
                   className="mr-1"
                   required
                 />
@@ -146,14 +148,39 @@ export default function Index() {
                   id="paid-no"
                   name="paid"
                   value="false"
-                  onChange={(event) => setPaid(event.target.value)}
+                  onChange={(event) => {
+                    setPaid(false);
+                    setPaidAt(null);
+                  }}
                   className="mr-1"
+                  defaultChecked
                   required
                 />
                 No
               </label>
             </div>
           </div>
+          {paid === true ? (
+            <div className="flex flex-col">
+              <label
+                htmlFor="paidat"
+                className="mb-2 text-sm font-medium text-gray-700"
+              >
+                Date Paid
+              </label>
+              <input
+                type="date"
+                id="paidat"
+                name="paidat"
+                defaultValue={duedate}
+                onChange={(event) => setPaidAt(event.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+          ) : (
+            false
+          )}
           <div className="flex flex-col">
             <label
               htmlFor="category"
@@ -168,7 +195,7 @@ export default function Index() {
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             >
-              <option value="" disabled hidden>
+              <option value="" disabled hidden selected>
                 Select a category
               </option>
               <optgroup label="Essentials">

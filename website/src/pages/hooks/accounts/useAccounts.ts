@@ -1,13 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
-interface Account {
-  id: number;
-  name: string;
-  starting_balance: string;
-  category: string;
-  user_id?: string;
-}
+import { Account } from "@/models/account";
 
 function useAccounts(userId: string | number | undefined) {
   const [accounts, setAccounts] = useState<Account[]>([]);

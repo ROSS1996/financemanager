@@ -1,19 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
-interface Revenue {
-  id: number;
-  description: string;
-  amount: string;
-  due_date: string;
-  received: boolean;
-  category: string;
-  user_id: number;
-  received_at: string | null;
-  account_id: number;
-  created_at: string;
-  updated_at: string;
-}
+import { Revenue } from "@/models/revenue";
 
 function useRevenues(userId: string | undefined) {
   const [revenues, setRevenues] = useState<Revenue[]>([]);

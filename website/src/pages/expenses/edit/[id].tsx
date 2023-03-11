@@ -11,9 +11,10 @@ export default function Index() {
   const { id } = router.query;
 
   const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState("");
-  const [duedate, setDueDate] = useState("");
+  const [amount, setAmount] = useState<number>(0);
+  const [duedate, setDueDate] = useState<Date>();
   const [paid, setPaid] = useState(false);
+  const [paidat, setPaidAt] = useState<Date | null>(null);
   const [category, setCategory] = useState("");
   const [accountId, setAccountId] = useState(0);
 
@@ -30,7 +31,8 @@ export default function Index() {
       setCategory(expense.category);
       setDueDate(expense.due_date);
       setPaid(expense.paid);
-      setAccountId(expense.account_id as unknown as number);
+      setPaidAt(expense.paid_at ? new Date(expense.paid_at) : null);
+      setAccountId(parseInt(expense.account_id));
     }
   }, [expense]);
 
@@ -48,6 +50,7 @@ export default function Index() {
         category,
         due_date: duedate,
         paid,
+        paid_at: paidat,
         account_id: accountId,
       });
       if (data) {
@@ -94,7 +97,7 @@ export default function Index() {
               id="amount"
               name="amount"
               defaultValue={expense?.amount}
-              onChange={(event) => setAmount(event.target.value)}
+              onChange={(event) => setAmount(parseFloat(event.target.value))}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
@@ -110,8 +113,10 @@ export default function Index() {
               type="date"
               id="duedate"
               name="duedate"
-              defaultValue={expense.due_date.slice(0, 10)}
-              onChange={(event) => setDueDate(event.target.value)}
+              defaultValue={new Date(expense.due_date)
+                .toISOString()
+                .slice(0, 10)}
+              onChange={(event) => setDueDate(new Date(event.target.value))}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
@@ -133,6 +138,7 @@ export default function Index() {
                   onChange={(event) => setPaid(true)}
                   className="mr-1"
                   required
+                  defaultChecked={expense.paid === true}
                 />
                 Yes
               </label>
@@ -142,14 +148,43 @@ export default function Index() {
                   id="paid-no"
                   name="paid"
                   value="false"
-                  onChange={(event) => setPaid(false)}
+                  onChange={(event) => {
+                    setPaid(false);
+                    setPaidAt(null);
+                  }}
                   className="mr-1"
                   required
+                  defaultChecked={expense.paid === false}
                 />
                 No
               </label>
             </div>
           </div>
+          {paid === true ? (
+            <div className="flex flex-col">
+              <label
+                htmlFor="paidat"
+                className="mb-2 text-sm font-medium text-gray-700"
+              >
+                Date Paid
+              </label>
+              <input
+                type="date"
+                id="paidat"
+                name="paidat"
+                defaultValue={
+                  expense.paid_at
+                    ? new Date(expense.paid_at).toISOString().slice(0, 10)
+                    : new Date(expense.due_date).toISOString().slice(0, 10)
+                }
+                onChange={(event) => setPaidAt(new Date(event.target.value))}
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+          ) : (
+            false
+          )}
           <div className="flex flex-col">
             <label
               htmlFor="category"

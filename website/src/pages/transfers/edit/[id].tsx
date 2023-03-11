@@ -11,9 +11,9 @@ export default function Index() {
   const { id } = router.query;
 
   const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState("");
-  const [duedate, setDueDate] = useState("");
-  const [done, setDone] = useState("");
+  const [amount, setAmount] = useState<number>();
+  const [duedate, setDueDate] = useState<Date>();
+  const [done, setDone] = useState<boolean>(false);
   const [originAccount, setOriginAccount] = useState<string | null>(null);
   const [destinationAccount, setDestinationAccount] = useState<string | null>(
     null
@@ -30,6 +30,7 @@ export default function Index() {
       setDescription(transfer.description);
       setAmount(transfer.amount);
       setDueDate(transfer.due_date);
+      setDone(transfer.done);
       setOriginAccount(String(transfer.origin_account_id));
       setDestinationAccount(String(transfer.destination_account_id));
     }
@@ -95,7 +96,7 @@ export default function Index() {
               id="amount"
               name="amount"
               defaultValue={transfer.amount}
-              onChange={(event) => setAmount(event.target.value)}
+              onChange={(event) => setAmount(parseFloat(event.target.value))}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
@@ -111,8 +112,8 @@ export default function Index() {
               type="date"
               id="duedate"
               name="duedate"
-              defaultValue={transfer.due_date.slice(0, 10)}
-              onChange={(event) => setDueDate(event.target.value)}
+              defaultValue={transfer.due_date.toISOString().slice(0, 10)}
+              onChange={(event) => setDueDate(new Date(event.target.value))}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
@@ -132,9 +133,10 @@ export default function Index() {
                   id="paid-yes"
                   name="done"
                   value="true"
-                  onChange={(event) => setDone(event.target.value)}
+                  onChange={() => setDone(true)}
                   className="mr-1"
                   required
+                  defaultChecked={transfer.done === true}
                 />
                 <label htmlFor="paid-no">No</label>
                 <input
@@ -142,9 +144,10 @@ export default function Index() {
                   id="paid-no"
                   name="done"
                   value="false"
-                  onChange={(event) => setDone(event.target.value)}
+                  onChange={() => setDone(false)}
                   className="mr-1"
                   required
+                  defaultChecked={transfer.done === false}
                 />
               </div>
             </div>

@@ -20,8 +20,16 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const { id, description, amount, due_date, paid, category, account_id } =
-      req.body as RequestBody;
+    const {
+      id,
+      description,
+      amount,
+      due_date,
+      paid,
+      category,
+      account_id,
+      paid_at,
+    } = req.body as RequestBody;
     const { data } = await axios.patch(
       "http://localhost:3000/expenses/single",
       {
@@ -31,6 +39,7 @@ export default async function handler(
         due_date,
         paid,
         category,
+        paid_at,
         account_id,
       }
     );

@@ -21,12 +21,13 @@ export default function Index() {
     }
   }, [sessionData, status, router]);
 
-  const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState("");
-  const [duedate, setDueDate] = useState("");
-  const [received, setReceived] = useState("");
-  const [category, setCategory] = useState("");
-  const [accountId, setAccountId] = useState("");
+  const [description, setDescription] = useState<string>();
+  const [amount, setAmount] = useState<number>();
+  const [duedate, setDueDate] = useState<string>();
+  const [received, setReceived] = useState<boolean>(false);
+  const [receivedat, setReceivedat] = useState<string>();
+  const [category, setCategory] = useState<string>();
+  const [accountId, setAccountId] = useState<string>();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -39,6 +40,7 @@ export default function Index() {
         due_date: duedate,
         received,
         category,
+        received_at: receivedat,
         account_id: accountId,
       });
       if (data) {
@@ -99,7 +101,9 @@ export default function Index() {
               type="number"
               id="amount"
               name="amount"
-              onChange={(event) => setAmount(event.target.value)}
+              onChange={(event) =>
+                setAmount(event.target.value as unknown as number)
+              }
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
@@ -134,7 +138,7 @@ export default function Index() {
                   id="received-yes"
                   name="received"
                   value="true"
-                  onChange={(event) => setReceived(event.target.value)}
+                  onChange={(event) => setReceived(true)}
                   className="mr-1"
                   required
                 />
@@ -146,47 +150,80 @@ export default function Index() {
                   id="received-no"
                   name="received"
                   value="false"
-                  onChange={(event) => setReceived(event.target.value)}
+                  onChange={(event) => {
+                    setReceived(false);
+                    setReceivedat(undefined);
+                  }}
                   className="mr-1"
+                  defaultChecked
                   required
                 />
                 No
               </label>
             </div>
           </div>
-          <select
-            id="category"
-            name="category"
-            onChange={(event) => setCategory(event.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            required
-          >
-            <option value="" disabled hidden>
-              Select a category
-            </option>
-            <optgroup label=" Employment">
-              <option value="Salary">Salary</option>
-              <option value="Wages">Wages</option>
-              <option value="Bonuses">Bonuses</option>
-              <option value="Commissions">Commissions</option>
-            </optgroup>
-            <optgroup label="Investments">
-              <option value="Stocks">Stocks</option>
-              <option value="Bonds">Bonds</option>
-              <option value="Real Estate">Real Estate</option>
-              <option value="Dividends">Dividends</option>
-              <option value="Interest">Interest</option>
-            </optgroup>
-            <optgroup label="Business">
-              <option value="Sales">Sales</option>
-              <option value="Services">Services</option>
-              <option value="Rent">Rent</option>
-              <option value="Royalties">Royalties</option>
-            </optgroup>
-            <optgroup label="Income">
-              <option value="Other">Other</option>
-            </optgroup>
-          </select>
+          {received === true ? (
+            <div className="flex flex-col">
+              <label
+                htmlFor="receivedat"
+                className="mb-2 text-sm font-medium text-gray-700"
+              >
+                Date Received
+              </label>
+              <input
+                type="date"
+                id="receivedat"
+                name="receivedat"
+                defaultValue={duedate}
+                onChange={(event) => setReceivedat(event.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              />
+            </div>
+          ) : (
+            false
+          )}
+          <div className="flex flex-col">
+            <label
+              htmlFor="category"
+              className="mb-2 text-sm font-medium text-gray-700"
+            >
+              Category
+            </label>
+            <select
+              id="category"
+              name="category"
+              onChange={(event) => setCategory(event.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            >
+              <option value="" disabled hidden selected>
+                Select a category
+              </option>
+              <optgroup label=" Employment">
+                <option value="Salary">Salary</option>
+                <option value="Wages">Wages</option>
+                <option value="Bonuses">Bonuses</option>
+                <option value="Commissions">Commissions</option>
+              </optgroup>
+              <optgroup label="Investments">
+                <option value="Stocks">Stocks</option>
+                <option value="Bonds">Bonds</option>
+                <option value="Real Estate">Real Estate</option>
+                <option value="Dividends">Dividends</option>
+                <option value="Interest">Interest</option>
+              </optgroup>
+              <optgroup label="Business">
+                <option value="Sales">Sales</option>
+                <option value="Services">Services</option>
+                <option value="Rent">Rent</option>
+                <option value="Royalties">Royalties</option>
+              </optgroup>
+              <optgroup label="Income">
+                <option value="Other">Other</option>
+              </optgroup>
+            </select>
+          </div>
           <div className="flex flex-col">
             <label
               htmlFor="accountId"
@@ -197,12 +234,11 @@ export default function Index() {
             <select
               id="accountId"
               name="accountId"
-              value={accountId}
               onChange={(event) => setAccountId(event.target.value)}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             >
-              <option value="" disabled hidden>
+              <option value="" disabled hidden selected>
                 Select an account
               </option>
               {accounts.map((account) => (

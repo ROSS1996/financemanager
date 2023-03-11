@@ -69,9 +69,9 @@ class Handler {
           paid: paid,
           category: category,
           account_id: account_id,
-          user_id: "",
           paid_at: paid_at,
         };
+        console.log(expense);
         const result = await this.service.updateExpense(id, expense);
         res.status(result.statusCode).json({ message: result.message });
       }
@@ -88,7 +88,6 @@ class Handler {
           paid_at,
         } = req.body;
         const expense: Expense = {
-          id: "",
           description: description,
           amount: amount,
           due_date: due_date,
