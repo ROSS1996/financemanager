@@ -14,7 +14,7 @@ interface Account {
   balance: number;
 }
 
-function useBalance(userId: string | number) {
+function useBalance(userId: string | number | undefined) {
   const [accounts, setAccounts] = useState<Account[]>([]);
   useEffect(() => {
     const fetchData = async () => {

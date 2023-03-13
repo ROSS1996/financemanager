@@ -10,6 +10,7 @@ export default async function handler(
     const { data } = await axios.get(
       `http://localhost:3000/accounts/balance/${id}`
     );
+
     return res.status(200).json({
       accounts: data.accounts,
     });

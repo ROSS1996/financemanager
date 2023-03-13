@@ -5,10 +5,11 @@ import type { Session } from "next-auth";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { BsFillPencilFill, BsFillTrashFill } from "react-icons/bs";
 import useBalance from "../hooks/accounts/useBalance";
-import { AiOutlineDollar } from "react-icons/ai";
 import { Account } from "@/models/account";
+import { BsFillPencilFill, BsFillTrashFill } from "react-icons/bs";
+
+import Icons from "@/components/icons";
 
 interface ProfileProps {
   session?: Session | null;
@@ -24,12 +25,7 @@ function AccountsList({ accounts }: AccountsProps) {
   const handleDelete = async (id: any, div: any) => {
     try {
       const { data } = await axios.delete(
-        "http://localhost:3000/accounts/single",
-        {
-          data: {
-            id: id,
-          },
-        }
+        `http://localhost:3000/accounts/single/${id}`
       );
       if (data) {
         div.parentElement.removeChild(div);
@@ -45,7 +41,7 @@ function AccountsList({ accounts }: AccountsProps) {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {accounts.map((item) => (
             <div
-              className="overflow-hidden bg-white rounded-lg shadow-md"
+              className="overflow-hidden bg-white border rounded-lg shadow-md"
               key={item.id}
               ref={divRef}
             >
@@ -56,39 +52,54 @@ function AccountsList({ accounts }: AccountsProps) {
               </div>
               <div className="px-4 py-3">
                 <div className="flex items-center mb-2">
-                  <AiOutlineDollar className="text-2xl text-yellow-500" />
+                  <Icons
+                    category="Money"
+                    className="text-2xl text-yellow-500"
+                  />
                   <div className="ml-2 text-sm font-semibold text-gray-500">
-                    Starting Balance: ${item.starting_balance}
+                    Starting Balance: ${" "}
+                    {item.starting_balance?.toLocaleString()}
                   </div>
                 </div>
                 <div className="flex items-center mb-2">
-                  <AiOutlineDollar className="text-2xl text-yellow-500" />
+                  <Icons
+                    category="Received"
+                    className="text-2xl text-green-500"
+                  />
                   <div className="ml-2 text-sm font-semibold text-gray-500">
-                    Revenues: ${item.total_revenues}
+                    Revenues: $ {item.total_revenues?.toLocaleString()}
                   </div>
                 </div>
                 <div className="flex items-center mb-2">
-                  <AiOutlineDollar className="text-2xl text-yellow-500" />
+                  <Icons category="Paid" className="text-2xl text-red-500" />
                   <div className="ml-2 text-sm font-semibold text-gray-500">
-                    Expenses: ${item.total_expenses}
+                    Expenses: $ {item.total_expenses?.toLocaleString()}
                   </div>
                 </div>
                 <div className="flex items-center mb-2">
-                  <AiOutlineDollar className="text-2xl text-yellow-500" />
+                  <Icons
+                    category="Received"
+                    className="text-2xl text-green-500"
+                  />
                   <div className="ml-2 text-sm font-semibold text-gray-500">
-                    Transfers Sent: ${item.total_transfers_sent}
+                    Transfers Received: ${" "}
+                    {item.total_transfers_received?.toLocaleString()}
                   </div>
                 </div>
                 <div className="flex items-center mb-2">
-                  <AiOutlineDollar className="text-2xl text-yellow-500" />
+                  <Icons category="Paid" className="text-2xl text-red-500" />
                   <div className="ml-2 text-sm font-semibold text-gray-500">
-                    Transfers Received: ${item.total_transfers_received}
+                    Transfers Sent: ${" "}
+                    {item.total_transfers_sent?.toLocaleString()}
                   </div>
                 </div>
                 <div className="flex items-center mb-2">
-                  <AiOutlineDollar className="text-2xl text-yellow-500" />
+                  <Icons
+                    category="Account"
+                    className="text-2xl text-indigo-500"
+                  />
                   <div className="ml-2 text-sm font-semibold text-gray-500">
-                    Balance: ${item.balance}
+                    Balance: $ {item.balance?.toLocaleString()}
                   </div>
                 </div>
               </div>
@@ -136,6 +147,7 @@ export default function Index({ session }: ProfileProps) {
       sessionData ? setSessionState(sessionData) : setSessionState(null);
     }
   }, [sessionData, status, router]);
+
   const accounts = useBalance(sessionState?.user.id);
 
   if (!accounts) {
@@ -153,7 +165,10 @@ export default function Index({ session }: ProfileProps) {
 
   let totalBalance = 0;
   accounts.forEach((account) => {
-    totalBalance += +account.balance;
+    totalBalance +=
+      account.starting_balance +
+      account.total_revenues -
+      account.total_expenses;
   });
 
   return (

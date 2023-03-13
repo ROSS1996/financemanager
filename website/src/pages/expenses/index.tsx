@@ -10,12 +10,11 @@ import axios from "axios";
 import { BsFillPencilFill, BsFillTrashFill } from "react-icons/bs";
 import { AiOutlineDollar, AiOutlineCalendar } from "react-icons/ai";
 import { FaCheckSquare } from "react-icons/fa";
-import { GiFoodTruck } from "react-icons/gi";
-import { FaShoppingCart } from "react-icons/fa";
-import { BsGeoAlt } from "react-icons/bs";
 
 import { Account } from "@/models/account";
 import { Expense } from "@/models/expense";
+
+import Icons from "@/components/icons";
 
 interface ProfileProps {
   session?: Session | null;
@@ -32,12 +31,7 @@ function ExpensesList({ expenses, accounts }: InfoProps) {
   const handleDelete = async (id: any, div: any) => {
     try {
       const { data } = await axios.delete(
-        "http://localhost:3000/expenses/single",
-        {
-          data: {
-            id: id,
-          },
-        }
+        `http://localhost:3000/expenses/single/${id}`
       );
       if (data) {
         div.parentElement.removeChild(div);
@@ -52,7 +46,7 @@ function ExpensesList({ expenses, accounts }: InfoProps) {
       <div className="container grid grid-cols-1 gap-6 px-4 py-8 mx-auto sm:grid-cols-2 lg:grid-cols-3">
         {expenses.map((expense) => (
           <div
-            className="overflow-hidden bg-white rounded-lg shadow-md"
+            className="overflow-hidden bg-white border rounded-lg shadow-md"
             key={expense.id}
             ref={divRef}
           >
@@ -68,23 +62,18 @@ function ExpensesList({ expenses, accounts }: InfoProps) {
             </div>
             <div className="px-4 py-3">
               <div className="flex items-center mb-2">
-                {expense.category === "Food" ? (
-                  <GiFoodTruck className="text-2xl text-indigo-500" />
-                ) : expense.category === "Shopping" ? (
-                  <FaShoppingCart className="text-2xl text-red-500" />
-                ) : expense.category === "Travel" ? (
-                  <BsGeoAlt className="text-2xl text-green-500" />
-                ) : (
-                  <AiOutlineDollar className="text-2xl text-yellow-500" />
-                )}
+                <Icons
+                  category={expense.category}
+                  className="text-2xl text-blue-500"
+                />
                 <div className="ml-2 text-sm font-semibold text-gray-500 uppercase">
                   {expense.category}
                 </div>
               </div>
               <div className="flex items-center mb-2">
-                <AiOutlineDollar className="text-2xl text-yellow-500" />
+                <AiOutlineDollar className="text-2xl text-red-500" />
                 <div className="ml-2 text-sm font-semibold text-gray-500">
-                  ${expense.amount}
+                  $ {expense.amount.toLocaleString()}
                 </div>
               </div>
               <div className="flex items-center mb-2">

@@ -14,8 +14,10 @@ import { Transfer } from "@/models/transfer";
 import Layout from "../../components/layout";
 
 import { BsFillPencilFill, BsFillTrashFill } from "react-icons/bs";
-import { AiOutlineDollar, AiOutlineCalendar } from "react-icons/ai";
+import { AiOutlineCalendar } from "react-icons/ai";
 import { FaCheckSquare } from "react-icons/fa";
+
+import Icons from "@/components/icons";
 
 interface ProfileProps {
   session?: Session | null;
@@ -32,12 +34,7 @@ function TransferList({ transfers, accounts }: InfoProps) {
   const handleDelete = async (id: any, div: any) => {
     try {
       const { data } = await axios.delete(
-        "http://localhost:3000/transfers/single",
-        {
-          data: {
-            id: id,
-          },
-        }
+        `http://localhost:3000/transfers/single/${id}`
       );
       if (data) {
         div.parentElement.removeChild(div);
@@ -52,7 +49,7 @@ function TransferList({ transfers, accounts }: InfoProps) {
       <div className="container grid grid-cols-1 gap-6 px-4 py-8 mx-auto sm:grid-cols-2 lg:grid-cols-3">
         {transfers.map((transfer) => (
           <div
-            className="overflow-hidden bg-white rounded-lg shadow-md"
+            className="overflow-hidden bg-white border rounded-lg shadow-md"
             key={transfer.id}
             ref={divRef}
           >
@@ -63,19 +60,19 @@ function TransferList({ transfers, accounts }: InfoProps) {
             </div>
             <div className="px-4 py-3">
               <div className="flex items-center mb-2">
-                <AiOutlineDollar className="text-2xl text-yellow-500" />
+                <Icons category="Money" className="text-2xl text-yellow-700" />
                 <div className="ml-2 text-sm font-semibold text-gray-500">
-                  ${transfer.amount}
+                  $ {transfer.amount.toLocaleString()}
                 </div>
               </div>
               <div className="flex items-center mb-2">
-                <AiOutlineCalendar className="text-2xl text-green-500" />
+                <AiOutlineCalendar className="text-2xl text-blue-500" />
                 <div className="ml-2 text-sm font-semibold text-gray-500">
                   {new Date(transfer.due_date).toLocaleDateString()}
                 </div>
               </div>
               <div className="flex items-center mb-2">
-                <AiOutlineDollar className="text-2xl text-green-500" />
+                <Icons category="paid" className="text-2xl text-red-500" />
                 <div className="ml-2 text-sm font-semibold text-gray-500">
                   {accounts.find(
                     (account) => account.id === transfer.origin_account_id
@@ -83,7 +80,11 @@ function TransferList({ transfers, accounts }: InfoProps) {
                 </div>
               </div>
               <div className="flex items-center mb-2">
-                <AiOutlineDollar className="text-2xl text-green-500" />
+                <Icons
+                  category="received"
+                  className="text-2xl text-green-500"
+                />
+
                 <div className="ml-2 text-sm font-semibold text-gray-500">
                   {accounts.find(
                     (account) => account.id === transfer.destination_account_id
