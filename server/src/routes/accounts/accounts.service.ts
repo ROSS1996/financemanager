@@ -68,10 +68,10 @@ export class AccountsService {
         COALESCE(SUM(CASE WHEN transfers.destination_account_id = accounts.id AND transfers.done = true THEN transfers.amount ELSE 0 END), 0) AS transfers_received_total,
         COALESCE(SUM(CASE WHEN transfers.origin_account_id = accounts.id AND transfers.done = true THEN transfers.amount ELSE 0 END), 0) AS transfers_sent_total
       FROM accounts 
-      LEFT JOIN revenues ON revenues.account_id = accounts.id 
-      LEFT JOIN expenses ON expenses.account_id = accounts.id 
-      LEFT JOIN transfers ON (transfers.origin_account_id = accounts.id OR transfers.destination_account_id = accounts.id) 
-      WHERE accounts.user_id = $1 AND (revenues.received = true OR expenses.paid = true OR transfers.done = true) 
+      LEFT JOIN revenues ON revenues.account_id = accounts.id AND revenues.received = true
+      LEFT JOIN expenses ON expenses.account_id = accounts.id AND expenses.paid = true
+      LEFT JOIN transfers ON (transfers.origin_account_id = accounts.id OR transfers.destination_account_id = accounts.id) AND transfers.done = true
+      WHERE accounts.user_id = $1 
       GROUP BY accounts.id;
         `,
         [userId]

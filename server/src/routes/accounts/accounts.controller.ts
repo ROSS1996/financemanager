@@ -90,7 +90,6 @@ class Handler {
       if (userid) {
         const { name, starting_balance, category } = req.body;
         const account: Account = {
-          id: "",
           name: name,
           starting_balance: starting_balance,
           category: category,

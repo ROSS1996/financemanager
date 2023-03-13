@@ -180,11 +180,11 @@ export default function Index({ session }: ProfileProps) {
               <div className="flex items-center justify-between">
                 <h1 className="text-3xl font-bold text-gray-900">Accounts</h1>
                 <div className="flex items-center">
-                  <div className="flex flex-col items-center justify-center px-4 mr-4 text-gray-500 bg-white rounded-sm shadow-md">
+                  <div className="flex flex-col items-center justify-center px-2 pt-1 mr-4 text-gray-500 bg-white border border-gray-400 rounded-sm">
                     <span className="text-xs font-medium tracking-wider text-gray-500 uppercase">
                       Total Balance
                     </span>
-                    <div className="text-lg font-bold">
+                    <div className="text-lg font-bold text-black">
                       $ {totalBalance.toLocaleString()}
                     </div>
                   </div>

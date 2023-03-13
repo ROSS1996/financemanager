@@ -19,7 +19,7 @@ const AccountSummary: React.FC<AccountSummaryProps> = ({ userId }) => {
 
   const accountSummaries = balance.map((account) => (
     <p
-      className="p-2 text-lg text-justify border border-gray-300 rounded-sm shadow-sm"
+      className="p-4 text-lg text-justify border border-gray-400 rounded-sm shadow-sm"
       key={account.id}
     >
       Your <span className="font-semibold">{account.name}</span> account, which
@@ -83,7 +83,7 @@ const AccountSummary: React.FC<AccountSummaryProps> = ({ userId }) => {
   });
 
   return (
-    <div className="flex flex-col gap-4 p-4 rounded-md">
+    <div className="flex flex-col gap-4 rounded-md">
       <div className="flex flex-col gap-2">{accountSummaries}</div>
       <p>
         In total, you have a{" "}
@@ -109,7 +109,7 @@ export default function Index({ session }: ProfileProps) {
       {!sessionState ? (
         <NotLogged />
       ) : (
-        <div className="flex flex-col gap-4 p-4 rounded-md">
+        <div className="flex flex-col gap-4 p-4 rounded-md h-content">
           <p className="text-lg font-medium">
             Welcome back,{" "}
             <span className="text-indigo-600">{sessionState.user?.name}!</span>{" "}

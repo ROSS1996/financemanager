@@ -47,8 +47,10 @@ export default function Layout(
         <title>{`Finance Manager | ${pageTitle}`}</title>
         <meta name="description" content={pageDescription} />
       </Head>
-      <Navbar name={name} />
-      {children}
+      <header className="font-oxanium">
+        <Navbar name={name} />
+      </header>
+      <main className="font-oxanium bg-gray-50 text-gray600">{children}</main>
     </>
   );
 }

@@ -1,5 +1,5 @@
 export interface Account {
-  id: string;
+  id?: string;
   name: string;
   starting_balance: number;
   category: string;

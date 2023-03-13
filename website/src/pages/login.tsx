@@ -53,7 +53,7 @@ export default function Login() {
               name="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-emerald-500"
               required
             />
           </div>
@@ -70,14 +70,14 @@ export default function Login() {
               name="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-emerald-500"
               required
             />
           </div>
           <div className="flex flex-row items-center justify-between w-full">
             <button
               type="submit"
-              className="px-4 py-2 text-white bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600"
+              className="px-4 py-2 text-white rounded-md bg-emerald-500 hover:bg-emerald-600 focus:outline-none focus:bg-emerald-600"
             >
               Sign In
             </button>
