@@ -95,7 +95,7 @@ function RevenuesList({ revenues, accounts }: InfoProps) {
             <div className="flex justify-end px-4 py-2 bg-gray-100">
               <div className="flex gap-2">
                 <Link href={`revenues/edit/${revenue.id}`}>
-                  <div className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white bg-indigo-600 rounded cursor-pointer hover:bg-indigo-800">
+                  <div className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white rounded cursor-pointer bg-emerald-600 hover:bg-emerald-800">
                     <BsFillPencilFill /> Edit
                   </div>
                 </Link>
