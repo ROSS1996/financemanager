@@ -71,7 +71,6 @@ class Handler {
           account_id: account_id,
           received_at: received_at,
         };
-        console.log(revenue);
         const result = await this.service.updateRevenue(id, revenue);
         res.status(result.statusCode).json({ message: result.message });
       }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Layout from "../../components/layout";
 import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";
@@ -6,11 +6,131 @@ import Link from "next/link";
 import useRevenues from "../hooks/revenues/useRevenues";
 import useAccounts from "../hooks/accounts/useAccounts";
 import { useRouter } from "next/router";
-import { BsFillPencilFill, BsEraserFill } from "react-icons/bs";
 import axios from "axios";
+import { BsFillPencilFill, BsFillTrashFill } from "react-icons/bs";
+import { AiOutlineDollar, AiOutlineCalendar } from "react-icons/ai";
+import { FaCheckSquare } from "react-icons/fa";
+import { GiFoodTruck } from "react-icons/gi";
+import { FaShoppingCart } from "react-icons/fa";
+import { BsGeoAlt } from "react-icons/bs";
+
+import { Account } from "@/models/account";
+import { Revenue } from "@/models/revenue";
 
 interface ProfileProps {
   session?: Session | null;
+}
+
+interface InfoProps {
+  revenues: Revenue[];
+  accounts: Account[];
+}
+
+function RevenuesList({ revenues, accounts }: InfoProps) {
+  const divRef = useRef<HTMLDivElement>(null);
+
+  const handleDelete = async (id: any, div: any) => {
+    try {
+      const { data } = await axios.delete(
+        "http://localhost:3000/revenues/single",
+        {
+          data: {
+            id: id,
+          },
+        }
+      );
+      if (data) {
+        div.parentElement.removeChild(div);
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <main className="flex-grow">
+      <div className="container grid grid-cols-1 gap-6 px-4 py-8 mx-auto sm:grid-cols-2 lg:grid-cols-3">
+        {revenues.map((revenue) => (
+          <div
+            className="overflow-hidden bg-white rounded-lg shadow-md"
+            key={revenue.id}
+            ref={divRef}
+          >
+            <div className="flex items-center justify-between px-4 py-2 bg-gray-900">
+              <h3 className="text-lg font-bold text-white truncate">
+                {revenue.description}
+              </h3>
+              <div className="text-sm text-gray-400">
+                {revenue.created_at
+                  ? new Date(revenue.created_at).toLocaleString()
+                  : ""}
+              </div>
+            </div>
+            <div className="px-4 py-3">
+              <div className="flex items-center mb-2">
+                {revenue.category === "Food" ? (
+                  <GiFoodTruck className="text-2xl text-indigo-500" />
+                ) : revenue.category === "Shopping" ? (
+                  <FaShoppingCart className="text-2xl text-red-500" />
+                ) : revenue.category === "Travel" ? (
+                  <BsGeoAlt className="text-2xl text-green-500" />
+                ) : (
+                  <AiOutlineDollar className="text-2xl text-yellow-500" />
+                )}
+                <div className="ml-2 text-sm font-semibold text-gray-500 uppercase">
+                  {revenue.category}
+                </div>
+              </div>
+              <div className="flex items-center mb-2">
+                <AiOutlineDollar className="text-2xl text-yellow-500" />
+                <div className="ml-2 text-sm font-semibold text-gray-500">
+                  ${revenue.amount}
+                </div>
+              </div>
+              <div className="flex items-center mb-2">
+                <AiOutlineCalendar className="text-2xl text-green-500" />
+                <div className="ml-2 text-sm font-semibold text-gray-500">
+                  {new Date(revenue.due_date).toLocaleDateString()}
+                </div>
+              </div>
+              <div className="flex items-center mb-2">
+                <FaCheckSquare className="text-2xl text-indigo-500" />
+                <div className="ml-2 text-sm font-semibold text-gray-500">
+                  {revenue.received
+                    ? "Received on " +
+                      new Date(revenue.received_at!).toLocaleDateString()
+                    : "Not received"}
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-end px-4 py-2 bg-gray-100">
+              <div className="flex gap-2">
+                <Link href={`revenues/edit/${revenue.id}`}>
+                  <div className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white bg-indigo-600 rounded cursor-pointer hover:bg-indigo-800">
+                    <BsFillPencilFill /> Edit
+                  </div>
+                </Link>
+                <div
+                  className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white bg-red-500 rounded cursor-pointer hover:bg-red-700"
+                  onClick={(e) => {
+                    if (
+                      window.confirm(
+                        "Are you sure you want to delete this revenue?"
+                      )
+                    ) {
+                      handleDelete(revenue.id, divRef.current);
+                    }
+                  }}
+                >
+                  <BsFillTrashFill /> Delete
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </main>
+  );
 }
 
 export default function Index({ session }: ProfileProps) {
@@ -57,24 +177,6 @@ export default function Index({ session }: ProfileProps) {
     );
   }
 
-  const handleDelete = async (id: any, row: any) => {
-    try {
-      const { data } = await axios.delete(
-        "http://localhost:3000/revenues/single",
-        {
-          data: {
-            id: id,
-          },
-        }
-      );
-      if (data) {
-        row.parentElement.removeChild(row);
-      }
-    } catch (error: any) {
-      console.log(error);
-    }
-  };
-
   return (
     <Layout pageTitle="Revenues" pageDescription="Revenues">
       {revenues.length > 0 ? (
@@ -94,138 +196,7 @@ export default function Index({ session }: ProfileProps) {
               </div>
             </div>
           </header>
-          <main className="flex-grow">
-            <div className="container px-4 py-8 mx-auto">
-              <div className="inline-block min-w-full overflow-hidden bg-white rounded-lg shadow-md">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Description
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Amount
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Due Date
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Received
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Category
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Account
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Received at
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Created at
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Updated at
-                      </th>
-                      <th scope="col" className="relative px-6 py-3">
-                        <span className="sr-only">Actions</span>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {revenues.map((revenue) => (
-                      <tr key={revenue.id}>
-                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {revenue.description}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          $ {revenue.amount}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {new Date(revenue.due_date).toLocaleString()}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {revenue.received ? "Yes" : "No"}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {revenue.category}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {accounts.find(
-                            (account) => account.id === revenue.account_id
-                          )?.name ?? ""}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {revenue.received_at
-                            ? new Date(revenue.received_at).toLocaleString()
-                            : ""}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {new Date(revenue.created_at).toLocaleString()}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {new Date(revenue.updated_at).toLocaleString()}
-                        </td>
-                        <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                          <div className="flex items-center gap-2">
-                            <Link href={`revenues/edit/${revenue.id}`}>
-                              <div className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white bg-indigo-600 rounded-sm cursor-pointer hover:bg-indigo-800">
-                                <BsFillPencilFill /> Edit
-                              </div>
-                            </Link>
-                            <div
-                              className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white bg-red-500 rounded-sm cursor-pointer hover:bg-red-700"
-                              onClick={(e) => {
-                                if (
-                                  window.confirm(
-                                    "Are you sure you want to delete this revenue?"
-                                  )
-                                ) {
-                                  handleDelete(
-                                    revenue.id,
-                                    e.currentTarget.closest("tr")
-                                  );
-                                }
-                              }}
-                            >
-                              <BsEraserFill /> Delete
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </main>
+          <RevenuesList accounts={accounts} revenues={revenues} />
         </div>
       ) : (
         <p className="text-lg font-bold text-center">

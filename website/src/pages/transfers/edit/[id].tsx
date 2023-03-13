@@ -112,7 +112,9 @@ export default function Index() {
               type="date"
               id="duedate"
               name="duedate"
-              defaultValue={transfer.due_date.toISOString().slice(0, 10)}
+              defaultValue={new Date(transfer.due_date)
+                .toISOString()
+                .slice(0, 10)}
               onChange={(event) => setDueDate(new Date(event.target.value))}
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required

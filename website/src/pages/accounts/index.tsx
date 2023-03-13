@@ -1,19 +1,126 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Layout from "../../components/layout";
 import { useSession } from "next-auth/react";
 import type { Session } from "next-auth";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { BsFillPencilFill, BsEraserFill } from "react-icons/bs";
+import { BsFillPencilFill, BsFillTrashFill } from "react-icons/bs";
 import useBalance from "../hooks/accounts/useBalance";
-
-/** TODO
-  Edit this and the other pages to show a div instead of a table.
-**/
+import { AiOutlineDollar } from "react-icons/ai";
+import { Account } from "@/models/account";
 
 interface ProfileProps {
   session?: Session | null;
+}
+
+interface AccountsProps {
+  accounts: Account[];
+}
+
+function AccountsList({ accounts }: AccountsProps) {
+  const divRef = useRef<HTMLDivElement>(null);
+
+  const handleDelete = async (id: any, div: any) => {
+    try {
+      const { data } = await axios.delete(
+        "http://localhost:3000/accounts/single",
+        {
+          data: {
+            id: id,
+          },
+        }
+      );
+      if (data) {
+        div.parentElement.removeChild(div);
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <main className="flex-grow">
+      <div className="container px-4 py-8 mx-auto">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {accounts.map((item) => (
+            <div
+              className="overflow-hidden bg-white rounded-lg shadow-md"
+              key={item.id}
+              ref={divRef}
+            >
+              <div className="flex items-center justify-between px-4 py-2 bg-gray-900">
+                <h3 className="text-lg font-bold text-white truncate">
+                  {item.name}
+                </h3>
+              </div>
+              <div className="px-4 py-3">
+                <div className="flex items-center mb-2">
+                  <AiOutlineDollar className="text-2xl text-yellow-500" />
+                  <div className="ml-2 text-sm font-semibold text-gray-500">
+                    Starting Balance: ${item.starting_balance}
+                  </div>
+                </div>
+                <div className="flex items-center mb-2">
+                  <AiOutlineDollar className="text-2xl text-yellow-500" />
+                  <div className="ml-2 text-sm font-semibold text-gray-500">
+                    Revenues: ${item.total_revenues}
+                  </div>
+                </div>
+                <div className="flex items-center mb-2">
+                  <AiOutlineDollar className="text-2xl text-yellow-500" />
+                  <div className="ml-2 text-sm font-semibold text-gray-500">
+                    Expenses: ${item.total_expenses}
+                  </div>
+                </div>
+                <div className="flex items-center mb-2">
+                  <AiOutlineDollar className="text-2xl text-yellow-500" />
+                  <div className="ml-2 text-sm font-semibold text-gray-500">
+                    Transfers Sent: ${item.total_transfers_sent}
+                  </div>
+                </div>
+                <div className="flex items-center mb-2">
+                  <AiOutlineDollar className="text-2xl text-yellow-500" />
+                  <div className="ml-2 text-sm font-semibold text-gray-500">
+                    Transfers Received: ${item.total_transfers_received}
+                  </div>
+                </div>
+                <div className="flex items-center mb-2">
+                  <AiOutlineDollar className="text-2xl text-yellow-500" />
+                  <div className="ml-2 text-sm font-semibold text-gray-500">
+                    Balance: ${item.balance}
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-end px-4 py-2 bg-gray-100">
+                <div className="flex gap-2">
+                  <Link href={`items/edit/${item.id}`}>
+                    <div className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white bg-indigo-600 rounded cursor-pointer hover:bg-indigo-800">
+                      <BsFillPencilFill /> Edit
+                    </div>
+                  </Link>
+                  <div
+                    className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white bg-red-500 rounded cursor-pointer hover:bg-red-700"
+                    onClick={(e) => {
+                      if (
+                        window.confirm(
+                          "Are you sure you want to delete this item?"
+                        )
+                      ) {
+                        handleDelete(item.id, divRef.current);
+                      }
+                    }}
+                  >
+                    <BsFillTrashFill /> Delete
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </main>
+  );
 }
 
 export default function Index({ session }: ProfileProps) {
@@ -43,24 +150,6 @@ export default function Index({ session }: ProfileProps) {
       </Layout>
     );
   }
-
-  const handleDelete = async (id: any, row: any) => {
-    try {
-      const { data } = await axios.delete(
-        "http://localhost:3000/accounts/single",
-        {
-          data: {
-            id: id,
-          },
-        }
-      );
-      if (data) {
-        row.parentElement.removeChild(row);
-      }
-    } catch (error: any) {
-      console.log(error);
-    }
-  };
 
   let totalBalance = 0;
   accounts.forEach((account) => {
@@ -94,125 +183,7 @@ export default function Index({ session }: ProfileProps) {
               </div>
             </div>
           </header>
-          <main className="flex-grow">
-            <div className="container px-4 py-8 mx-auto">
-              <div className="inline-block min-w-full overflow-hidden bg-white rounded-lg shadow-md">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        ID
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Name
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Starting Balance
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Revenues
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs tracking-wider text-left text-gray-500 uppercase font medium"
-                      >
-                        Expenses
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Transfers Sent
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Transfers Received
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Balance
-                      </th>
-                      <th scope="col" className="relative px-6 py-3">
-                        <span className="sr-only">Actions</span>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {accounts.map((account) => (
-                      <tr key={account.id}>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
-                          {account.id}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {account.name}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          $ {account.starting_balance.toLocaleString()}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-green-500 whitespace-nowrap">
-                          $ {account.total_revenues.toLocaleString()}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-red-500 whitespace-nowrap">
-                          $ {account.total_expenses.toLocaleString()}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          $ {account.total_transfers_sent.toLocaleString()}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          $ {account.total_transfers_received.toLocaleString()}
-                        </td>
-                        <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
-                          $ {account.balance.toLocaleString()}
-                        </td>
-                        <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                          <div className="flex items-center gap-2">
-                            <Link href={`accounts/edit/${account.id}`}>
-                              <div className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white bg-indigo-600 rounded-sm cursor-pointer hover:bg-indigo-800">
-                                <BsFillPencilFill /> Edit
-                              </div>
-                            </Link>
-                            <div
-                              className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white bg-red-500 rounded-sm cursor-pointer hover:bg-red-700"
-                              onClick={(e) => {
-                                if (
-                                  window.confirm(
-                                    "Are you sure you want to delete this account? Doing so will also remove all the expenses, revenues and transfers related to that account"
-                                  )
-                                ) {
-                                  handleDelete(
-                                    account.id,
-                                    e.currentTarget.closest("tr")
-                                  );
-                                }
-                              }}
-                            >
-                              <BsEraserFill /> Delete
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </main>
+          <AccountsList accounts={accounts} />
         </div>
       ) : (
         <p className="text-lg font-bold text-center">

@@ -1,16 +1,130 @@
-import { useEffect, useState } from "react";
-import Layout from "../../components/layout";
-import { useSession } from "next-auth/react";
-import type { Session } from "next-auth";
+import axios from "axios";
 import Link from "next/link";
+
+import { useEffect, useState, useRef } from "react";
+import { useSession } from "next-auth/react";
 import useTransfers from "../hooks/transfers/useTransfers";
 import useAccounts from "../hooks/accounts/useAccounts";
 import { useRouter } from "next/router";
-import axios from "axios";
-import { BsFillPencilFill, BsEraserFill } from "react-icons/bs";
+
+import type { Session } from "next-auth";
+import { Account } from "@/models/account";
+import { Transfer } from "@/models/transfer";
+
+import Layout from "../../components/layout";
+
+import { BsFillPencilFill, BsFillTrashFill } from "react-icons/bs";
+import { AiOutlineDollar, AiOutlineCalendar } from "react-icons/ai";
+import { FaCheckSquare } from "react-icons/fa";
 
 interface ProfileProps {
   session?: Session | null;
+}
+
+interface InfoProps {
+  transfers: Transfer[];
+  accounts: Account[];
+}
+
+function TransferList({ transfers, accounts }: InfoProps) {
+  const divRef = useRef<HTMLDivElement>(null);
+
+  const handleDelete = async (id: any, div: any) => {
+    try {
+      const { data } = await axios.delete(
+        "http://localhost:3000/transfers/single",
+        {
+          data: {
+            id: id,
+          },
+        }
+      );
+      if (data) {
+        div.parentElement.removeChild(div);
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <main className="flex-grow">
+      <div className="container grid grid-cols-1 gap-6 px-4 py-8 mx-auto sm:grid-cols-2 lg:grid-cols-3">
+        {transfers.map((transfer) => (
+          <div
+            className="overflow-hidden bg-white rounded-lg shadow-md"
+            key={transfer.id}
+            ref={divRef}
+          >
+            <div className="flex items-center justify-between px-4 py-2 bg-gray-900">
+              <h3 className="text-lg font-bold text-white truncate">
+                {transfer.description}
+              </h3>
+            </div>
+            <div className="px-4 py-3">
+              <div className="flex items-center mb-2">
+                <AiOutlineDollar className="text-2xl text-yellow-500" />
+                <div className="ml-2 text-sm font-semibold text-gray-500">
+                  ${transfer.amount}
+                </div>
+              </div>
+              <div className="flex items-center mb-2">
+                <AiOutlineCalendar className="text-2xl text-green-500" />
+                <div className="ml-2 text-sm font-semibold text-gray-500">
+                  {new Date(transfer.due_date).toLocaleDateString()}
+                </div>
+              </div>
+              <div className="flex items-center mb-2">
+                <AiOutlineDollar className="text-2xl text-green-500" />
+                <div className="ml-2 text-sm font-semibold text-gray-500">
+                  {accounts.find(
+                    (account) => account.id === transfer.origin_account_id
+                  )?.name ?? ""}{" "}
+                </div>
+              </div>
+              <div className="flex items-center mb-2">
+                <AiOutlineDollar className="text-2xl text-green-500" />
+                <div className="ml-2 text-sm font-semibold text-gray-500">
+                  {accounts.find(
+                    (account) => account.id === transfer.destination_account_id
+                  )?.name ?? ""}
+                </div>
+              </div>
+              <div className="flex items-center mb-2">
+                <FaCheckSquare className="text-2xl text-indigo-500" />
+                <div className="ml-2 text-sm font-semibold text-gray-500">
+                  {transfer.done ? "Transfer Done" : "Transfer Pending"}
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-end px-4 py-2 bg-gray-100">
+              <div className="flex gap-2">
+                <Link href={`transfers/edit/${transfer.id}`}>
+                  <div className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white bg-indigo-600 rounded cursor-pointer hover:bg-indigo-800">
+                    <BsFillPencilFill /> Edit
+                  </div>
+                </Link>
+                <div
+                  className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white bg-red-500 rounded cursor-pointer hover:bg-red-700"
+                  onClick={(e) => {
+                    if (
+                      window.confirm(
+                        "Are you sure you want to delete this transfer?"
+                      )
+                    ) {
+                      handleDelete(transfer.id, divRef.current);
+                    }
+                  }}
+                >
+                  <BsFillTrashFill /> Delete
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </main>
+  );
 }
 
 export default function Index({ session }: ProfileProps) {
@@ -56,24 +170,6 @@ export default function Index({ session }: ProfileProps) {
     );
   }
 
-  const handleDelete = async (id: any, row: any) => {
-    try {
-      const { data } = await axios.delete(
-        "http://localhost:3000/transfers/single",
-        {
-          data: {
-            id: id,
-          },
-        }
-      );
-      if (data) {
-        row.parentElement.removeChild(row);
-      }
-    } catch (error: any) {
-      console.log(error);
-    }
-  };
-
   return (
     <Layout pageTitle="Transfers" pageDescription="Transfers">
       {transfers.length > 0 ? (
@@ -93,116 +189,7 @@ export default function Index({ session }: ProfileProps) {
               </div>
             </div>
           </header>
-          <main className="flex-grow">
-            <div className="container px-4 py-8 mx-auto">
-              <div className="inline-block min-w-full overflow-hidden bg-white rounded-lg shadow-md">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Description
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Amount
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Due Date
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Done
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Origin Account
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
-                      >
-                        Destination Account
-                      </th>
-                      <th scope="col" className="relative px-6 py-3">
-                        <span className="sr-only">Actions</span>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {transfers.map((transfer) => (
-                      <tr
-                        key={transfer.id}
-                        className="bg-white border-b border-gray-200"
-                      >
-                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {transfer.description}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          $ {transfer.amount}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {new Date(transfer.due_date).toLocaleString()}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {transfer.done ? "Yes" : "No"}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {accounts.find(
-                            (account) =>
-                              account.id === transfer.origin_account_id
-                          )?.name ?? ""}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {accounts.find(
-                            (account) =>
-                              account.id === transfer.destination_account_id
-                          )?.name ?? ""}
-                        </td>
-                        <td className="flex flex-col gap-2 px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center gap-2">
-                            <Link href={`transfers/edit/${transfer.id}`}>
-                              <div className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white bg-indigo-600 rounded-sm cursor-pointer hover:bg-indigo-800">
-                                <BsFillPencilFill /> Edit
-                              </div>
-                            </Link>
-                            <div
-                              className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white bg-red-500 rounded-sm cursor-pointer hover:bg-red-700"
-                              onClick={(e) => {
-                                if (
-                                  window.confirm(
-                                    "Are you sure you want to delete this transfer?"
-                                  )
-                                ) {
-                                  handleDelete(
-                                    transfer.id,
-                                    e.currentTarget.closest("tr")
-                                  );
-                                }
-                              }}
-                            >
-                              <BsEraserFill /> Delete
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </main>
+          <TransferList accounts={accounts} transfers={transfers} />
         </div>
       ) : (
         <p className="text-lg font-bold text-center">
