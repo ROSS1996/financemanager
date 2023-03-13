@@ -12,7 +12,8 @@ class Handler {
 
   async multi(req: express.Request, res: express.Response): Promise<void> {
     if (req.method === "GET") {
-      const userId = req.body.id;
+      const userId = req.params.userId;
+      if (!userId) res.status(401).json({ message: "Unauthorized" });
       if (userId) {
         const result = await this.service.getTransfers(userId);
         if (result.statusCode === 200) {
@@ -31,7 +32,9 @@ class Handler {
 
   async single(req: express.Request, res: express.Response): Promise<void> {
     if (req.method === "GET") {
-      const transferId = req.body.id;
+      const transferId = req.params.id;
+      if (!transferId) res.status(401).json({ message: "Unauthorized" });
+
       if (transferId) {
         const result = await this.service.getTransferById(transferId);
         if (result.statusCode === 200) {
@@ -44,7 +47,9 @@ class Handler {
         }
       }
     } else if (req.method === "DELETE") {
-      const transferId = req.body.id;
+      const transferId = req.params.id;
+      if (!transferId) res.status(401).json({ message: "Unauthorized" });
+
       if (transferId) {
         const result = await this.service.deleteTransferById(transferId);
         res.status(result.statusCode).json({ message: result.message });
@@ -104,7 +109,7 @@ class Handler {
 const TransfersController = express.Router();
 const Transfers = new Handler();
 
-TransfersController.all("/multi", Transfers.multi);
-TransfersController.all("/single", Transfers.single);
+TransfersController.all("/multi/:userId", Transfers.multi);
+TransfersController.all("/single/:transferId?", Transfers.single);
 
 export default TransfersController;

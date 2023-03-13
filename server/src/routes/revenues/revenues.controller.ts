@@ -12,9 +12,11 @@ class Handler {
 
   async multi(req: express.Request, res: express.Response): Promise<void> {
     if (req.method === "GET") {
-      const userid = req.body.id;
-      if (userid) {
-        const result = await this.service.getRevenues(userid);
+      const userId = req.params.userId;
+      if (!userId) res.status(401).json({ message: "Unauthorized" });
+
+      if (userId) {
+        const result = await this.service.getRevenues(userId);
         if (result.statusCode === 200) {
           res.status(result.statusCode).json({
             message: result.message,
@@ -31,7 +33,9 @@ class Handler {
 
   async single(req: express.Request, res: express.Response): Promise<void> {
     if (req.method === "GET") {
-      const revenueId = req.body.id;
+      const revenueId = req.params.revenueId;
+      if (!revenueId) res.status(401).json({ message: "Unauthorized" });
+
       if (revenueId) {
         const result = await this.service.getRevenueById(revenueId);
         if (result.statusCode === 200) {
@@ -44,7 +48,9 @@ class Handler {
         }
       }
     } else if (req.method === "DELETE") {
-      const revenueId = req.body.id;
+      const revenueId = req.params.revenueId;
+      if (!revenueId) res.status(401).json({ message: "Unauthorized" });
+
       if (revenueId) {
         const result = await this.service.deleteRevenueById(revenueId);
         res.status(result.statusCode).json({ message: result.message });
@@ -108,7 +114,7 @@ class Handler {
 const RevenuesController = express.Router();
 const Revenues = new Handler();
 
-RevenuesController.all("/multi", Revenues.multi);
-RevenuesController.all("/single", Revenues.single);
+RevenuesController.all("/multi/:userId", Revenues.multi);
+RevenuesController.all("/single/:revenueId?", Revenues.single);
 
 export default RevenuesController;

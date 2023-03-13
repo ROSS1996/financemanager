@@ -12,9 +12,10 @@ class Handler {
 
   async multi(req: express.Request, res: express.Response): Promise<void> {
     if (req.method === "GET") {
-      const userid = req.body.id;
-      if (userid) {
-        const result = await this.service.getExpenses(userid);
+      const userId = req.params.userId;
+      if (!userId) res.status(401).json({ message: "Unauthorized" });
+      if (userId) {
+        const result = await this.service.getExpenses(userId);
         if (result.statusCode === 200) {
           res.status(result.statusCode).json({
             message: result.message,
@@ -31,7 +32,8 @@ class Handler {
 
   async single(req: express.Request, res: express.Response): Promise<void> {
     if (req.method === "GET") {
-      const expenseId = req.body.id;
+      const expenseId = req.params.expenseId;
+      if (!expenseId) res.status(401).json({ message: "Unauthorized" });
       if (expenseId) {
         const result = await this.service.getExpenseById(expenseId);
         if (result.statusCode === 200) {
@@ -44,7 +46,8 @@ class Handler {
         }
       }
     } else if (req.method === "DELETE") {
-      const expenseId = req.body.id;
+      const expenseId = req.params.expenseId;
+      if (!expenseId) res.status(401).json({ message: "Unauthorized" });
       if (expenseId) {
         const result = await this.service.deleteExpenseById(expenseId);
         res.status(result.statusCode).json({ message: result.message });
@@ -108,7 +111,7 @@ class Handler {
 const ExpensesController = express.Router();
 const Expenses = new Handler();
 
-ExpensesController.all("/multi", Expenses.multi);
-ExpensesController.all("/single", Expenses.single);
+ExpensesController.all("/multi/:userId", Expenses.multi);
+ExpensesController.all("/single/:expenseId?", Expenses.single);
 
 export default ExpensesController;

@@ -13,7 +13,8 @@ class Handler {
 
   async multi(req: express.Request, res: express.Response): Promise<void> {
     if (req.method === "GET") {
-      const userId = req.body.id;
+      const userId = req.params.userId;
+      if (!userId) res.status(401).json({ message: "Unauthorized" });
       if (userId) {
         const result = await this.service.getAccounts(userId);
         if (result.statusCode === 200) {
@@ -32,7 +33,8 @@ class Handler {
 
   async balance(req: express.Request, res: express.Response): Promise<void> {
     if (req.method === "GET") {
-      const userId = req.body.id;
+      const userId = req.params.userId;
+      if (!userId) res.status(401).json({ message: "Unauthorized" });
       if (userId) {
         const result = await this.service.getBalance(userId);
         if (result.statusCode === 200) {
@@ -51,7 +53,8 @@ class Handler {
 
   async single(req: express.Request, res: express.Response): Promise<void> {
     if (req.method === "GET") {
-      const accountId = req.body.id;
+      const accountId = req.params.accountId;
+      if (!accountId) res.status(401).json({ message: "Unauthorized" });
       if (accountId) {
         const result = await this.service.getAccountById(accountId);
         if (result.statusCode === 200) {
@@ -64,9 +67,10 @@ class Handler {
         }
       }
     } else if (req.method === "DELETE") {
-      const expenseId = req.body.id;
-      if (expenseId) {
-        const result = await this.service.deleteAccountById(expenseId);
+      const accountId = req.params.accountId;
+      if (!accountId) res.status(401).json({ message: "Unauthorized" });
+      if (accountId) {
+        const result = await this.service.deleteAccountById(accountId);
         res.status(result.statusCode).json({ message: result.message });
       }
     } else if (req.method === "PATCH") {
@@ -104,8 +108,8 @@ class Handler {
 const AccountsController = express.Router();
 const Accounts = new Handler();
 
-AccountsController.all("/multi", Accounts.multi);
-AccountsController.all("/balance", Accounts.balance);
-AccountsController.all("/single", Accounts.single);
+AccountsController.all("/multi/:userId?", Accounts.multi);
+AccountsController.all("/single/:accountId?", Accounts.single);
+AccountsController.all("/balance/:userId?", Accounts.balance);
 
 export default AccountsController;
