@@ -7,12 +7,10 @@ export default async function handler(
 ) {
   try {
     const id = req.query.id;
-    const { data } = await axios.get("http://localhost:3000/expenses/multi", {
-      data: { id },
-    });
-    return res.status(200).json({
-      expenses: data.expenses,
-    });
+    const { data } = await axios.delete(
+      `http://localhost:3000/expenses/single/${id}`
+    );
+    return res.status(200).json({ message: "Expense successfully removed" });
   } catch (error: any) {
     if (error.response) {
       return res

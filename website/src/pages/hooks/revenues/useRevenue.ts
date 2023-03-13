@@ -8,9 +8,7 @@ function useRevenue(revenueId: string | undefined) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/api/revenues/read", {
-          params: { id: revenueId },
-        });
+        const response = await axios.get(`/api/revenues/read/${revenueId}`);
         const revenueData = response.data.revenue;
         setRevenue(revenueData);
       } catch (error) {

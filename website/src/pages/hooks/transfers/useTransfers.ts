@@ -8,9 +8,7 @@ function useTransfers(userId: string | undefined) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/api/transfers/all", {
-          params: { id: userId },
-        });
+        const response = await axios.get(`/api/transfers/all/${userId}`);
         setTransfers(response.data.transfers);
       } catch (error) {
         console.error(error);

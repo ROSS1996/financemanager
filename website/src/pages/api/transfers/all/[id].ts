@@ -7,11 +7,11 @@ export default async function handler(
 ) {
   try {
     const id = req.query.id;
-    const { data } = await axios.get("http://localhost:3000/accounts/balance", {
-      data: { id },
-    });
+    const { data } = await axios.get(
+      `http://localhost:3000/transfers/multi/${id}`
+    );
     return res.status(200).json({
-      accounts: data.accounts,
+      transfers: data.transfers,
     });
   } catch (error: any) {
     if (error.response) {

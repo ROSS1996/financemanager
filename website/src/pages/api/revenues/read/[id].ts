@@ -7,13 +7,12 @@ export default async function handler(
 ) {
   try {
     const id = req.query.id;
-    const { data } = await axios.delete(
-      "http://localhost:3000/accounts/single",
-      {
-        data: { id },
-      }
+    const { data } = await axios.get(
+      `http://localhost:3000/revenues/single/${id}`
     );
-    return res.status(200).json({ message: "Account successfully removed" });
+    return res.status(200).json({
+      revenue: data.revenue,
+    });
   } catch (error: any) {
     if (error.response) {
       return res

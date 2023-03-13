@@ -8,12 +8,9 @@ export default async function handler(
   try {
     const id = req.query.id;
     const { data } = await axios.delete(
-      "http://localhost:3000/expenses/single",
-      {
-        data: { id },
-      }
+      `http://localhost:3000/revenues/single/${id}`
     );
-    return res.status(200).json({ message: "Expense successfully removed" });
+    return res.status(200).json({ message: "Revenue successfully removed" });
   } catch (error: any) {
     if (error.response) {
       return res

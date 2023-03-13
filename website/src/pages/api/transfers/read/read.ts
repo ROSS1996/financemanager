@@ -7,9 +7,9 @@ export default async function handler(
 ) {
   try {
     const id = req.query.id;
-    const { data } = await axios.get("http://localhost:3000/transfers/single", {
-      data: { id },
-    });
+    const { data } = await axios.get(
+      `http://localhost:3000/transfers/single/${id}`
+    );
     return res.status(200).json({
       transfer: data.transfer,
     });

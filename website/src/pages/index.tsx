@@ -10,17 +10,12 @@ interface ProfileProps {
   session?: Session | null;
 }
 
-export default function Index({ session }: ProfileProps) {
-  const [sessionState, setSessionState] = useState<Session | null>(null);
-  const { data: sessionData, status } = useSession();
+interface AccountSummaryProps {
+  userId: string;
+}
 
-  useEffect(() => {
-    if (status === "authenticated") {
-      sessionData ? setSessionState(sessionData) : setSessionState(null);
-    }
-  }, [sessionData, status]);
-
-  let balance = useBalance(sessionState?.user.id);
+const AccountSummary: React.FC<AccountSummaryProps> = ({ userId }) => {
+  const balance = useBalance(userId);
 
   const accountSummaries = balance.map((account) => (
     <p
@@ -88,6 +83,28 @@ export default function Index({ session }: ProfileProps) {
   });
 
   return (
+    <div className="flex flex-col gap-4 p-4 rounded-md">
+      <div className="flex flex-col gap-2">{accountSummaries}</div>
+      <p>
+        In total, you have a{" "}
+        <span className="font-semibold">${totalBalance}</span> balance across
+        all accounts.
+      </p>
+    </div>
+  );
+};
+
+export default function Index({ session }: ProfileProps) {
+  const [sessionState, setSessionState] = useState<Session | null>(null);
+  const { data: sessionData, status } = useSession();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      sessionData ? setSessionState(sessionData) : setSessionState(null);
+    }
+  }, [sessionData, status]);
+
+  return (
     <Layout pageTitle="Home" pageDescription="Home">
       {!sessionState ? (
         <NotLogged />
@@ -100,12 +117,7 @@ export default function Index({ session }: ProfileProps) {
               Here is a summary of your accounts:
             </span>
           </p>
-          <div className="flex flex-col gap-2">{accountSummaries}</div>
-          <p>
-            In total, you have a{" "}
-            <span className="font-semibold">${totalBalance}</span> balance
-            across all accounts.
-          </p>
+          <AccountSummary userId={sessionState.user.id} />
         </div>
       )}
     </Layout>

@@ -8,9 +8,7 @@ function useRevenues(userId: string | undefined) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/api/revenues/all", {
-          params: { id: userId },
-        });
+        const response = await axios.get(`/api/revenues/all/${userId}`);
         setRevenues(response.data.revenues);
       } catch (error) {
         console.error(error);

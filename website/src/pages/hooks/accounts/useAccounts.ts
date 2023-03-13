@@ -8,9 +8,7 @@ function useAccounts(userId: string | number | undefined) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/api/accounts/all", {
-          params: { id: userId },
-        });
+        const response = await axios.get(`/api/accounts/all/${userId}`);
         setAccounts(response.data.accounts);
       } catch (error) {
         console.error(error);

@@ -14,15 +14,12 @@ interface Account {
   balance: number;
 }
 
-function useBalance(userId: string | number | undefined) {
+function useBalance(userId: string | number) {
   const [accounts, setAccounts] = useState<Account[]>([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/api/accounts/balance", {
-          params: { id: userId },
-        });
+        const response = await axios.get(`/api/accounts/balance/${userId}`);
         setAccounts(response.data.accounts);
       } catch (error) {
         console.error(error);

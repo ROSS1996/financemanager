@@ -8,9 +8,7 @@ function useExpense(expenseId: string | undefined) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/api/expenses/read", {
-          params: { id: expenseId },
-        });
+        const response = await axios.get(`/api/expenses/read/${expenseId}`);
         const expenseData = response.data.expense;
         setExpense(expenseData);
       } catch (error) {

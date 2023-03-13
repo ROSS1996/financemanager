@@ -8,12 +8,9 @@ export default async function handler(
   try {
     const id = req.query.id;
     const { data } = await axios.delete(
-      "http://localhost:3000/transfers/single",
-      {
-        data: { id },
-      }
+      `http://localhost:3000/accounts/single/${id}`
     );
-    return res.status(200).json({ message: "Transfer successfully removed" });
+    return res.status(200).json({ message: "Account successfully removed" });
   } catch (error: any) {
     if (error.response) {
       return res
