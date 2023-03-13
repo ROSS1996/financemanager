@@ -99,7 +99,7 @@ export const Navbar = ({ name }: NavbarProps) => {
           </Link>
         </div>
 
-        <div className="flex items-center gap-4 md:hidden">
+        <div className="flex items-center gap-4 cursor-pointer md:hidden">
           <RxHamburgerMenu
             size={24}
             onClick={() => setIsMenuOpen(!isMenuOpen)}

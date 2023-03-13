@@ -71,7 +71,7 @@ export default function Register() {
                 id="username"
                 name="username"
                 onChange={(event) => setUsername(event.target.value)}
-                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-emerald-500"
                 required
               />
             </div>
@@ -87,7 +87,7 @@ export default function Register() {
                 id="email"
                 name="email"
                 onChange={(event) => setEmail(event.target.value)}
-                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-emerald-500"
                 required
               />
             </div>
@@ -105,7 +105,7 @@ export default function Register() {
                 id="password"
                 name="password"
                 onChange={(event) => setPassword(event.target.value)}
-                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-emerald-500"
                 required
               />
             </div>
@@ -121,7 +121,7 @@ export default function Register() {
                 id="confirm"
                 name="confirm"
                 onChange={(event) => setConfirm(event.target.value)}
-                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-emerald-500"
                 required
               />
             </div>
@@ -139,7 +139,7 @@ export default function Register() {
                 id="firstname"
                 name="firstname"
                 onChange={(event) => setFirstName(event.target.value)}
-                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-emerald-500"
                 required
               />
             </div>
@@ -155,7 +155,7 @@ export default function Register() {
                 id="lastname"
                 name="lastname"
                 onChange={(event) => setLastName(event.target.value)}
-                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-emerald-500"
                 required
               />
             </div>
@@ -173,7 +173,7 @@ export default function Register() {
                 id="birthdate"
                 name="birthdate"
                 onChange={(event) => setBirthdate(event.target.value)}
-                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-emerald-500"
                 required
               />
             </div>
@@ -189,7 +189,7 @@ export default function Register() {
                 id="phone"
                 name="phone"
                 onChange={(event) => setPhone(event.target.value)}
-                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-emerald-500"
                 required
               />
             </div>
@@ -207,7 +207,7 @@ export default function Register() {
                 id="address"
                 name="address"
                 onChange={(event) => setAddress(event.target.value)}
-                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-emerald-500"
                 required
               />
             </div>
@@ -223,7 +223,7 @@ export default function Register() {
                 id="country"
                 name="country"
                 onChange={(event) => setCountry(event.target.value)}
-                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 mt-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-emerald-500"
                 required
               />
             </div>
@@ -231,7 +231,7 @@ export default function Register() {
           <div className="flex flex-row items-center justify-around w-full">
             <button
               type="submit"
-              className="px-4 py-2 text-white bg-indigo-500 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600"
+              className="px-4 py-2 text-white rounded-md bg-emerald-500 hover:bg-emerald-600 focus:outline-none focus:bg-emerald-600"
             >
               Submit
             </button>
