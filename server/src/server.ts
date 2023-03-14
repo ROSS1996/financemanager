@@ -9,7 +9,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-const port = process.env.SERVER_PORT || "3030";
+const port = process.env.PORT || "3030";
 const websiteAddress = process.env.WEBSITE_ADDRESS;
 const websitePort = process.env.WEBSITE_PORT;
 

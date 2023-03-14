@@ -1,52 +1,32 @@
-# Pin specific version for stability
-# Use slim for reduced image size
-FROM node:19.6-bullseye-slim AS base
+FROM node:19.4-bullseye AS build
 
 # Specify working directory other than /
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copy only files required to install
 # dependencies (better layer caching)
 COPY package*.json ./
-COPY src/ ./src/
 
 # Use cache mount to speed up install of existing dependencies
 RUN --mount=type=cache,target=/usr/src/app/.npm \
     npm set cache /usr/src/app/.npm && \
-    npm install --production
+    npm install
 
-# Install dev dependencies
-RUN npm install --only=development
-
-# Development stage
-FROM base as dev
+ENV NODE_ENV=production
 
 COPY . .
+RUN npm run build
 
-CMD ["npm", "run", "dev"]
+FROM node:19.4-bullseye
+WORKDIR /app
 
-# Production stage
-FROM base as production
+COPY --from=build /app/package*.json ./
+RUN npm ci --only=production
+ENV NODE_ENV=production
 
-# Set NODE_ENV
-ENV NODE_ENV production
+COPY --from=build /app/.next ./.next
+COPY --from=build /app/public ./public
 
-# Install only production dependencies
-# Use cache mount to speed up install of existing dependencies
-RUN --mount=type=cache,target=/usr/src/app/.npm \
-    npm set cache /usr/src/app/.npm && \
-    npm ci --only=production
-
-# Use non-root user
-# Use --chown on COPY commands to set file permissions
-USER node
-
-# Copy remaining source code AFTER installing dependencies. 
-# Again, copy only the necessary files
-COPY --chown=node:node ./src/ .
-
-# Expose the server port
-EXPOSE 3000
-
-# Start the server
 CMD ["npm", "start"]
+
+EXPOSE 8080

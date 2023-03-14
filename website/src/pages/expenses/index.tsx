@@ -30,9 +30,7 @@ function ExpensesList({ expenses, accounts }: InfoProps) {
 
   const handleDelete = async (id: any, div: any) => {
     try {
-      const { data } = await axios.delete(
-        `http://localhost:3000/expenses/single/${id}`
-      );
+      const { data } = await axios.delete(`/api/expenses/delete/${id}`);
       if (data) {
         div.parentElement.removeChild(div);
       }

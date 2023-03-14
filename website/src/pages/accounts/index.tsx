@@ -24,9 +24,7 @@ function AccountsList({ accounts }: AccountsProps) {
 
   const handleDelete = async (id: any, div: any) => {
     try {
-      const { data } = await axios.delete(
-        `http://localhost:3000/accounts/single/${id}`
-      );
+      const { data } = await axios.delete(`/api/accounts/delete/${id}`);
       if (data) {
         div.parentElement.removeChild(div);
       }
@@ -115,7 +113,7 @@ function AccountsList({ accounts }: AccountsProps) {
                     onClick={(e) => {
                       if (
                         window.confirm(
-                          "Are you sure you want to delete this item?"
+                          "Are you sure you want to delete this account? All of the transfers related to that account will also be delete"
                         )
                       ) {
                         handleDelete(item.id, divRef.current);

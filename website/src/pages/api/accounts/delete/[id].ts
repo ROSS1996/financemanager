@@ -7,7 +7,7 @@ export default async function handler(
 ) {
   try {
     const id = req.query.id;
-    const { data } = await axios.get(
+    const { data } = await axios.delete(
       `http://${process.env.SERVER_ADDRESS}:${process.env.SERVER_PORT}/accounts/single/${id}`
     );
     return res.status(200).json({

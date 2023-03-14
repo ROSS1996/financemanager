@@ -30,9 +30,7 @@ function RevenuesList({ revenues, accounts }: InfoProps) {
 
   const handleDelete = async (id: any, div: any) => {
     try {
-      const { data } = await axios.delete(
-        `http://localhost:3000/revenues/single/${id}`
-      );
+      const { data } = await axios.delete(`/api/revenues/${id}`);
       if (data) {
         div.parentElement.removeChild(div);
       }
