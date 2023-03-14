@@ -7,9 +7,9 @@ export default async function handler(
 ) {
   try {
     const id = req.query.id;
-    const { data } = await axios.get("http://localhost:3000/accounts/single", {
-      data: { id },
-    });
+    const { data } = await axios.get(
+      `http://${process.env.SERVER_ADDRESS}:${process.env.SERVER_PORT}/accounts/single/${id}`
+    );
     return res.status(200).json({
       account: data.account,
     });

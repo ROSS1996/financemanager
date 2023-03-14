@@ -22,7 +22,7 @@ const options: NextAuthOptions = {
       ) => {
         try {
           const { data, headers } = await axios.post(
-            "http://localhost:3000/login",
+            `http://${process.env.SERVER_ADDRESS}:${process.env.SERVER_PORT}/login`,
             {
               email: credentials?.email,
               password: credentials?.password,

@@ -2,3 +2,4 @@ node_modules
 server/
 .next
 next-env.d.ts
+dist/

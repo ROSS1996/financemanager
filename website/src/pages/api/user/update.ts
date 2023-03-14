@@ -18,7 +18,7 @@ export default async function handler(
       address,
     } = req.body;
     const { data } = await axios.patch(
-      "http://localhost:3000/userInfo",
+      `http://${process.env.SERVER_ADDRESS}:${process.env.SERVER_PORT}/userInfo`,
       {
         email,
         username,

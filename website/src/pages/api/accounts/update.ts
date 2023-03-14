@@ -15,7 +15,7 @@ export default async function handler(
   try {
     const { id, name, balance, category } = req.body as RequestBody;
     const { data } = await axios.patch(
-      "http://localhost:3000/accounts/single",
+      `http://${process.env.SERVER_ADDRESS}:${process.env.SERVER_PORT}/accounts/single`,
       {
         id,
         name,

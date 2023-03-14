@@ -8,7 +8,7 @@ export default async function handler(
   try {
     const id = req.query.id;
     const { data } = await axios.get(
-      `http://localhost:3000/transfers/multi/${id}`
+      `http://${process.env.SERVER_ADDRESS}:${process.env.SERVER_PORT}/transfers/multi/${id}`
     );
     return res.status(200).json({
       transfers: data.transfers,

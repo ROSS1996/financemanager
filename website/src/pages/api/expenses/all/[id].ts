@@ -8,7 +8,7 @@ export default async function handler(
   try {
     const id = req.query.id;
     const { data } = await axios.get(
-      `http://localhost:3000/expenses/multi/${id}`
+      `http://${process.env.SERVER_ADDRESS}:${process.env.SERVER_PORT}/expenses/multi/${id}`
     );
     return res.status(200).json({
       expenses: data.expenses,

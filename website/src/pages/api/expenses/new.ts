@@ -27,16 +27,19 @@ export default async function handler(
       account_id,
       paid_at,
     } = req.body as RequestBody;
-    const { data } = await axios.post("http://localhost:3000/expenses/single", {
-      id,
-      description,
-      amount,
-      due_date,
-      paid,
-      category,
-      account_id,
-      paid_at,
-    });
+    const { data } = await axios.post(
+      `http://${process.env.SERVER_ADDRESS}:${process.env.SERVER_PORT}/expenses/single`,
+      {
+        id,
+        description,
+        amount,
+        due_date,
+        paid,
+        category,
+        account_id,
+        paid_at,
+      }
+    );
     return res.status(200).json({ message: "Expense created" });
   } catch (error: any) {
     if (error.response) {

@@ -8,7 +8,7 @@ export default async function handler(
   try {
     const id = req.query.id;
     const { data } = await axios.delete(
-      `http://localhost:3000/revenues/single/${id}`
+      `http://${process.env.SERVER_ADDRESS}:${process.env.SERVER_PORT}/revenues/single/${id}`
     );
     return res.status(200).json({ message: "Revenue successfully removed" });
   } catch (error: any) {

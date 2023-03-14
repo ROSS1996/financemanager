@@ -31,7 +31,7 @@ export default async function handler(
       paid_at,
     } = req.body as RequestBody;
     const { data } = await axios.patch(
-      "http://localhost:3000/expenses/single",
+      `http://${process.env.SERVER_ADDRESS}:${process.env.SERVER_PORT}/expenses/single`,
       {
         id,
         description,

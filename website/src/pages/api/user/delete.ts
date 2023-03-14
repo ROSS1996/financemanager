@@ -6,9 +6,12 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const { data } = await axios.delete("http://localhost:3000/userInfo", {
-      headers: { Authorization: req.headers.authorization },
-    });
+    const { data } = await axios.delete(
+      `http://${process.env.SERVER_ADDRESS}:${process.env.SERVER_PORT}/userInfo`,
+      {
+        headers: { Authorization: req.headers.authorization },
+      }
+    );
     return res.status(200).json({ message: data.message });
   } catch (error: any) {
     if (error.response) {

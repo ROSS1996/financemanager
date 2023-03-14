@@ -14,12 +14,15 @@ export default async function handler(
 ) {
   try {
     const { id, name, balance, category } = req.body as RequestBody;
-    const { data } = await axios.post("http://localhost:3000/accounts/single", {
-      id,
-      name,
-      starting_balance: balance,
-      category,
-    });
+    const { data } = await axios.post(
+      `http://${process.env.SERVER_ADDRESS}:${process.env.SERVER_PORT}/accounts/single`,
+      {
+        id,
+        name,
+        starting_balance: balance,
+        category,
+      }
+    );
     return res.status(200).json({ message: "Account created" });
   } catch (error: any) {
     if (error.response) {
