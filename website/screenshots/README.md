@@ -2,7 +2,7 @@
 
 ## Home
 
-![Preview of the Home(./home.jpeg)
+![Preview of the Home](./home.jpeg)
 
 ## Overview
 
