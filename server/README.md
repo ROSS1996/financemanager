@@ -2,7 +2,7 @@
 
 ## Description
 
-The backend is written in [Node.JS](https://nodejs.org/en/download/) and [Typescript](https://www.typescriptlang.org/) and requires a [PostgreSQL](https://www.postgresql.org/download/) database to work. It provides the server-side functionality of the project and communicates with the database to manage user authentication, account management, expenses and revenues, and transfers. This backend follows a REST API structure. This means clients can interact with the backend through standard HTTP methods such as GET, POST, PATCH, and DELETE.
+The backend is written in [Node.JS](https://nodejs.org/en/download/) and [Typescript](https://www.typescriptlang.org/) and requires a [PostgreSQL](https://www.postgresql.org/download/) database to work. It provides the server-side functionality of the project and communicates with the database to manage user authentication, account management, expenses and revenues, and transfers. The clients can interact with the backend through standard HTTP methods such as GET, POST, PATCH, and DELETE.
 
 ## Installation
 
@@ -35,7 +35,7 @@ These commands assume that Node.js and npm are installed on your system. If you'
 
 ## Usage
 
-The backend provides various endpoints to manage user authentication, account management, expenses and revenues, and transfers. These endpoints can be accessed via a HTTP requests using a client or through the frontend, following a REST API structure.
+The backend provides various endpoints to manage user authentication, account management, expenses and revenues, and transfers. These endpoints can be accessed via a HTTP requests using a client or through the frontend.
 
 ## Dependencies
 
