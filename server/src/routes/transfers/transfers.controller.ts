@@ -32,9 +32,8 @@ class Handler {
 
   async single(req: express.Request, res: express.Response): Promise<void> {
     if (req.method === "GET") {
-      const transferId = req.params.id;
+      const transferId = req.params.transferId;
       if (!transferId) res.status(401).json({ message: "Unauthorized" });
-
       if (transferId) {
         const result = await this.service.getTransferById(transferId);
         if (result.statusCode === 200) {
@@ -47,7 +46,7 @@ class Handler {
         }
       }
     } else if (req.method === "DELETE") {
-      const transferId = req.params.id;
+      const transferId = req.params.transferId;
       if (!transferId) res.status(401).json({ message: "Unauthorized" });
 
       if (transferId) {

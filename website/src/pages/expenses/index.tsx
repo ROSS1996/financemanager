@@ -69,9 +69,16 @@ function ExpensesList({ expenses, accounts }: InfoProps) {
                 </div>
               </div>
               <div className="flex items-center mb-2">
-                <AiOutlineDollar className="text-2xl text-red-500" />
+                <AiOutlineDollar className="text-2xl text-yellow-500" />
                 <div className="ml-2 text-sm font-semibold text-gray-500">
                   $ {expense.amount.toLocaleString()}
+                </div>
+              </div>
+              <div className="flex items-center mb-2">
+                <Icons category="account" className="text-2xl text-red-500" />
+                <div className="ml-2 text-sm font-semibold text-gray-500">
+                  {accounts.find((account) => account.id === expense.account_id)
+                    ?.name ?? ""}
                 </div>
               </div>
               <div className="flex items-center mb-2">

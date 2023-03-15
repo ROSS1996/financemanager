@@ -74,7 +74,7 @@ function TransferList({ transfers, accounts }: InfoProps) {
                 <div className="ml-2 text-sm font-semibold text-gray-500">
                   {accounts.find(
                     (account) => account.id === transfer.origin_account_id
-                  )?.name ?? ""}{" "}
+                  )?.name ?? ""}
                 </div>
               </div>
               <div className="flex items-center mb-2">

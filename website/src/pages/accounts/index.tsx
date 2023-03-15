@@ -103,7 +103,7 @@ function AccountsList({ accounts }: AccountsProps) {
               </div>
               <div className="flex justify-end px-4 py-2 bg-gray-100">
                 <div className="flex gap-2">
-                  <Link href={`items/edit/${item.id}`}>
+                  <Link href={`/accounts/edit/${item.id}`}>
                     <div className="flex items-center justify-center w-20 gap-1 py-1 text-sm font-bold text-white rounded cursor-pointer bg-emerald-600 hover:bg-emerald-800">
                       <BsFillPencilFill /> Edit
                     </div>

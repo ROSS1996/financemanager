@@ -75,6 +75,13 @@ function RevenuesList({ revenues, accounts }: InfoProps) {
                 </div>
               </div>
               <div className="flex items-center mb-2">
+                <Icons category="account" className="text-2xl text-green-500" />
+                <div className="ml-2 text-sm font-semibold text-gray-500">
+                  {accounts.find((account) => account.id === revenue.account_id)
+                    ?.name ?? ""}
+                </div>
+              </div>
+              <div className="flex items-center mb-2">
                 <AiOutlineCalendar className="text-2xl text-green-500" />
                 <div className="ml-2 text-sm font-semibold text-gray-500">
                   {new Date(revenue.due_date).toLocaleDateString()}
