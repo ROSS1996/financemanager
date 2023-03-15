@@ -2,7 +2,7 @@
 
 ## Description
 
-The frontend of this project is built with Next.js and TypeScript and uses Tailwind for styling. It requires a backend endpoint to function properly (not necessarily the one provided in this repository). Before attempting to run it, make sure to edit the `.env` file in the project directory.
+The frontend of this project is built with [Next.JS](https://nextjs.org/), [Typescript](https://www.typescriptlang.org/) and uses [TailwindCSS](https://tailwindcss.com/) for styling. It requires a backend endpoint to function properly (not necessarily the one provided in this repository). Before attempting to run it, make sure to edit the `.env` file in the project directory.
 
 ## Screenshot
 
@@ -13,7 +13,7 @@ The frontend of this project is built with Next.js and TypeScript and uses Tailw
 
 To install and run the frontend, follow these steps:
 
-1. Install Node.js and npm on your system.
+1. Install [Node.JS](https://nodejs.org/en/download/) and npm on your system.
 2. Clone the project repository.
 3. Navigate to the frontend directory in the project repository.
 4. Edit the `.env` file in the directory to define the required environment variables.
@@ -22,7 +22,7 @@ To install and run the frontend, follow these steps:
 
 Alternatively, you can use the Dockerfile in the directory to run the frontend in a Docker container. To do so, follow these steps:
 
-1. Install Docker on your system.
+1. Install [Docker](https://www.docker.com/products/docker-desktop/) on your system.
 2. Clone the project repository.
 3. Navigate to the frontend directory in the project repository.
 4. Edit the `.env` file in the directory to define the required environment variables.

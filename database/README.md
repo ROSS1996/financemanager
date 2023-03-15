@@ -1,45 +1,36 @@
 # Database
 
-This is the README file for the database component of the project. The database used in this project is PostgreSQL. The database schema comprises four tables: users, accounts, expenses, revenues, and transfers.
+This is the README file for the database component of the project. The database used in this project is [PostgreSQL](https://www.postgresql.org/download/). The database schema has five tables: users, accounts, expenses, revenues, and transfers.
 
 ## Table Descriptions
 
 ### Users
 
-This table contains information about users such as their id, username, email, password hash, country, first name, last name, birthdate, phone, address, and creation and update timestamps.
+The "Users" table contains information about users such as their username, email, password hash, country, first name, last name, birthdate, phone, address, and creation and update timestamps. This table serves as the primary source of user data for the system.
 
 ### Accounts
 
-This table stores data about financial accounts, including their id, name, starting balance, category, and user_id. The user_id field is a foreign key that references the id field of the Users table.
+The "Accounts" table stores data about financial accounts, including their name, starting balance, category, and user_id. The user_id field is a foreign key that references the id field of the Users table. This table allows the system to track multiple accounts per user and categorize them according to the user's preferences.
 
 ### Expenses
 
-This table contains data about expenses. The table includes fields such as id, description, amount, due_date, paid, category, account_id, user_id, paid_at, and timestamps for creation and update.
+The "Expenses" table contains data about expenses. It includes fields such as description, amount, due_date, paid, category, account_id, user_id, paid_at, and timestamps for creation and update. This table enables the system to keep track of all expenses made by users across different accounts.
 
 ### Revenues
 
-This table stores information about revenues, such as id, description, amount, due_date, received, category, account_id, user_id, received_at, and timestamps for creation and update.
+The "Revenues" table stores information about revenues, such as description, amount, due_date, received, category, account_id, user_id, received_at, and timestamps for creation and update. This table allows the system to keep track of all revenues received by users across different accounts.
 
 ### Transfers
 
-This table contains data about transfers of money between accounts. It has fields such as id, description, amount, due_date, done, origin_account_id, destination_account_id, and user_id. The origin_account_id and destination_account_id fields are foreign keys that reference the id field of the Accounts table.
+The "Transfers" table contains data about transfers of money between accounts. It has fields such as description, amount, due_date, done, origin_account_id, destination_account_id, and user_id. The origin_account_id and destination_account_id fields are foreign keys that reference the id field of the Accounts table.
 
-## Docker-Compose
+## Installation
 
-The database component of the project includes a Docker-Compose file that sets up a PostgreSQL container and a pgAdmin container for web-based management of the database. The Docker-Compose file defines the following environment variables:
+This folder contains a ``init.sql`` that defines the schema for the database. This schema should be used in a Postgres SQL database.
 
-- DB_USER: the username for the database
-- DB_PASSWORD: the password for the database
-- DB_NAME: the name of the database
-- DB_PORT: the port number for the database
-- PGADMIN_DEFAULT_EMAIL: the email address for the default pgAdmin user
-- PGADMIN_DEFAULT_PASSWORD: the password for the default pgAdmin user
+Alternatively, the database component can be executed using Docker-Compose. There is a file that sets up a PostgreSQL container and a pgAdmin container for web-based management of the database.
 
-The Docker-Compose file also maps the data directory and initialization script to the PostgreSQL container. The initialization script creates the necessary tables and indexes in the database.
-
-## Running the Database Component
-
-To run the database component, you need to have Docker installed on your system. Navigate to the db directory and run the following command:
+To run the database component via Docker, [download it](https://www.docker.com/products/docker-desktop/) and install it in your system. Navigate to the db directory, edit the ``.env`` file  and run the following command:
 
 ```terminal
 docker-compose up -d
