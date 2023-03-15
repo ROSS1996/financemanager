@@ -1,38 +1,54 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Frontend README
 
-## Getting Started
+## Description
 
-First, run the development server:
+The frontend of this project is built with Next.js and TypeScript and uses Tailwind for styling. It requires a backend endpoint to function properly (not necessarily the one provided in the repository). Before attempting to run it, make sure to edit the `.env` file in the project directory.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## Screenshot
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+![Preview of the Website](./screenshots/accounts.jpeg)
+[*(Check more screenshots)*](./screenshots/)
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Installation
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+To install and run the frontend, follow these steps:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+1. Install Node.js and npm on your system.
+2. Clone the project repository.
+3. Navigate to the frontend directory in the project repository.
+4. Edit the `.env` file in the directory to define the required environment variables.
+5. Install dependencies using the command `npm install`.
+6. Start the frontend using the command `npm run dev`.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Alternatively, you can use the Dockerfile in the directory to run the frontend in a Docker container. To do so, follow these steps:
 
-## Learn More
+1. Install Docker on your system.
+2. Clone the project repository.
+3. Navigate to the frontend directory in the project repository.
+4. Edit the `.env` file in the directory to define the required environment variables.
+5. Build the Docker image using the command `docker build -t <image-name> .` in the directory.
+6. Start the Docker container using the command `docker run -p <host-port>:<container-port> -d <image-name>`.
 
-To learn more about Next.js, take a look at the following resources:
+## Usage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The frontend provides a user interface for managing user authentication, account management, expenses and revenues, and transfers. It communicates with the backend to perform these actions.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Scripts
 
-## Deploy on Vercel
+The following scripts are available to run the frontend:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `npm run dev`: Start the development server.
+- `npm run build`: Build the production version of the frontend.
+- `npm run start`: Start the production version of the frontend.
+- `npm run lint`: Lint the codebase.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+These commands assume that Node.js and npm are installed on your system. If you're running the frontend in a Docker container, the scripts will automatically be executed.
+
+## Dependencies
+
+To run the frontend, you will need:
+
+- Node.js and npm OR Docker installed on your system.
+- A backend server to persist the data.
+
+Please ensure that you have these dependencies installed before attempting to run the website.
