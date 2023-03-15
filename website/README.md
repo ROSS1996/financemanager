@@ -2,7 +2,7 @@
 
 ## Description
 
-The frontend of this project is built with Next.js and TypeScript and uses Tailwind for styling. It requires a backend endpoint to function properly (not necessarily the one provided in the repository). Before attempting to run it, make sure to edit the `.env` file in the project directory.
+The frontend of this project is built with Next.js and TypeScript and uses Tailwind for styling. It requires a backend endpoint to function properly (not necessarily the one provided in this repository). Before attempting to run it, make sure to edit the `.env` file in the project directory.
 
 ## Screenshot
 

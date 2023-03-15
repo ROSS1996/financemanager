@@ -2,9 +2,9 @@
 
 ## Overview
 
-This project is a finance manager application that consists of three parts: the PostgreSQL database, a backend built with Javascript (Node.js, Express and TypeScript), and the frontend, built with Next.js. The frontend part does not depend on the database or backend provided in this repository.
+This project is a finance manager application that consists of three parts: a PostgreSQL database, a Javascript backend server (built with Node.js, Express and TypeScript), and the frontend, built with Next.js. The frontend part does not depend on the database or backend provided in this repository.
 
-The backend provides the server-side functionality for user authentication, account management, expenses and revenues, and transfers. The database stores user data and transaction information. The frontend provides a user interface for managing financial activities such as creating and managing accounts, tracking expenses, revenues, and transfers between accounts.
+The backend provides the server-side functionality for user authentication, account management, expenses and revenues, and transfers. The database stores user data and all accounts activities. The frontend provides a user interface for managing financial activities such as creating and managing accounts, tracking expenses, revenues, and transfers between accounts.
 
 ## Screenshot
 
