@@ -8,7 +8,7 @@ The backend provides the server-side functionality for user authentication, acco
 
 ## Screenshot
 
-![Preview of the Website](website/screenshots/accounts.jpeg)
+![Preview of the Website](website/screenshots/home.jpeg)
 [*(Check more screenshots)*](./website/screenshots/)
 
 ## Future Plans

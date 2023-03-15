@@ -1,5 +1,9 @@
 # Screenshots
 
+## Home
+
+![Preview of the Home(./home.jpeg)
+
 ## Overview
 
 ![Preview of the Overview](./overview.jpeg)
